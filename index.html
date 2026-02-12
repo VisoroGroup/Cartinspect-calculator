@@ -1201,11 +1201,10 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
             const pageW = 210;
-            const pageH = 297;
-            const margin = 15;
+            const margin = 12;
             const contentW = pageW - 2 * margin;
 
-            // Register Roboto fonts (supports Romanian diacritics: ț, ș, ă, î, â)
+            // Register Roboto fonts
             registerRobotoFonts(doc);
 
             // Colors
@@ -1215,245 +1214,218 @@
             const textColor = [26, 32, 44];
             const gray = [74, 85, 104];
             const gold = [196, 164, 52];
+            const blue = [49, 130, 206];
 
-            // Helper: check page break
             let y = 0;
-            function checkPageBreak(needed) {
-                if (y + needed > pageH - 30) {
-                    drawFooter(doc, pageW, margin, contentW, primary, gray);
-                    doc.addPage();
-                    y = 20;
-                    return true;
-                }
-                return false;
-            }
 
-            // ========= HEADER WITH LOGO =========
-            // Dark blue header bar
+            // ========= HEADER (compact – 28mm) =========
             doc.setFillColor(...primary);
-            doc.rect(0, 0, pageW, 36, 'F');
-
-            // Gold accent line at bottom of header
+            doc.rect(0, 0, pageW, 28, 'F');
             doc.setFillColor(...gold);
-            doc.rect(0, 36, pageW, 1.2, 'F');
+            doc.rect(0, 28, pageW, 0.8, 'F');
 
-            // Logo on the left
-            try {
-                doc.addImage(LOGO_B64, 'PNG', margin, 3, 30, 30);
-            } catch (e) {
-                console.warn('Logo could not be embedded:', e);
-            }
+            try { doc.addImage(LOGO_B64, 'PNG', margin, 2, 24, 24); } catch (e) { }
 
-            // Title text
             doc.setFont('Roboto', 'bold');
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(20);
-            doc.text('VISORO CartInspect', margin + 35, 15);
-
+            doc.setFontSize(17);
+            doc.text('VISORO CartInspect', margin + 28, 12);
             doc.setFont('Roboto', 'normal');
-            doc.setFontSize(11);
-            doc.setTextColor(200, 210, 230);
-            doc.text('Calculator Impact Bugetar', margin + 35, 22);
-
-            doc.setFontSize(8);
-            doc.setTextColor(180, 195, 215);
-            doc.text('Data: ' + today + '  |  Agent: ' + agentName, margin + 35, 29);
-
-            y = 44;
-
-            // ========= ADMINISTRATIVE DATA =========
-            doc.setTextColor(...primary);
-            doc.setFontSize(12);
-            doc.setFont('Roboto', 'bold');
-            doc.text('DATE ADMINISTRATIVE', margin, y);
-            y += 2;
-            doc.setDrawColor(...primary);
-            doc.setLineWidth(0.6);
-            doc.line(margin, y, margin + contentW, y);
-            y += 7;
-
             doc.setFontSize(9);
-            const adminData = [
-                ['Jude\u021b', county],
-                ['UAT', communeName],
-                ['Rang localitate', 'Rang ' + r.rang + ' (Legea 351/2001)'],
-                ['Zon\u0103 fiscal\u0103', 'Zona A (scenariu maxim legal)'],
-                ['Nr. imobile intravilan', r.N.toLocaleString('ro-RO')],
-                ['Rata actual\u0103 colectare', Math.round(r.rCurrent * 100) + '%'],
-                ['Rata poten\u021bial\u0103 colectare', Math.round(r.rTarget * 100) + '%']
+            doc.setTextColor(200, 210, 230);
+            doc.text('Calculator Impact Bugetar', margin + 28, 18);
+            doc.setFontSize(7);
+            doc.setTextColor(180, 195, 215);
+            doc.text('Data: ' + today + '  |  Agent: ' + agentName, margin + 28, 24);
+
+            y = 34;
+
+            // ========= DATE ADMINISTRATIVE (left) + MODEL DE CALCUL (right) – two columns =========
+            var colLeft = margin;
+            var colRight = margin + contentW / 2 + 3;
+            var colW = contentW / 2 - 3;
+
+            // Section title – left
+            doc.setTextColor(...primary);
+            doc.setFontSize(9);
+            doc.setFont('Roboto', 'bold');
+            doc.text('DATE ADMINISTRATIVE', colLeft, y);
+            doc.setDrawColor(...primary);
+            doc.setLineWidth(0.4);
+            doc.line(colLeft, y + 1.5, colLeft + colW, y + 1.5);
+
+            // Section title – right
+            doc.text('MODEL DE CALCUL', colRight, y);
+            doc.line(colRight, y + 1.5, colRight + colW, y + 1.5);
+
+            y += 6;
+
+            // Admin data – left col
+            doc.setFontSize(7.5);
+            var adminRows = [
+                ['Jude\u021b:', county],
+                ['UAT:', communeName],
+                ['Rang:', 'Rang ' + r.rang + ' (Legea 351/2001)'],
+                ['Zon\u0103 fiscal\u0103:', 'Zona A (maxim legal)'],
+                ['Nr. imobile:', r.N.toLocaleString('ro-RO')],
+                ['Rata actual\u0103:', Math.round(r.rCurrent * 100) + '%'],
+                ['Rata poten\u021bial\u0103:', Math.round(r.rTarget * 100) + '%']
             ];
 
-            adminData.forEach(function (row) {
+            var adminY = y;
+            adminRows.forEach(function (row) {
                 doc.setFont('Roboto', 'normal');
                 doc.setTextColor(...gray);
-                doc.text(row[0] + ':', margin, y);
+                doc.text(row[0], colLeft, adminY);
                 doc.setFont('Roboto', 'bold');
                 doc.setTextColor(...textColor);
-                doc.text(String(row[1]), margin + 55, y);
-                y += 5.5;
+                doc.text(String(row[1]), colLeft + 28, adminY);
+                adminY += 4.2;
             });
 
-            y += 3;
-
-            // ========= MODEL DE CALCUL =========
-            checkPageBreak(50);
-            doc.setTextColor(...primary);
-            doc.setFontSize(12);
-            doc.setFont('Roboto', 'bold');
-            doc.text('MODEL DE CALCUL', margin, y);
-            y += 2;
-            doc.setDrawColor(...primary);
-            doc.setLineWidth(0.6);
-            doc.line(margin, y, margin + contentW, y);
-            y += 7;
-
-            doc.setFontSize(8);
-            doc.setTextColor(...gray);
+            // Model de calcul – right col
+            doc.setFontSize(7);
             doc.setFont('Roboto', 'normal');
-
+            doc.setTextColor(...gray);
+            var modelY = y;
             var modelLines = [
-                'Modelul folose\u0219te o structur\u0103 medie: 80% imobile cu cl\u0103dire (100 m\u00B2) +',
-                '1000 m\u00B2 teren intravilan (500 m\u00B2 cur\u021bi-construc\u021bii, 500 m\u00B2 gr\u0103din\u0103).',
+                'Structur\u0103 medie: 80% imobile cu cl\u0103dire',
+                '(100 m\u00B2) + 1000 m\u00B2 teren intravilan.',
                 '',
-                'Impozit cl\u0103dire/imobil: ' + formatRON(r.taxBuilding) + ' (Tip A, cu utilit\u0103\u021bi, coef. ' + r.coefCladire + ')',
-                'Impozit teren cur\u021bi-constr./imobil: ' + formatRON(r.taxLandCC) + ' (' + r.leiPerHaCC + ' lei/ha)',
-                'Impozit teren gr\u0103din\u0103/imobil: ' + formatRON(r.taxLandGarden) + ' (' + r.leiPerHaGarden + ' lei/ha \u00D7 coef. ' + r.coefTeren + ')',
-                'Total mediu per imobil: ' + formatRON(r.taxPerImobil),
+                'Impozit cl\u0103dire: ' + formatRON(r.taxBuilding) + ' (coef. ' + r.coefCladire + ')',
+                'Teren cur\u021bi-constr.: ' + formatRON(r.taxLandCC) + ' (' + r.leiPerHaCC + ' lei/ha)',
+                'Teren gr\u0103din\u0103: ' + formatRON(r.taxLandGarden) + ' (' + r.leiPerHaGarden + ' lei/ha)',
+                'Total per imobil: ' + formatRON(r.taxPerImobil),
                 '',
-                'Cre\u0219tere estimat\u0103 dup\u0103 CartInspect: +80% (bazat pe rezultate documentate).'
+                'Cre\u0219tere dup\u0103 CartInspect: +80%'
             ];
-
             modelLines.forEach(function (line) {
-                if (line === '') { y += 2; return; }
-                doc.text(line, margin, y);
-                y += 4.5;
+                if (line === '') { modelY += 1.5; return; }
+                doc.text(line, colRight, modelY);
+                modelY += 3.8;
             });
 
-            y += 5;
+            y = Math.max(adminY, modelY) + 3;
 
             // ========= REZULTATE SIMULARE =========
-            checkPageBreak(80);
             doc.setTextColor(...primary);
-            doc.setFontSize(12);
+            doc.setFontSize(9);
             doc.setFont('Roboto', 'bold');
             doc.text('REZULTATE SIMULARE', margin, y);
-            y += 2;
             doc.setDrawColor(...primary);
-            doc.setLineWidth(0.6);
-            doc.line(margin, y, margin + contentW, y);
-            y += 8;
+            doc.setLineWidth(0.4);
+            doc.line(margin, y + 1.5, margin + contentW, y + 1.5);
+            y += 6;
 
-            // Current - red box
+            // Four result boxes in 2x2 grid
+            var boxW = contentW / 2 - 2;
+            var boxH = 14;
+
+            // Row 1: Current (red) | After (green)
+            // Box 1 – Current
             doc.setFillColor(255, 245, 245);
             doc.setDrawColor(254, 215, 215);
-            doc.roundedRect(margin, y - 4, contentW, 16, 2, 2, 'FD');
+            doc.roundedRect(margin, y, boxW, boxH, 1.5, 1.5, 'FD');
             doc.setTextColor(...accent);
-            doc.setFontSize(9);
+            doc.setFontSize(7);
             doc.setFont('Roboto', 'normal');
-            doc.text('\u00CEncasare anual\u0103 estimat\u0103 actual\u0103:', margin + 4, y + 1);
-            doc.setFontSize(14);
+            doc.text('\u00CEncasare anual\u0103 actual\u0103:', margin + 3, y + 4.5);
+            doc.setFontSize(12);
             doc.setFont('Roboto', 'bold');
-            doc.text(formatRON(r.collectedNow), margin + 4, y + 9);
-            y += 20;
+            doc.text(formatRON(r.collectedNow), margin + 3, y + 11);
 
-            // After - green box
+            // Box 2 – After
+            var bx2 = margin + boxW + 4;
             doc.setFillColor(240, 255, 244);
             doc.setDrawColor(198, 246, 213);
-            doc.roundedRect(margin, y - 4, contentW, 16, 2, 2, 'FD');
+            doc.roundedRect(bx2, y, boxW, boxH, 1.5, 1.5, 'FD');
             doc.setTextColor(...success);
-            doc.setFontSize(9);
+            doc.setFontSize(7);
             doc.setFont('Roboto', 'normal');
-            doc.text('\u00CEncasare anual\u0103 estimat\u0103 dup\u0103 CartInspect:', margin + 4, y + 1);
-            doc.setFontSize(14);
+            doc.text('\u00CEncasare dup\u0103 CartInspect:', bx2 + 3, y + 4.5);
+            doc.setFontSize(12);
             doc.setFont('Roboto', 'bold');
-            doc.text(formatRON(r.collectedAfterTarget), margin + 4, y + 9);
-            y += 20;
+            doc.text(formatRON(r.collectedAfterTarget), bx2 + 3, y + 11);
 
-            // Delta annual - blue box
+            y += boxH + 3;
+
+            // Row 2: Delta (blue) | 10Y Impact (dark)
+            // Box 3 – Delta
             doc.setFillColor(235, 248, 255);
             doc.setDrawColor(190, 227, 248);
-            doc.roundedRect(margin, y - 4, contentW, 16, 2, 2, 'FD');
-            doc.setTextColor(49, 130, 206);
-            doc.setFontSize(9);
+            doc.roundedRect(margin, y, boxW, boxH, 1.5, 1.5, 'FD');
+            doc.setTextColor(...blue);
+            doc.setFontSize(7);
             doc.setFont('Roboto', 'normal');
-            doc.text('Diferen\u021b\u0103 anual\u0103 suplimentar\u0103:', margin + 4, y + 1);
-            doc.setFontSize(14);
+            doc.text('Diferen\u021b\u0103 anual\u0103 suplimentar\u0103:', margin + 3, y + 4.5);
+            doc.setFontSize(12);
             doc.setFont('Roboto', 'bold');
-            doc.text('+ ' + formatRON(r.deltaYear), margin + 4, y + 9);
-            y += 20;
+            doc.text('+ ' + formatRON(r.deltaYear), margin + 3, y + 11);
 
-            // 10 year highlight - dark blue box
+            // Box 4 – 10Y
             doc.setFillColor(...primary);
             doc.setDrawColor(...primary);
-            doc.roundedRect(margin, y - 4, contentW, 20, 2, 2, 'FD');
+            doc.roundedRect(bx2, y, boxW, boxH, 1.5, 1.5, 'FD');
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(9);
+            doc.setFontSize(7);
             doc.setFont('Roboto', 'normal');
-            doc.text('IMPACT PE 10 ANI \u2013 Venituri suplimentare cumulate:', margin + 4, y + 2);
-            doc.setFontSize(18);
+            doc.text('IMPACT PE 10 ANI:', bx2 + 3, y + 4.5);
+            doc.setFontSize(12);
             doc.setFont('Roboto', 'bold');
             doc.setTextColor(104, 211, 145);
-            doc.text('+ ' + formatRON(r.delta10Y), margin + 4, y + 13);
-            y += 26;
+            doc.text('+ ' + formatRON(r.delta10Y), bx2 + 3, y + 11);
 
-            // ========= COST & ROI =========
-            checkPageBreak(40);
+            y += boxH + 5;
+
+            // ========= COST & ROI (left) + SURPLUS (right) – two columns =========
+            // Section title – left
             doc.setTextColor(...primary);
-            doc.setFontSize(12);
-            doc.setFont('Roboto', 'bold');
-            doc.text('COST \u0218I RECUPERARE', margin, y);
-            y += 2;
-            doc.setDrawColor(...primary);
-            doc.setLineWidth(0.6);
-            doc.line(margin, y, margin + contentW, y);
-            y += 7;
-
             doc.setFontSize(9);
-            var roiData = [
-                ['Cost proiect CartInspect', formatRON(r.cost)],
-                ['Pre\u021b per imobil', '120 RON'],
-                ['ROI pe 10 ani', Math.round(r.roi10Y * 100) + '%'],
-                ['Perioad\u0103 recuperare', r.paybackYears < 1
-                    ? Math.max(1, Math.round(r.paybackYears * 12)) + ' luni'
-                    : r.paybackYears.toFixed(1) + ' ani'
-                ]
-            ];
+            doc.setFont('Roboto', 'bold');
+            doc.text('COST \u0218I RECUPERARE', colLeft, y);
+            doc.setDrawColor(...primary);
+            doc.setLineWidth(0.4);
+            doc.line(colLeft, y + 1.5, colLeft + colW, y + 1.5);
 
-            roiData.forEach(function (row) {
+            // Section title – right
+            doc.text('CE SE POATE REALIZA DIN SURPLUS', colRight, y);
+            doc.line(colRight, y + 1.5, colRight + colW, y + 1.5);
+
+            y += 6;
+
+            // ROI data – left
+            doc.setFontSize(7.5);
+            var roiY = y;
+            var paybackStr = r.paybackYears < 1
+                ? Math.max(1, Math.round(r.paybackYears * 12)) + ' luni'
+                : r.paybackYears.toFixed(1) + ' ani';
+            var roiRows = [
+                ['Cost proiect:', formatRON(r.cost)],
+                ['Pre\u021b / imobil:', '120 RON'],
+                ['ROI pe 10 ani:', Math.round(r.roi10Y * 100) + '%'],
+                ['Recuperare:', paybackStr]
+            ];
+            roiRows.forEach(function (row) {
                 doc.setFont('Roboto', 'normal');
                 doc.setTextColor(...gray);
-                doc.text(row[0] + ':', margin, y);
+                doc.text(row[0], colLeft, roiY);
                 doc.setFont('Roboto', 'bold');
                 doc.setTextColor(...textColor);
-                doc.text(String(row[1]), margin + 55, y);
-                y += 5.5;
+                doc.text(row[1], colLeft + 28, roiY);
+                roiY += 4.2;
             });
 
-            y += 5;
-
-            // ========= IMPACT / SURPLUS =========
-            checkPageBreak(40);
-            doc.setTextColor(...primary);
-            doc.setFontSize(12);
-            doc.setFont('Roboto', 'bold');
-            doc.text('CE SE POATE REALIZA DIN SURPLUS (orientativ)', margin, y);
-            y += 2;
-            doc.setDrawColor(...primary);
-            doc.setLineWidth(0.6);
-            doc.line(margin, y, margin + contentW, y);
-            y += 7;
-
-            doc.setFontSize(8.5);
-            doc.setTextColor(...textColor);
+            // Surplus – right
+            doc.setFontSize(7);
             doc.setFont('Roboto', 'normal');
-
+            doc.setTextColor(...textColor);
+            var surplusY = y;
             INVESTMENTS.forEach(function (inv) {
                 var count = r.deltaYear / inv.cost;
                 if (count >= 0.1) {
-                    checkPageBreak(6);
                     var displayCount = count >= 1 ? count.toFixed(1) : count.toFixed(2);
-                    doc.text('\u2022 ~' + displayCount + ' ' + inv.name + ' / an (' + formatRON(inv.cost) + ' / buc.)', margin, y);
-                    y += 5;
+                    doc.text('\u2022 ~' + displayCount + ' ' + inv.name + '/an', colRight, surplusY);
+                    surplusY += 3.8;
                 }
             });
 
@@ -1463,8 +1435,6 @@
             // Save
             var filename = 'CartInspect_' + communeName.replace(/\s+/g, '_') + '_' + today.replace(/\./g, '-') + '.pdf';
             doc.save(filename);
-
-            // Log simulation
             logSimulation();
         }
 
