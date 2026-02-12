@@ -546,6 +546,92 @@
             margin-bottom: 0.5rem;
         }
 
+        /* ===== INSTALLMENT PLAN ===== */
+        .contract-box {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .contract-box-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-bar {
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 28px;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: white;
+            white-space: nowrap;
+            min-width: 30px;
+        }
+
+        .timeline-segment.paying {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+        }
+
+        .timeline-segment.paid-surplus {
+            background: linear-gradient(135deg, #d69e2e, #b7791f);
+        }
+
+        .timeline-segment.free {
+            background: linear-gradient(135deg, #38a169, #2f855a);
+        }
+
+        .timeline-legend {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .timeline-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+        }
+
+        .installment-summary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            margin-top: 0.75rem;
+        }
+
+        .installment-summary .result-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .installment-summary .result-value {
+            color: var(--success);
+        }
+
         /* ===== FOOTER ===== */
         .site-footer {
             text-align: center;
@@ -828,6 +914,32 @@
                 </div>
             </div>
 
+            <!-- SECTION 5b: Installment Payment Plan -->
+            <div class="card" id="installmentCard" style="display:none">
+                <div class="card-title">Plan de plată în rate</div>
+
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <label>Rată lunară per contract</label>
+                        <span class="slider-value" id="installmentDisplay">5.000 RON</span>
+                    </div>
+                    <input type="range" id="installmentRate" min="5000" max="15000" value="5000" step="1000"
+                        oninput="updateInstallmentSlider(); calculate()" aria-label="Rată lunară">
+                    <div
+                        style="display:flex; justify-content:space-between; font-size:0.6rem; color:var(--text-secondary); margin-top:0.15rem;">
+                        <span>5.000</span>
+                        <span>15.000 RON/lună</span>
+                    </div>
+                </div>
+
+                <div id="installmentDetails"></div>
+
+                <div class="divider"></div>
+
+                <!-- Timeline visualization -->
+                <div id="installmentTimeline"></div>
+            </div>
+
             <!-- SECTION 6: What can be funded -->
             <div class="card grid-full" id="impactCard" style="display:none">
                 <div class="card-title">Ce se poate realiza din surplus</div>
@@ -951,6 +1063,7 @@
             populateCounties();
             updateSlider('currentRate');
             updateSlider('targetRate');
+            updateInstallmentSlider();
         }
 
         function populateCounties() {
@@ -1041,6 +1154,7 @@
                 document.getElementById('resultsCard').style.display = 'none';
                 document.getElementById('roiCard').style.display = 'none';
                 document.getElementById('impactCard').style.display = 'none';
+                document.getElementById('installmentCard').style.display = 'none';
                 document.getElementById('pdfCard').style.display = 'none';
                 return;
             }
@@ -1157,6 +1271,9 @@
 
             // Impact items
             renderImpact(r.deltaYear);
+
+            // Installment plan
+            calculateInstallments();
         }
 
         function renderImpact(deltaYear) {
@@ -1482,6 +1599,169 @@
                 localStorage.setItem('cartinspect_device_id', id);
             }
             return id;
+        }
+
+        // ============================================================
+        // INSTALLMENT PAYMENT PLAN
+        // ============================================================
+        const MAX_CONTRACT = 270000; // Romanian public procurement direct limit
+
+        function updateInstallmentSlider() {
+            const val = parseInt(document.getElementById('installmentRate').value);
+            document.getElementById('installmentDisplay').textContent =
+                new Intl.NumberFormat('ro-RO').format(val) + ' RON';
+        }
+
+        function calculateInstallments() {
+            const r = calculationResults;
+            if (!r) return;
+
+            const cost = r.cost;
+            const monthlyRate = parseInt(document.getElementById('installmentRate').value);
+            const deltaMonth = r.deltaYear / 12; // monthly surplus
+
+            // Split into contracts if > 270,000
+            const contracts = [];
+            let remaining = cost;
+            while (remaining > 0) {
+                const contractValue = Math.min(remaining, MAX_CONTRACT);
+                const months = Math.ceil(contractValue / monthlyRate);
+                const totalPaid = months * monthlyRate;
+                contracts.push({
+                    value: contractValue,
+                    monthlyRate: monthlyRate,
+                    months: months,
+                    totalPaid: totalPaid
+                });
+                remaining -= contractValue;
+            }
+
+            // Total payment duration = max of all contracts (they run in parallel, each paying monthlyRate)
+            // Actually: all contracts are paid simultaneously, each at monthlyRate
+            // So total monthly outflow = contracts.length * monthlyRate
+            const totalMonthlyPayment = contracts.length * monthlyRate;
+            const longestContract = Math.max(...contracts.map(c => c.months));
+
+            // When does the surplus cover the installments?
+            // After CartInspect, monthly surplus = deltaMonth
+            // The commune pays totalMonthlyPayment per month
+            // Net benefit per month = deltaMonth - totalMonthlyPayment (while paying)
+            // After all paid: net benefit = deltaMonth (full surplus, no more payments)
+
+            // Months until surplus alone covers installments (breakeven month)
+            const surplusCoversPayment = deltaMonth >= totalMonthlyPayment;
+
+            // Total cost across all contracts
+            const totalCost = contracts.reduce((s, c) => s + c.totalPaid, 0);
+
+            // Render
+            renderInstallments(contracts, monthlyRate, totalMonthlyPayment, longestContract, deltaMonth, totalCost);
+        }
+
+        function renderInstallments(contracts, monthlyRate, totalMonthlyPayment, longestMonths, deltaMonth, totalCost) {
+            const r = calculationResults;
+
+            // Show card
+            document.getElementById('installmentCard').style.display = 'block';
+
+            // Contract details
+            const detailsEl = document.getElementById('installmentDetails');
+            let html = '';
+
+            if (contracts.length > 1) {
+                html += '<div style="font-size:0.75rem; color:var(--accent-light); margin-bottom:0.75rem; padding:0.5rem; background:rgba(229,62,62,0.08); border-radius:8px; text-align:center;">';
+                html += 'Contractul depășește ' + formatRON(MAX_CONTRACT) + ' → se împarte în ' + contracts.length + ' contracte (conform legii achizițiilor publice directe)';
+                html += '</div>';
+            }
+
+            contracts.forEach((c, i) => {
+                html += '<div class="contract-box">';
+                html += '<div class="contract-box-title">Contract ' + (i + 1) + ' din ' + contracts.length + '</div>';
+                html += '<div class="info-row"><span class="info-label">Valoare contract</span><span class="info-value">' + formatRON(c.value) + '</span></div>';
+                html += '<div class="info-row"><span class="info-label">Rată lunară</span><span class="info-value">' + formatRON(c.monthlyRate) + '</span></div>';
+                html += '<div class="info-row"><span class="info-label">Durată plată</span><span class="info-value">' + c.months + ' luni (' + (c.months / 12).toFixed(1) + ' ani)</span></div>';
+                html += '</div>';
+            });
+
+            // Total summary
+            if (contracts.length > 1) {
+                html += '<div class="info-row" style="border-top:1px solid var(--gold); padding-top:0.5rem; margin-top:0.25rem;">';
+                html += '<span class="info-label" style="font-weight:700;">Total plată lunară (toate contractele)</span>';
+                html += '<span class="info-value" style="color:var(--gold);">' + formatRON(totalMonthlyPayment) + '/lună</span>';
+                html += '</div>';
+            }
+
+            detailsEl.innerHTML = html;
+
+            // Timeline visualization
+            const timelineEl = document.getElementById('installmentTimeline');
+            let tHtml = '';
+
+            // Calculate phases:
+            // Phase 1: Paying installments (0 → longestMonths)
+            // During this phase, the commune pays totalMonthlyPayment/month
+            // but gets deltaMonth/month surplus
+            // Net during payment = deltaMonth - totalMonthlyPayment
+
+            const netDuringPayment = deltaMonth - totalMonthlyPayment;
+            const totalSurplus10Y = r.deltaYear * 10;
+            const totalInstallments = totalCost;
+
+            // How many months until installment cost is recovered from surplus?
+            const monthsToRecoverFromSurplus = deltaMonth > 0 ? Math.ceil(totalInstallments / deltaMonth) : Infinity;
+
+            // Timeline bar (120 months = 10 years)
+            const totalMonths = 120;
+            const payingMonths = Math.min(longestMonths, totalMonths);
+            const paidFromSurplusMonths = Math.max(0, Math.min(monthsToRecoverFromSurplus - payingMonths, totalMonths - payingMonths));
+            const freeMonths = Math.max(0, totalMonths - payingMonths);
+
+            const payingPct = (payingMonths / totalMonths * 100).toFixed(1);
+            const freePct = (freeMonths / totalMonths * 100).toFixed(1);
+
+            tHtml += '<div style="font-size:0.7rem; font-weight:700; color:var(--text-secondary); margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:1px;">Cronologie 10 ani</div>';
+
+            tHtml += '<div class="timeline-bar">';
+            if (payingPct > 0) {
+                tHtml += '<div class="timeline-segment paying" style="width:' + payingPct + '%">' + payingMonths + ' luni</div>';
+            }
+            if (freePct > 0) {
+                tHtml += '<div class="timeline-segment free" style="width:' + freePct + '%">' + freeMonths + ' luni</div>';
+            }
+            tHtml += '</div>';
+
+            tHtml += '<div class="timeline-legend">';
+            tHtml += '<div class="timeline-legend-item"><div class="legend-dot" style="background:#e53e3e;"></div>Plătește rate</div>';
+            tHtml += '<div class="timeline-legend-item"><div class="legend-dot" style="background:#38a169;"></div>Surplus net 100%</div>';
+            tHtml += '</div>';
+
+            // Key insight: during payment months, how much does the commune actually pay "from pocket"?
+            // If deltaMonth > totalMonthlyPayment, the surplus covers the installments entirely!
+            tHtml += '<div class="installment-summary">';
+            if (deltaMonth >= totalMonthlyPayment) {
+                tHtml += '<div class="result-label">SURPLUSUL ACOPERĂ RATELE DIN PRIMA LUNĂ</div>';
+                tHtml += '<div class="result-value green" style="font-size:1.5rem;">Surplus lunar: ' + formatRON(deltaMonth) + '</div>';
+                tHtml += '<div class="result-detail" style="color:rgba(255,255,255,0.7);">Rata lunară (' + formatRON(totalMonthlyPayment) + ') se plătește integral din venitul suplimentar!</div>';
+                tHtml += '<div class="result-detail" style="color:rgba(255,255,255,0.5); margin-top:0.35rem;">Diferență lunară netă: +' + formatRON(netDuringPayment) + '</div>';
+            } else {
+                const outOfPocket = totalMonthlyPayment - deltaMonth;
+                tHtml += '<div class="result-label">CONTRIBUȚIE NETĂ DIN BUGET (LUNAR)</div>';
+                tHtml += '<div class="result-value" style="font-size:1.5rem; color:var(--gold-light);">' + formatRON(outOfPocket) + '/lună</div>';
+                tHtml += '<div class="result-detail" style="color:rgba(255,255,255,0.7);">Din rata de ' + formatRON(totalMonthlyPayment) + ', surplusul acoperă ' + formatRON(deltaMonth) + '</div>';
+            }
+            tHtml += '</div>';
+
+            // 10 year net calculation
+            const totalPaid10Y = totalInstallments;
+            const netGain10Y = totalSurplus10Y - totalPaid10Y;
+
+            tHtml += '<div style="margin-top:0.75rem;">';
+            tHtml += '<div class="info-row"><span class="info-label">Total plătit (toate ratele)</span><span class="info-value">' + formatRON(totalPaid10Y) + '</span></div>';
+            tHtml += '<div class="info-row"><span class="info-label">Total surplus 10 ani</span><span class="info-value" style="color:var(--success);">' + formatRON(totalSurplus10Y) + '</span></div>';
+            tHtml += '<div class="info-row" style="border-top:1px solid var(--gold); padding-top:0.5rem;"><span class="info-label" style="font-weight:700;">Câștig net pe 10 ani</span><span class="info-value" style="color:var(--success); font-size:1.1rem;">' + formatRON(netGain10Y) + '</span></div>';
+            tHtml += '</div>';
+
+            timelineEl.innerHTML = tHtml;
         }
 
         // ============================================================
