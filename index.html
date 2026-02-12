@@ -1201,13 +1201,11 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
             const pageW = 210;
-            const margin = 14;
+            const margin = 15;
             const contentW = pageW - 2 * margin;
 
-            // Register Roboto fonts
             registerRobotoFonts(doc);
 
-            // Colors
             const primary = [26, 54, 93];
             const accent = [229, 62, 62];
             const success = [56, 161, 105];
@@ -1218,44 +1216,40 @@
 
             let y = 0;
 
-            // ========= HEADER (32mm) =========
+            // ========= HEADER (36mm) =========
             doc.setFillColor(...primary);
-            doc.rect(0, 0, pageW, 32, 'F');
+            doc.rect(0, 0, pageW, 36, 'F');
             doc.setFillColor(...gold);
-            doc.rect(0, 32, pageW, 1, 'F');
+            doc.rect(0, 36, pageW, 1.2, 'F');
 
-            try { doc.addImage(LOGO_B64, 'PNG', margin, 3, 26, 26); } catch (e) { }
+            try { doc.addImage(LOGO_B64, 'PNG', margin, 3, 30, 30); } catch (e) { }
 
             doc.setFont('Roboto', 'bold');
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(19);
-            doc.text('VISORO CartInspect', margin + 31, 14);
+            doc.setFontSize(22);
+            doc.text('VISORO CartInspect', margin + 35, 16);
             doc.setFont('Roboto', 'normal');
-            doc.setFontSize(10);
+            doc.setFontSize(11);
             doc.setTextColor(200, 210, 230);
-            doc.text('Calculator Impact Bugetar', margin + 31, 21);
-            doc.setFontSize(8);
+            doc.text('Calculator Impact Bugetar', margin + 35, 24);
+            doc.setFontSize(9);
             doc.setTextColor(180, 195, 215);
-            doc.text('Data: ' + today + '  |  Agent: ' + agentName, margin + 31, 27);
+            doc.text('Data: ' + today + '  |  Agent: ' + agentName, margin + 35, 31);
 
-            y = 40;
+            y = 46;
 
             // ========= DATE ADMINISTRATIVE =========
-            var colLeft = margin;
-            var colRight = margin + contentW / 2 + 4;
-            var colW = contentW / 2 - 4;
-
             doc.setTextColor(...primary);
-            doc.setFontSize(10);
+            doc.setFontSize(12);
             doc.setFont('Roboto', 'bold');
             doc.text('DATE ADMINISTRATIVE', margin, y);
             doc.setDrawColor(...primary);
-            doc.setLineWidth(0.5);
-            doc.line(margin, y + 2, margin + contentW, y + 2);
+            doc.setLineWidth(0.6);
+            doc.line(margin, y + 2.5, margin + contentW, y + 2.5);
 
-            y += 8;
+            y += 10;
 
-            doc.setFontSize(9);
+            doc.setFontSize(10);
             var adminRows = [
                 ['Jude\u021b:', county],
                 ['UAT:', communeName],
@@ -1272,100 +1266,97 @@
                 doc.text(row[0], margin, y);
                 doc.setFont('Roboto', 'bold');
                 doc.setTextColor(...textColor);
-                doc.text(String(row[1]), margin + 50, y);
-                y += 5.5;
+                doc.text(String(row[1]), margin + 55, y);
+                y += 7;
             });
 
-            y += 6;
+            y += 8;
 
             // ========= REZULTATE SIMULARE =========
             doc.setTextColor(...primary);
-            doc.setFontSize(10);
+            doc.setFontSize(12);
             doc.setFont('Roboto', 'bold');
             doc.text('REZULTATE SIMULARE', margin, y);
             doc.setDrawColor(...primary);
-            doc.setLineWidth(0.5);
-            doc.line(margin, y + 2, margin + contentW, y + 2);
-            y += 8;
+            doc.setLineWidth(0.6);
+            doc.line(margin, y + 2.5, margin + contentW, y + 2.5);
+            y += 10;
 
-            // Four result boxes in 2x2 grid
-            var boxW = contentW / 2 - 2;
-            var boxH = 18;
+            var boxW = contentW / 2 - 3;
+            var boxH = 22;
 
             // Row 1: Current (red) | After (green)
-            // Box 1 – Current
             doc.setFillColor(255, 245, 245);
             doc.setDrawColor(254, 215, 215);
             doc.roundedRect(margin, y, boxW, boxH, 2, 2, 'FD');
             doc.setTextColor(...accent);
-            doc.setFontSize(8);
+            doc.setFontSize(9);
             doc.setFont('Roboto', 'normal');
-            doc.text('\u00CEncasare anual\u0103 actual\u0103:', margin + 4, y + 6);
-            doc.setFontSize(14);
+            doc.text('\u00CEncasare anual\u0103 actual\u0103:', margin + 5, y + 7);
+            doc.setFontSize(16);
             doc.setFont('Roboto', 'bold');
-            doc.text(formatRON(r.collectedNow), margin + 4, y + 14);
+            doc.text(formatRON(r.collectedNow), margin + 5, y + 17);
 
-            // Box 2 – After
-            var bx2 = margin + boxW + 4;
+            var bx2 = margin + boxW + 6;
             doc.setFillColor(240, 255, 244);
             doc.setDrawColor(198, 246, 213);
             doc.roundedRect(bx2, y, boxW, boxH, 2, 2, 'FD');
             doc.setTextColor(...success);
-            doc.setFontSize(8);
+            doc.setFontSize(9);
             doc.setFont('Roboto', 'normal');
-            doc.text('\u00CEncasare dup\u0103 CartInspect:', bx2 + 4, y + 6);
-            doc.setFontSize(14);
+            doc.text('\u00CEncasare dup\u0103 CartInspect:', bx2 + 5, y + 7);
+            doc.setFontSize(16);
             doc.setFont('Roboto', 'bold');
-            doc.text(formatRON(r.collectedAfterTarget), bx2 + 4, y + 14);
+            doc.text(formatRON(r.collectedAfterTarget), bx2 + 5, y + 17);
 
-            y += boxH + 4;
+            y += boxH + 5;
 
             // Row 2: Delta (blue) | 10Y Impact (dark)
-            // Box 3 – Delta
             doc.setFillColor(235, 248, 255);
             doc.setDrawColor(190, 227, 248);
             doc.roundedRect(margin, y, boxW, boxH, 2, 2, 'FD');
             doc.setTextColor(...blue);
-            doc.setFontSize(8);
+            doc.setFontSize(9);
             doc.setFont('Roboto', 'normal');
-            doc.text('Diferen\u021b\u0103 anual\u0103 suplimentar\u0103:', margin + 4, y + 6);
-            doc.setFontSize(14);
+            doc.text('Diferen\u021b\u0103 anual\u0103 suplimentar\u0103:', margin + 5, y + 7);
+            doc.setFontSize(16);
             doc.setFont('Roboto', 'bold');
-            doc.text('+ ' + formatRON(r.deltaYear), margin + 4, y + 14);
+            doc.text('+ ' + formatRON(r.deltaYear), margin + 5, y + 17);
 
-            // Box 4 – 10Y
             doc.setFillColor(...primary);
             doc.setDrawColor(...primary);
             doc.roundedRect(bx2, y, boxW, boxH, 2, 2, 'FD');
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(8);
+            doc.setFontSize(9);
             doc.setFont('Roboto', 'normal');
-            doc.text('IMPACT PE 10 ANI:', bx2 + 4, y + 6);
-            doc.setFontSize(14);
+            doc.text('IMPACT PE 10 ANI:', bx2 + 5, y + 7);
+            doc.setFontSize(16);
             doc.setFont('Roboto', 'bold');
             doc.setTextColor(104, 211, 145);
-            doc.text('+ ' + formatRON(r.delta10Y), bx2 + 4, y + 14);
+            doc.text('+ ' + formatRON(r.delta10Y), bx2 + 5, y + 17);
 
-            y += boxH + 8;
+            y += boxH + 10;
 
             // ========= COST & ROI (left) + SURPLUS (right) =========
-            // Section title – left
+            var colLeft = margin;
+            var colRight = margin + contentW / 2 + 4;
+            var colW = contentW / 2 - 4;
+
             doc.setTextColor(...primary);
-            doc.setFontSize(10);
+            doc.setFontSize(11);
             doc.setFont('Roboto', 'bold');
             doc.text('COST \u0218I RECUPERARE', colLeft, y);
             doc.setDrawColor(...primary);
             doc.setLineWidth(0.5);
-            doc.line(colLeft, y + 2, colLeft + colW, y + 2);
+            doc.line(colLeft, y + 2.5, colLeft + colW, y + 2.5);
 
-            // Section title – right
             doc.text('CE SE POATE REALIZA DIN SURPLUS', colRight, y);
-            doc.line(colRight, y + 2, colRight + colW, y + 2);
+            doc.line(colRight, y + 2.5, colRight + colW, y + 2.5);
 
-            y += 8;
+            y += 9;
 
             // ROI data – left
-            doc.setFontSize(8.5);
+            doc.setFontSize(9.5);
             var roiY = y;
             var paybackStr = r.paybackYears < 1
                 ? Math.max(1, Math.round(r.paybackYears * 12)) + ' luni'
@@ -1382,12 +1373,12 @@
                 doc.text(row[0], colLeft, roiY);
                 doc.setFont('Roboto', 'bold');
                 doc.setTextColor(...textColor);
-                doc.text(row[1], colLeft + 30, roiY);
-                roiY += 5.5;
+                doc.text(row[1], colLeft + 35, roiY);
+                roiY += 7;
             });
 
             // Surplus – right
-            doc.setFontSize(8);
+            doc.setFontSize(9);
             doc.setFont('Roboto', 'normal');
             doc.setTextColor(...textColor);
             var surplusY = y;
@@ -1396,14 +1387,13 @@
                 if (count >= 0.1) {
                     var displayCount = count >= 1 ? count.toFixed(1) : count.toFixed(2);
                     doc.text('\u2022 ~' + displayCount + ' ' + inv.name + '/an', colRight, surplusY);
-                    surplusY += 5;
+                    surplusY += 6;
                 }
             });
 
             // ========= FOOTER =========
             drawFooter(doc, pageW, margin, contentW, primary, gray);
 
-            // Save
             var filename = 'CartInspect_' + communeName.replace(/\s+/g, '_') + '_' + today.replace(/\./g, '-') + '.pdf';
             doc.save(filename);
             logSimulation();
