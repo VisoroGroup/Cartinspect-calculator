@@ -1,0 +1,8 @@
+{
+  "name": "cartinspect-calculator",
+  "version": "2.0.0",
+  "description": "CartInspect - Calculator Impact Bugetar",
+  "scripts": {
+    "start": "npx serve . -l tcp://0.0.0.0:${PORT:-8080} --no-clipboard"
+  }
+}
