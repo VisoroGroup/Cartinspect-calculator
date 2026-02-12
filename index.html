@@ -3,24 +3,43 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="CartInspect - Calculator Impact Bugetar. Simulare venituri fiscale pentru administrații publice locale din România.">
     <title>CartInspect - Calculator Impact Bugetar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
-            --primary: #1a365d;
-            --primary-light: #2a4a7f;
+            --primary: #0f2744;
+            --primary-light: #1a3a5c;
+            --primary-mid: #1e4976;
             --accent: #e53e3e;
             --accent-light: #fc8181;
-            --success: #38a169;
-            --success-light: #68d391;
-            --bg: #f7fafc;
-            --card: #ffffff;
-            --text: #1a202c;
-            --text-secondary: #4a5568;
-            --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --success: #22c55e;
+            --success-dark: #16a34a;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --gold: #c4a434;
+            --gold-light: #d4b84a;
+            --bg: #0c1829;
+            --bg-surface: rgba(255, 255, 255, 0.03);
+            --card: rgba(255, 255, 255, 0.06);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --card-hover: rgba(255, 255, 255, 0.09);
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: rgba(255, 255, 255, 0.08);
+            --input-bg: rgba(255, 255, 255, 0.07);
+            --input-border: rgba(255, 255, 255, 0.15);
+            --input-focus: var(--gold);
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.35);
+            --glass: blur(20px) saturate(180%);
         }
 
         * {
@@ -30,69 +49,147 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            padding-bottom: 2rem;
+            overflow-x: hidden;
         }
 
+        /* Animated gradient mesh background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(26, 58, 92, 0.5) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(196, 164, 52, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+            z-index: -1;
+            animation: meshShift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshShift {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* ===== HEADER ===== */
         .header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            padding: 1rem;
-            text-align: center;
+            background: rgba(15, 39, 68, 0.85);
+            backdrop-filter: var(--glass);
+            -webkit-backdrop-filter: var(--glass);
+            border-bottom: 1px solid var(--gold);
+            padding: 0.75rem 1.5rem;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .header-logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+        }
+
+        .header-text {
+            text-align: left;
         }
 
         .header-logo {
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             font-weight: 800;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            color: #fff;
         }
 
         .header-logo span {
-            color: var(--accent-light);
+            color: var(--gold-light);
         }
 
         .header-sub {
-            font-size: 0.75rem;
-            opacity: 0.85;
-            margin-top: 0.15rem;
-            letter-spacing: 0.5px;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
         }
 
+        /* ===== LAYOUT ===== */
         .container {
-            max-width: 480px;
+            max-width: 960px;
             margin: 0 auto;
-            padding: 0.75rem;
+            padding: 1.5rem;
         }
 
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .grid-full {
+            grid-column: 1 / -1;
+        }
+
+        /* ===== CARDS ===== */
         .card {
             background: var(--card);
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-bottom: 0.75rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+            backdrop-filter: var(--glass);
+            -webkit-backdrop-filter: var(--glass);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--card-border);
+            transition: background 0.3s, border-color 0.3s, transform 0.2s;
+        }
+
+        .card:hover {
+            background: var(--card-hover);
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
         .card-title {
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--gold);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--primary);
+            letter-spacing: 2px;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
+        .card-title::before {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 14px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+
+        /* ===== FORMS ===== */
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
         }
 
         .form-group:last-child {
@@ -101,23 +198,25 @@
 
         label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: var(--text-secondary);
-            margin-bottom: 0.35rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.3px;
         }
 
         select,
         input[type="number"],
         input[type="text"] {
             width: 100%;
-            padding: 0.75rem;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 1rem;
-            background: white;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            background: var(--input-bg);
             color: var(--text);
-            transition: border-color 0.2s;
+            transition: all 0.25s ease;
             -webkit-appearance: none;
             appearance: none;
         }
@@ -125,31 +224,40 @@
         select:focus,
         input:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(196, 164, 52, 0.15);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        select option {
+            background: #1a2e44;
+            color: #f1f5f9;
         }
 
         input[type="number"] {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             font-weight: 700;
             text-align: center;
+            letter-spacing: 1px;
         }
 
+        /* ===== SLIDERS ===== */
         .slider-container {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
         }
 
         .slider-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         .slider-value {
-            font-size: 1.25rem;
+            font-size: 1.4rem;
             font-weight: 800;
-            color: var(--primary);
-            min-width: 50px;
+            color: var(--gold);
+            min-width: 55px;
             text-align: right;
         }
 
@@ -157,38 +265,45 @@
             -webkit-appearance: none;
             appearance: none;
             width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            background: var(--border);
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--primary-mid), rgba(196, 164, 52, 0.3));
             outline: none;
             transition: background 0.2s;
         }
 
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 32px;
-            height: 32px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 10px rgba(196, 164, 52, 0.4);
+            transition: transform 0.15s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
         }
 
         input[type="range"]::-moz-range-thumb {
-            width: 32px;
-            height: 32px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             cursor: pointer;
             border: none;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 10px rgba(196, 164, 52, 0.4);
         }
 
+        /* ===== RESULT BLOCKS ===== */
         .result-block {
             text-align: center;
-            padding: 1rem;
-            border-radius: 10px;
+            padding: 1.25rem;
+            border-radius: 12px;
             margin-bottom: 0.75rem;
+            transition: transform 0.2s;
         }
 
         .result-block:last-child {
@@ -196,41 +311,42 @@
         }
 
         .result-block.current {
-            background: #fff5f5;
-            border: 2px solid #fed7d7;
+            background: rgba(229, 62, 62, 0.08);
+            border: 1px solid rgba(229, 62, 62, 0.2);
         }
 
         .result-block.after {
-            background: #f0fff4;
-            border: 2px solid #c6f6d5;
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.2);
         }
 
         .result-block.delta {
-            background: #ebf8ff;
-            border: 2px solid #bee3f8;
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .result-block.roi {
-            background: #faf5ff;
-            border: 2px solid #e9d8fd;
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         .result-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .result-value {
-            font-size: 1.75rem;
+            font-size: 1.85rem;
             font-weight: 800;
-            margin: 0.25rem 0;
+            margin: 0.35rem 0;
+            letter-spacing: -0.5px;
         }
 
         .result-value.red {
-            color: var(--accent);
+            color: #f87171;
         }
 
         .result-value.green {
@@ -238,33 +354,68 @@
         }
 
         .result-value.blue {
-            color: #3182ce;
+            color: var(--blue);
         }
 
         .result-value.purple {
-            color: #805ad5;
+            color: var(--purple);
         }
 
         .result-detail {
             font-size: 0.7rem;
-            color: #2d3748;
+            color: var(--text-secondary);
         }
 
+        /* ===== 10 YEAR HIGHLIGHT ===== */
+        .ten-year-highlight {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border: 1px solid var(--gold);
+            padding: 1.5rem;
+            border-radius: 14px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ten-year-highlight::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(196, 164, 52, 0.1), transparent 60%);
+            pointer-events: none;
+        }
+
+        .ten-year-highlight .result-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .ten-year-highlight .result-value {
+            color: var(--success);
+            font-size: 2.2rem;
+        }
+
+        /* ===== IMPACT ITEMS ===== */
         .impact-item {
             display: flex;
             align-items: center;
-            padding: 0.6rem 0;
+            padding: 0.75rem 0;
             border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
         }
 
         .impact-item:last-child {
             border-bottom: none;
         }
 
+        .impact-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+        }
+
         .impact-icon {
             font-size: 1.5rem;
             margin-right: 0.75rem;
-            width: 2rem;
+            width: 2.2rem;
             text-align: center;
         }
 
@@ -275,6 +426,7 @@
         .impact-name {
             font-size: 0.85rem;
             font-weight: 600;
+            color: var(--text);
         }
 
         .impact-count {
@@ -283,39 +435,41 @@
             font-weight: 700;
         }
 
+        /* ===== BUTTONS ===== */
         .btn {
             width: 100%;
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            border-radius: 12px;
+            font-size: 1rem;
             font-weight: 700;
+            font-family: 'Inter', sans-serif;
             cursor: pointer;
-            transition: all 0.2s;
-            letter-spacing: 0.5px;
+            transition: all 0.25s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            box-shadow: var(--shadow);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--primary);
+            box-shadow: 0 4px 20px rgba(196, 164, 52, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(196, 164, 52, 0.45);
         }
 
         .btn-primary:active {
-            transform: scale(0.98);
+            transform: translateY(0);
         }
 
-        .btn-success {
-            background: linear-gradient(135deg, var(--success), #48bb78);
-            color: white;
-            box-shadow: var(--shadow);
-            margin-top: 0.5rem;
-        }
-
+        /* ===== INFO ROWS ===== */
         .info-row {
             display: flex;
             justify-content: space-between;
-            padding: 0.4rem 0;
+            padding: 0.5rem 0;
             font-size: 0.8rem;
             border-bottom: 1px solid var(--border);
         }
@@ -330,87 +484,160 @@
 
         .info-value {
             font-weight: 700;
+            color: var(--text);
         }
 
         .rang-badge {
             display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 0.15rem 0.5rem;
-            border-radius: 4px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--primary);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
             font-size: 0.7rem;
             font-weight: 700;
         }
 
+        /* ===== MISC ===== */
         .disclaimer {
             font-size: 0.65rem;
-            color: #2d3748;
+            color: var(--text-muted);
             text-align: center;
             padding: 0.75rem;
-            line-height: 1.4;
+            line-height: 1.5;
             font-style: italic;
         }
 
         .error-banner {
-            background: #fff5f5;
-            border: 2px solid #fed7d7;
-            color: #c53030;
+            background: rgba(229, 62, 62, 0.1);
+            border: 1px solid rgba(229, 62, 62, 0.3);
+            color: #f87171;
             padding: 1rem;
-            border-radius: 8px;
+            border-radius: 10px;
             text-align: center;
             font-weight: 600;
             font-size: 0.85rem;
-            margin-bottom: 0.75rem;
+            grid-column: 1 / -1;
         }
 
         .hidden {
             display: none;
         }
 
-        .ten-year-highlight {
-            background: linear-gradient(135deg, #1a365d, #2a4a7f);
-            color: white;
-            padding: 1.25rem;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .ten-year-highlight .result-label {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .ten-year-highlight .result-value {
-            color: #68d391;
-            font-size: 2rem;
-        }
-
         .divider {
             height: 1px;
             background: var(--border);
-            margin: 0.75rem 0;
+            margin: 1rem 0;
         }
 
         .fiscal-detail {
-            background: #f7fafc;
-            border-radius: 8px;
-            padding: 0.75rem;
-            margin-top: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 0.75rem;
+            border: 1px solid var(--border);
         }
 
         .fiscal-detail-title {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.35rem;
+            color: var(--gold);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
         }
 
-        @media (max-width: 360px) {
-            .result-value {
-                font-size: 1.4rem;
+        /* ===== FOOTER ===== */
+        .site-footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .site-footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.4s ease both;
+        }
+
+        .grid>*:nth-child(2) {
+            animation-delay: 0.05s;
+        }
+
+        .grid>*:nth-child(3) {
+            animation-delay: 0.1s;
+        }
+
+        .grid>*:nth-child(4) {
+            animation-delay: 0.15s;
+        }
+
+        .grid>*:nth-child(5) {
+            animation-delay: 0.2s;
+        }
+
+        .grid>*:nth-child(6) {
+            animation-delay: 0.25s;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
             }
 
             .container {
-                padding: 0.5rem;
+                padding: 0.75rem;
+            }
+
+            .header {
+                padding: 0.6rem 1rem;
+            }
+
+            .header-logo {
+                font-size: 1.15rem;
+            }
+
+            .header-logo-img {
+                width: 34px;
+                height: 34px;
+            }
+
+            .result-value {
+                font-size: 1.5rem;
+            }
+
+            .ten-year-highlight .result-value {
+                font-size: 1.75rem;
+            }
+
+            .card {
+                padding: 1.15rem;
+                border-radius: 14px;
+            }
+        }
+
+        @media (min-width: 701px) {
+            .container {
+                padding: 2rem;
             }
         }
     </style>
@@ -419,202 +646,215 @@
 <body>
 
     <div class="header">
-        <div class="header-logo">VISORO <span>CartInspect</span></div>
-        <div class="header-sub">CALCULATOR IMPACT BUGETAR</div>
+        <img src="logo-01.png" alt="Visoro Group" class="header-logo-img">
+        <div class="header-text">
+            <div class="header-logo">VISORO <span>CartInspect</span></div>
+            <div class="header-sub">Calculator Impact Bugetar</div>
+        </div>
     </div>
 
     <div class="container">
+        <div class="grid">
 
-        <!-- Error banner (shown if romania_uat.js fails to load) -->
-        <div class="error-banner" id="errorBanner" style="display:none"></div>
+            <!-- Error banner (shown if romania_uat.js fails to load) -->
+            <div class="error-banner" id="errorBanner" style="display:none"></div>
 
-        <!-- SECTION 1: Administrative Data -->
-        <div class="card">
-            <div class="card-title">Date administrative</div>
+            <!-- SECTION 1: Administrative Data -->
+            <div class="card">
+                <div class="card-title">Date administrative</div>
 
-            <div class="form-group">
-                <label>Nume agent</label>
-                <input type="text" id="agentName" placeholder="Introduceți numele agentului">
+                <div class="form-group">
+                    <label>Nume agent</label>
+                    <input type="text" id="agentName" placeholder="Introduceți numele agentului">
+                </div>
+
+                <div class="form-group">
+                    <label>Județ</label>
+                    <select id="county" onchange="onCountyChange()">
+                        <option value="">Selectați județul</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Comună / Oraș / Municipiu</label>
+                    <select id="commune" onchange="onCommuneChange()" disabled>
+                        <option value="">Selectați mai întâi județul</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="rankDisplay" style="display:none">
+                    <div class="info-row">
+                        <span class="info-label">Rang localitate (Legea 351/2001)</span>
+                        <span class="info-value"><span class="rang-badge" id="rankBadge"></span></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Zonă fiscală</span>
+                        <span class="info-value">Zona A (maxim legal)</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Județ</label>
-                <select id="county" onchange="onCountyChange()">
-                    <option value="">Selectați județul</option>
-                </select>
+            <!-- SECTION 2: Input -->
+            <div class="card">
+                <div class="card-title">Date imobile</div>
+
+                <div class="form-group">
+                    <label>Număr imobile intravilan</label>
+                    <input type="number" id="nrImobile" placeholder="ex: 2556" min="1" max="100000"
+                        oninput="calculate()">
+                    <div style="font-size:0.65rem; color:var(--text-secondary); margin-top:0.25rem; text-align:center;">
+                        Imobil = teren cu sau fără construcție (conform Cod Fiscal)
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Comună / Oraș / Municipiu</label>
-                <select id="commune" onchange="onCommuneChange()" disabled>
-                    <option value="">Selectați mai întâi județul</option>
-                </select>
+            <!-- SECTION 3: Sliders -->
+            <div class="card">
+                <div class="card-title">Parametri colectare</div>
+
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <label>Rata actuală de colectare</label>
+                        <span class="slider-value" id="currentRateDisplay">80%</span>
+                    </div>
+                    <input type="range" id="currentRate" min="10" max="90" value="80" step="5"
+                        oninput="updateSlider('currentRate'); calculate()" aria-label="Rata actuală de colectare">
+                    <div
+                        style="display:flex; justify-content:space-between; font-size:0.6rem; color:var(--text-secondary); margin-top:0.15rem;">
+                        <span>10%</span>
+                        <span>90%</span>
+                    </div>
+                </div>
+
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <label>Rata potențială de colectare</label>
+                        <span class="slider-value" id="targetRateDisplay">90%</span>
+                    </div>
+                    <input type="range" id="targetRate" min="10" max="100" value="90" step="5"
+                        oninput="updateSlider('targetRate'); calculate()" aria-label="Rata potențială de colectare">
+                    <div
+                        style="display:flex; justify-content:space-between; font-size:0.6rem; color:var(--text-secondary); margin-top:0.15rem;">
+                        <span>10%</span>
+                        <span>100%</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group" id="rankDisplay" style="display:none">
+            <!-- SECTION 4: Results -->
+            <div class="card" id="resultsCard" style="display:none">
+                <div class="card-title">Rezultate simulare</div>
+
+                <!-- Fiscal breakdown -->
+                <div class="fiscal-detail">
+                    <div class="fiscal-detail-title">DETALII FISCALE PER IMOBIL (medie)</div>
+                    <div class="info-row">
+                        <span class="info-label">Impozit clădire (100 m², Tip A, cu utilități)</span>
+                        <span class="info-value" id="taxBuildingPerImobil">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Impozit teren curți-construcții (500 m²)</span>
+                        <span class="info-value" id="taxLandCCPerImobil">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Impozit teren grădină (500 m²)</span>
+                        <span class="info-value" id="taxLandGardenPerImobil">-</span>
+                    </div>
+                    <div class="info-row"
+                        style="border-top: 1px solid var(--gold); margin-top: 0.25rem; padding-top: 0.5rem;">
+                        <span class="info-label" style="font-weight:700;">Total per imobil (medie)</span>
+                        <span class="info-value" id="taxTotalPerImobil" style="color: var(--gold);">-</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Current situation -->
+                <div class="result-block current">
+                    <div class="result-label">Încasare anuală estimată actuală</div>
+                    <div class="result-value red" id="collectedNow">0 RON</div>
+                    <div class="result-detail" id="collectedNowDetail"></div>
+                </div>
+
+                <!-- After CartInspect -->
+                <div class="result-block after">
+                    <div class="result-label">Încasare anuală după CartInspect</div>
+                    <div class="result-value green" id="collectedAfter">0 RON</div>
+                    <div class="result-detail">Cu rata potențială de colectare selectată</div>
+                </div>
+
+                <!-- Annual delta -->
+                <div class="result-block delta">
+                    <div class="result-label">Diferență anuală suplimentară</div>
+                    <div class="result-value blue" id="deltaYear">0 RON</div>
+                    <div class="result-detail" id="deltaYearPercent"></div>
+                </div>
+
+                <!-- 10 year highlight -->
+                <div class="ten-year-highlight">
+                    <div class="result-label">IMPACT PE 10 ANI</div>
+                    <div class="result-value" id="delta10Y">0 RON</div>
+                    <div class="result-detail" style="color:rgba(255,255,255,0.7);">Venituri suplimentare cumulate pe 10
+                        ani
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: Cost & ROI -->
+            <div class="card" id="roiCard" style="display:none">
+                <div class="card-title">Cost și recuperare investiție</div>
+
                 <div class="info-row">
-                    <span class="info-label">Rang localitate (Legea 351/2001)</span>
-                    <span class="info-value"><span class="rang-badge" id="rankBadge"></span></span>
+                    <span class="info-label">Cost proiect CartInspect</span>
+                    <span class="info-value" id="costTotal">-</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Zonă fiscală</span>
-                    <span class="info-value">Zona A (maxim legal)</span>
+                    <span class="info-label">Preț per imobil</span>
+                    <span class="info-value">120 RON</span>
                 </div>
-            </div>
-        </div>
 
-        <!-- SECTION 2: Input -->
-        <div class="card">
-            <div class="card-title">Date imobile</div>
+                <div class="divider"></div>
 
-            <div class="form-group">
-                <label>Număr imobile intravilan</label>
-                <input type="number" id="nrImobile" placeholder="ex: 2556" min="1" max="100000" oninput="calculate()">
-                <div style="font-size:0.65rem; color:var(--text-secondary); margin-top:0.25rem; text-align:center;">
-                    Imobil = teren cu sau fără construcție (conform Cod Fiscal)
+                <div class="result-block roi">
+                    <div class="result-label">ROI pe 10 ani</div>
+                    <div class="result-value purple" id="roiValue">0%</div>
                 </div>
-            </div>
-        </div>
 
-        <!-- SECTION 3: Sliders -->
-        <div class="card">
-            <div class="card-title">Parametri colectare</div>
-
-            <div class="slider-container">
-                <div class="slider-header">
-                    <label>Rata actuală de colectare</label>
-                    <span class="slider-value" id="currentRateDisplay">80%</span>
-                </div>
-                <input type="range" id="currentRate" min="10" max="90" value="80" step="5"
-                    oninput="updateSlider('currentRate'); calculate()" aria-label="Rata actuală de colectare">
-                <div
-                    style="display:flex; justify-content:space-between; font-size:0.6rem; color:var(--text-secondary); margin-top:0.15rem;">
-                    <span>10%</span>
-                    <span>90%</span>
+                <div class="result-block"
+                    style="background:rgba(196,164,52,0.08); border:1px solid rgba(196,164,52,0.2);">
+                    <div class="result-label">Perioadă recuperare investiție</div>
+                    <div class="result-value" style="color:var(--gold-light);" id="paybackValue">0</div>
+                    <div class="result-detail" id="paybackDetail"></div>
                 </div>
             </div>
 
-            <div class="slider-container">
-                <div class="slider-header">
-                    <label>Rata potențială de colectare</label>
-                    <span class="slider-value" id="targetRateDisplay">90%</span>
+            <!-- SECTION 6: What can be funded -->
+            <div class="card grid-full" id="impactCard" style="display:none">
+                <div class="card-title">Ce se poate realiza din surplus</div>
+                <div style="font-size:0.7rem; color:var(--text-secondary); margin-bottom:0.5rem;">
+                    Estimare orientativă pe baza surplusului anual:
                 </div>
-                <input type="range" id="targetRate" min="10" max="100" value="90" step="5"
-                    oninput="updateSlider('targetRate'); calculate()" aria-label="Rata potențială de colectare">
-                <div
-                    style="display:flex; justify-content:space-between; font-size:0.6rem; color:var(--text-secondary); margin-top:0.15rem;">
-                    <span>10%</span>
-                    <span>100%</span>
-                </div>
+                <div id="impactList"></div>
             </div>
-        </div>
 
-        <!-- SECTION 4: Results -->
-        <div class="card" id="resultsCard" style="display:none">
-            <div class="card-title">Rezultate simulare</div>
-
-            <!-- Fiscal breakdown -->
-            <div class="fiscal-detail">
-                <div class="fiscal-detail-title">DETALII FISCALE PER IMOBIL (medie)</div>
-                <div class="info-row">
-                    <span class="info-label">Impozit clădire (100 m², Tip A, cu utilități)</span>
-                    <span class="info-value" id="taxBuildingPerImobil">-</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Impozit teren curți-construcții (500 m²)</span>
-                    <span class="info-value" id="taxLandCCPerImobil">-</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Impozit teren grădină (500 m²)</span>
-                    <span class="info-value" id="taxLandGardenPerImobil">-</span>
-                </div>
-                <div class="info-row"
-                    style="border-top: 2px solid var(--primary); margin-top: 0.25rem; padding-top: 0.5rem;">
-                    <span class="info-label" style="font-weight:700;">Total per imobil (medie)</span>
-                    <span class="info-value" id="taxTotalPerImobil" style="color: var(--primary);">-</span>
+            <!-- SECTION 7: Generate PDF -->
+            <div class="card grid-full" id="pdfCard" style="display:none">
+                <button class="btn btn-primary" onclick="generatePDF()">
+                    ⬇ GENEREAZĂ PDF
+                </button>
+                <div class="disclaimer">
+                    Simulare realizată conform Codului Fiscal în vigoare (Legea 227/2015, actualizat 2026).<br>
+                    Valorile sunt estimative.
                 </div>
             </div>
 
-            <div class="divider"></div>
+        </div><!-- /grid -->
+    </div><!-- /container -->
 
-            <!-- Current situation -->
-            <div class="result-block current">
-                <div class="result-label">Încasare anuală estimată actuală</div>
-                <div class="result-value red" id="collectedNow">0 RON</div>
-                <div class="result-detail" id="collectedNowDetail"></div>
-            </div>
-
-            <!-- After CartInspect -->
-            <div class="result-block after">
-                <div class="result-label">Încasare anuală după CartInspect</div>
-                <div class="result-value green" id="collectedAfter">0 RON</div>
-                <div class="result-detail">Cu rata potențială de colectare selectată</div>
-            </div>
-
-            <!-- Annual delta -->
-            <div class="result-block delta">
-                <div class="result-label">Diferență anuală suplimentară</div>
-                <div class="result-value blue" id="deltaYear">0 RON</div>
-                <div class="result-detail" id="deltaYearPercent"></div>
-            </div>
-
-            <!-- 10 year highlight -->
-            <div class="ten-year-highlight">
-                <div class="result-label">IMPACT PE 10 ANI</div>
-                <div class="result-value" id="delta10Y">0 RON</div>
-                <div class="result-detail" style="color:rgba(255,255,255,0.7);">Venituri suplimentare cumulate pe 10 ani
-                </div>
-            </div>
-        </div>
-
-        <!-- SECTION 5: Cost & ROI -->
-        <div class="card" id="roiCard" style="display:none">
-            <div class="card-title">Cost și recuperare investiție</div>
-
-            <div class="info-row">
-                <span class="info-label">Cost proiect CartInspect</span>
-                <span class="info-value" id="costTotal">-</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Preț per imobil</span>
-                <span class="info-value">120 RON</span>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="result-block roi">
-                <div class="result-label">ROI pe 10 ani</div>
-                <div class="result-value purple" id="roiValue">0%</div>
-            </div>
-
-            <div class="result-block" style="background:#fffaf0; border:2px solid #feebc8;">
-                <div class="result-label">Perioadă recuperare investiție</div>
-                <div class="result-value" style="color:#c05621;" id="paybackValue">0</div>
-                <div class="result-detail" id="paybackDetail"></div>
-            </div>
-        </div>
-
-        <!-- SECTION 6: What can be funded -->
-        <div class="card" id="impactCard" style="display:none">
-            <div class="card-title">Ce se poate realiza din surplus</div>
-            <div style="font-size:0.7rem; color:var(--text-secondary); margin-bottom:0.5rem;">
-                Estimare orientativă pe baza surplusului anual:
-            </div>
-            <div id="impactList"></div>
-        </div>
-
-        <!-- SECTION 7: Generate PDF -->
-        <div class="card" id="pdfCard" style="display:none">
-            <button class="btn btn-primary" onclick="generatePDF()">
-                GENEREAZĂ PDF
-            </button>
-            <div class="disclaimer">
-                Simulare realizată conform Codului Fiscal în vigoare (Legea 227/2015, actualizat 2026).<br>
-                Valorile sunt estimative.
-            </div>
-        </div>
-
-    </div>
+    <footer class="site-footer">
+        © 2026 <a href="https://www.visoro.ro" target="_blank">VISORO GROUP</a> · CartInspect · Calculator Impact
+        Bugetar
+    </footer>
 
     <script src="romania_uat.js"></script>
     <script src="roboto-fonts.js"></script>
