@@ -805,11 +805,7 @@
                     </div>
                     <input type="range" id="currentRate" min="10" max="90" value="80" step="5"
                         oninput="updateSlider('currentRate'); calculate()" aria-label="Rata actuală de colectare">
-                    <div
-                        style="display:flex; justify-content:space-between; font-size:0.6rem; color:var(--text-secondary); margin-top:0.15rem;">
-                        <span>10%</span>
-                        <span>90%</span>
-                    </div>
+
                 </div>
 
                 <div class="slider-container">
@@ -819,11 +815,7 @@
                     </div>
                     <input type="range" id="targetRate" min="10" max="100" value="90" step="5"
                         oninput="updateSlider('targetRate'); calculate()" aria-label="Rata potențială de colectare">
-                    <div
-                        style="display:flex; justify-content:space-between; font-size:0.6rem; color:var(--text-secondary); margin-top:0.15rem;">
-                        <span>10%</span>
-                        <span>100%</span>
-                    </div>
+
                 </div>
             </div>
 
@@ -925,11 +917,7 @@
                     </div>
                     <input type="range" id="installmentRate" min="5000" max="15000" value="5000" step="1000"
                         oninput="updateInstallmentSlider(); calculate()" aria-label="Rată lunară">
-                    <div
-                        style="display:flex; justify-content:space-between; font-size:0.6rem; color:var(--text-secondary); margin-top:0.15rem;">
-                        <span>5.000</span>
-                        <span>15.000 RON/lună</span>
-                    </div>
+
                 </div>
 
                 <div id="installmentDetails"></div>
@@ -1667,11 +1655,7 @@
             const detailsEl = document.getElementById('installmentDetails');
             let html = '';
 
-            if (contracts.length > 1) {
-                html += '<div style="font-size:0.75rem; color:var(--accent-light); margin-bottom:0.75rem; padding:0.5rem; background:rgba(229,62,62,0.08); border-radius:8px; text-align:center;">';
-                html += 'Contractul depășește ' + formatRON(MAX_CONTRACT) + ' → se împarte în ' + contracts.length + ' contracte (conform legii achizițiilor publice directe)';
-                html += '</div>';
-            }
+
 
             contracts.forEach((c, i) => {
                 html += '<div class="contract-box">';
