@@ -1711,37 +1711,32 @@
             // Total years from contract signing to break-even
             const totalBreakevenYears = IMPL_YEARS + breakevenYearsFromSurplus;
 
-            // Timeline: 10 years
+            // Timeline: 10 years — 2 simple segments
             const totalYears = 10;
-            const implYears = IMPL_YEARS;
-            const recoveryYears = Math.min(breakevenYearsFromSurplus, totalYears - implYears);
-            const profitYears = Math.max(0, totalYears - implYears - recoveryYears);
+            const combinedRecoveryYears = Math.min(totalBreakevenYears, totalYears);
+            const profitYears = Math.max(0, totalYears - combinedRecoveryYears);
 
-            const implPct = (implYears / totalYears * 100).toFixed(1);
-            const recoveryPct = (recoveryYears / totalYears * 100).toFixed(1);
+            const recoveryPct = (combinedRecoveryYears / totalYears * 100).toFixed(1);
             const profitPct = (profitYears / totalYears * 100).toFixed(1);
 
             // Format years nicely
             function fmtYears(y) {
                 if (y < 1) return Math.round(y * 12) + ' luni';
-                if (y === Math.floor(y)) return y + (y === 1 ? ' an' : ' ani');
-                return y.toFixed(1) + ' ani';
+                var rounded = Math.round(y * 10) / 10;
+                if (rounded === Math.floor(rounded)) return rounded + (rounded === 1 ? ' an' : ' ani');
+                return rounded.toFixed(1) + ' ani';
             }
 
             tHtml += '<div style="font-size:0.7rem; font-weight:700; color:var(--text-secondary); margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:1px;">Cronologie 10 ani</div>';
 
             tHtml += '<div class="timeline-bar">';
-            tHtml += '<div class="timeline-segment implementation" style="width:' + implPct + '%">' + fmtYears(implYears) + '</div>';
-            if (recoveryYears > 0.01) {
-                tHtml += '<div class="timeline-segment breakeven" style="width:' + recoveryPct + '%">' + fmtYears(Math.round(recoveryYears * 10) / 10) + '</div>';
-            }
+            tHtml += '<div class="timeline-segment breakeven" style="width:' + recoveryPct + '%">' + fmtYears(combinedRecoveryYears) + '</div>';
             if (profitYears > 0.01) {
-                tHtml += '<div class="timeline-segment profit" style="width:' + profitPct + '%">' + fmtYears(Math.round(profitYears * 10) / 10) + '</div>';
+                tHtml += '<div class="timeline-segment profit" style="width:' + profitPct + '%">' + fmtYears(profitYears) + '</div>';
             }
             tHtml += '</div>';
 
             tHtml += '<div class="timeline-legend">';
-            tHtml += '<div class="timeline-legend-item"><div class="legend-dot" style="background:#3182ce;"></div>Implementare proiect</div>';
             tHtml += '<div class="timeline-legend-item"><div class="legend-dot" style="background:#d69e2e;"></div>Recuperare investiție</div>';
             tHtml += '<div class="timeline-legend-item"><div class="legend-dot" style="background:#38a169;"></div>Profit net</div>';
             tHtml += '</div>';
