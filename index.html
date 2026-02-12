@@ -1660,11 +1660,10 @@
 
         function renderInstallments(contracts, monthlyRate, totalMonthlyPayment, longestMonths, deltaMonth, totalCost) {
             const r = calculationResults;
+            const IMPLEMENTATION_MONTHS = 6; // project delivery time
 
-            // Show card
             document.getElementById('installmentCard').style.display = 'block';
 
-            // Contract details
             const detailsEl = document.getElementById('installmentDetails');
             let html = '';
 
@@ -1683,7 +1682,6 @@
                 html += '</div>';
             });
 
-            // Total summary
             if (contracts.length > 1) {
                 html += '<div class="info-row" style="border-top:1px solid var(--gold); padding-top:0.5rem; margin-top:0.25rem;">';
                 html += '<span class="info-label" style="font-weight:700;">Total plată lunară (toate contractele)</span>';
@@ -1693,71 +1691,94 @@
 
             detailsEl.innerHTML = html;
 
-            // Timeline visualization
+            // ============ TIMELINE – 3 phases ============
+            // Phase 1: IMPLEMENTARE (6 months) – project delivery, no surplus yet
+            //          Mayor pays installments from budget
+            // Phase 2: RECUPERARE – surplus kicks in, covers installments,
+            //          cumulative surplus grows until it equals total cost
+            // Phase 3: PROFIT NET – investment fully recovered, everything is profit
+
             const timelineEl = document.getElementById('installmentTimeline');
             let tHtml = '';
 
-            // Calculate phases:
-            // Phase 1: Paying installments (0 → longestMonths)
-            // During this phase, the commune pays totalMonthlyPayment/month
-            // but gets deltaMonth/month surplus
-            // Net during payment = deltaMonth - totalMonthlyPayment
+            // Monthly surplus (starts after implementation)
+            const monthlySurplus = deltaMonth; // deltaYear / 12
 
-            const netDuringPayment = deltaMonth - totalMonthlyPayment;
-            const totalSurplus10Y = r.deltaYear * 10;
-            const totalInstallments = totalCost;
+            // How many months of surplus needed to recover total cost?
+            const breakevenMonthsFromSurplus = monthlySurplus > 0
+                ? Math.ceil(totalCost / monthlySurplus)
+                : Infinity;
 
-            // How many months until installment cost is recovered from surplus?
-            const monthsToRecoverFromSurplus = deltaMonth > 0 ? Math.ceil(totalInstallments / deltaMonth) : Infinity;
+            // Total months from contract signing to break-even
+            const totalBreakevenMonths = IMPLEMENTATION_MONTHS + breakevenMonthsFromSurplus;
 
-            // Timeline bar (120 months = 10 years)
+            // 10 year timeline
             const totalMonths = 120;
-            const payingMonths = Math.min(longestMonths, totalMonths);
-            const paidFromSurplusMonths = Math.max(0, Math.min(monthsToRecoverFromSurplus - payingMonths, totalMonths - payingMonths));
-            const freeMonths = Math.max(0, totalMonths - payingMonths);
+            const implMonths = IMPLEMENTATION_MONTHS;
+            const recoveryMonths = Math.min(breakevenMonthsFromSurplus, totalMonths - implMonths);
+            const profitMonths = Math.max(0, totalMonths - implMonths - recoveryMonths);
 
-            const payingPct = (payingMonths / totalMonths * 100).toFixed(1);
-            const freePct = (freeMonths / totalMonths * 100).toFixed(1);
+            const implPct = (implMonths / totalMonths * 100).toFixed(1);
+            const recoveryPct = (recoveryMonths / totalMonths * 100).toFixed(1);
+            const profitPct = (profitMonths / totalMonths * 100).toFixed(1);
 
             tHtml += '<div style="font-size:0.7rem; font-weight:700; color:var(--text-secondary); margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:1px;">Cronologie 10 ani</div>';
 
             tHtml += '<div class="timeline-bar">';
-            if (payingPct > 0) {
-                tHtml += '<div class="timeline-segment paying" style="width:' + payingPct + '%">' + payingMonths + ' luni</div>';
+            tHtml += '<div class="timeline-segment implementation" style="width:' + implPct + '%">' + implMonths + ' luni</div>';
+            if (recoveryPct > 0) {
+                tHtml += '<div class="timeline-segment breakeven" style="width:' + recoveryPct + '%">' + recoveryMonths + ' luni</div>';
             }
-            if (freePct > 0) {
-                tHtml += '<div class="timeline-segment free" style="width:' + freePct + '%">' + freeMonths + ' luni</div>';
+            if (profitPct > 0) {
+                tHtml += '<div class="timeline-segment profit" style="width:' + profitPct + '%">' + profitMonths + ' luni</div>';
             }
             tHtml += '</div>';
 
             tHtml += '<div class="timeline-legend">';
-            tHtml += '<div class="timeline-legend-item"><div class="legend-dot" style="background:#e53e3e;"></div>Plătește rate</div>';
-            tHtml += '<div class="timeline-legend-item"><div class="legend-dot" style="background:#38a169;"></div>Surplus net 100%</div>';
+            tHtml += '<div class="timeline-legend-item"><div class="legend-dot" style="background:#3182ce;"></div>Implementare proiect (6 luni)</div>';
+            tHtml += '<div class="timeline-legend-item"><div class="legend-dot" style="background:#d69e2e;"></div>Recuperare investiție</div>';
+            tHtml += '<div class="timeline-legend-item"><div class="legend-dot" style="background:#38a169;"></div>Profit net</div>';
             tHtml += '</div>';
 
-            // Key insight: during payment months, how much does the commune actually pay "from pocket"?
-            // If deltaMonth > totalMonthlyPayment, the surplus covers the installments entirely!
+            // Key insight box
             tHtml += '<div class="installment-summary">';
-            if (deltaMonth >= totalMonthlyPayment) {
-                tHtml += '<div class="result-label">SURPLUSUL ACOPERĂ RATELE DIN PRIMA LUNĂ</div>';
-                tHtml += '<div class="result-value green" style="font-size:1.5rem;">Surplus lunar: ' + formatRON(deltaMonth) + '</div>';
-                tHtml += '<div class="result-detail" style="color:rgba(255,255,255,0.7);">Rata lunară (' + formatRON(totalMonthlyPayment) + ') se plătește integral din venitul suplimentar!</div>';
-                tHtml += '<div class="result-detail" style="color:rgba(255,255,255,0.5); margin-top:0.35rem;">Diferență lunară netă: +' + formatRON(netDuringPayment) + '</div>';
+
+            // During implementation (months 1-6), mayor pays installments from budget
+            const paidDuringImpl = IMPLEMENTATION_MONTHS * totalMonthlyPayment;
+
+            if (monthlySurplus >= totalMonthlyPayment) {
+                // Surplus covers installments entirely from month 7
+                const netMonthly = monthlySurplus - totalMonthlyPayment;
+                tHtml += '<div class="result-label" style="font-size:0.8rem; margin-bottom:0.5rem;">DIN LUNA 7, SURPLUSUL ACOPERĂ INTEGRAL RATELE</div>';
+                tHtml += '<div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:0.5rem;">';
+                tHtml += '<div style="text-align:center;"><div style="font-size:0.6rem; color:rgba(255,255,255,0.5);">Surplus lunar</div><div style="font-size:1.2rem; font-weight:700; color:var(--success);">' + formatRON(monthlySurplus) + '</div></div>';
+                tHtml += '<div style="text-align:center;"><div style="font-size:0.6rem; color:rgba(255,255,255,0.5);">Rata lunară</div><div style="font-size:1.2rem; font-weight:700; color:#e2a72e;">−' + formatRON(totalMonthlyPayment) + '</div></div>';
+                tHtml += '<div style="text-align:center;"><div style="font-size:0.6rem; color:rgba(255,255,255,0.5);">Rămâne net</div><div style="font-size:1.2rem; font-weight:700; color:var(--success);">+' + formatRON(netMonthly) + '</div></div>';
+                tHtml += '</div>';
+                tHtml += '<div class="result-detail" style="color:rgba(255,255,255,0.7); font-size:0.75rem;">Investiția se recuperează complet în <strong style="color:var(--success);">' + totalBreakevenMonths + ' luni</strong> (' + (totalBreakevenMonths / 12).toFixed(1) + ' ani) de la semnarea contractului</div>';
             } else {
-                const outOfPocket = totalMonthlyPayment - deltaMonth;
-                tHtml += '<div class="result-label">CONTRIBUȚIE NETĂ DIN BUGET (LUNAR)</div>';
-                tHtml += '<div class="result-value" style="font-size:1.5rem; color:var(--gold-light);">' + formatRON(outOfPocket) + '/lună</div>';
-                tHtml += '<div class="result-detail" style="color:rgba(255,255,255,0.7);">Din rata de ' + formatRON(totalMonthlyPayment) + ', surplusul acoperă ' + formatRON(deltaMonth) + '</div>';
+                // Surplus partially covers installments
+                const outOfPocket = totalMonthlyPayment - monthlySurplus;
+                tHtml += '<div class="result-label" style="font-size:0.8rem; margin-bottom:0.5rem;">DIN LUNA 7, SURPLUSUL ACOPERĂ PARȚIAL RATELE</div>';
+                tHtml += '<div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:0.5rem;">';
+                tHtml += '<div style="text-align:center;"><div style="font-size:0.6rem; color:rgba(255,255,255,0.5);">Surplus lunar</div><div style="font-size:1.2rem; font-weight:700; color:var(--success);">' + formatRON(monthlySurplus) + '</div></div>';
+                tHtml += '<div style="text-align:center;"><div style="font-size:0.6rem; color:rgba(255,255,255,0.5);">Rata lunară</div><div style="font-size:1.2rem; font-weight:700; color:#e2a72e;">−' + formatRON(totalMonthlyPayment) + '</div></div>';
+                tHtml += '<div style="text-align:center;"><div style="font-size:0.6rem; color:rgba(255,255,255,0.5);">Din buget</div><div style="font-size:1.2rem; font-weight:700; color:#e53e3e;">' + formatRON(outOfPocket) + '</div></div>';
+                tHtml += '</div>';
+                tHtml += '<div class="result-detail" style="color:rgba(255,255,255,0.7); font-size:0.75rem;">Investiția se recuperează complet în <strong style="color:var(--success);">' + totalBreakevenMonths + ' luni</strong> (' + (totalBreakevenMonths / 12).toFixed(1) + ' ani) de la semnarea contractului</div>';
             }
             tHtml += '</div>';
 
-            // 10 year net calculation
-            const totalPaid10Y = totalInstallments;
-            const netGain10Y = totalSurplus10Y - totalPaid10Y;
+            // Summary numbers
+            const totalSurplus10Y = r.deltaYear * 10;
+            // Surplus only comes for months 7-120 (114 months, not 120)
+            const surplusMonths = totalMonths - IMPLEMENTATION_MONTHS;
+            const actualSurplus10Y = monthlySurplus * surplusMonths;
+            const netGain10Y = actualSurplus10Y - totalCost;
 
             tHtml += '<div style="margin-top:0.75rem;">';
-            tHtml += '<div class="info-row"><span class="info-label">Total plătit (toate ratele)</span><span class="info-value">' + formatRON(totalPaid10Y) + '</span></div>';
-            tHtml += '<div class="info-row"><span class="info-label">Total surplus 10 ani</span><span class="info-value" style="color:var(--success);">' + formatRON(totalSurplus10Y) + '</span></div>';
+            tHtml += '<div class="info-row"><span class="info-label">Cost total proiect</span><span class="info-value">' + formatRON(totalCost) + '</span></div>';
+            tHtml += '<div class="info-row"><span class="info-label">Surplus generat pe 10 ani</span><span class="info-value" style="color:var(--success);">' + formatRON(actualSurplus10Y) + '</span></div>';
             tHtml += '<div class="info-row" style="border-top:1px solid var(--gold); padding-top:0.5rem;"><span class="info-label" style="font-weight:700;">Câștig net pe 10 ani</span><span class="info-value" style="color:var(--success); font-size:1.1rem;">' + formatRON(netGain10Y) + '</span></div>';
             tHtml += '</div>';
 
