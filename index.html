@@ -1030,12 +1030,12 @@
 
         // Public investment examples (realistic Romanian prices)
         const INVESTMENTS = [
-            { name: 'km drum asfaltat', cost: 1200000, icon: '🛣️' },
-            { name: 'loc de joacă modernizat', cost: 1000000, icon: '🎡' },
-            { name: 'km iluminat public extins', cost: 150000, icon: '💡' },
-            { name: 'sală sport / multifuncțională', cost: 5000000, icon: '🏟️' },
-            { name: 'ambulanță / autospecială', cost: 500000, icon: '🚑' },
-            { name: 'alimentare apă (km rețea)', cost: 800000, icon: '💧' }
+            { name: 'm² clădire finisată (la cheie)', cost: 5000, icon: '🏗️' },
+            { name: 'loc de joacă modernizat', cost: 500000, icon: '🛝' },
+            { name: 'ml drum pietruit (4m lățime)', cost: 200, icon: '🪨' },
+            { name: 'm² renovare clădire publică', cost: 2500, icon: '🏫' },
+            { name: 'bancă parc instalată', cost: 5000, icon: '🪑' },
+            { name: 'loc de parcare amenajat', cost: 375, icon: '🅿️' }
         ];
 
         // ============================================================
@@ -1270,24 +1270,24 @@
 
             INVESTMENTS.forEach(inv => {
                 const count = deltaYear / inv.cost;
-                if (count >= 0.1) {
-                    const div = document.createElement('div');
-                    div.className = 'impact-item';
-                    let displayCount;
-                    if (count >= 1) {
-                        displayCount = count.toFixed(1);
-                    } else {
-                        displayCount = count.toFixed(2);
-                    }
-                    div.innerHTML = `
+                const div = document.createElement('div');
+                div.className = 'impact-item';
+                let displayCount;
+                if (count >= 100) {
+                    displayCount = new Intl.NumberFormat('ro-RO', { maximumFractionDigits: 0 }).format(Math.round(count));
+                } else if (count >= 1) {
+                    displayCount = new Intl.NumberFormat('ro-RO', { maximumFractionDigits: 1 }).format(count);
+                } else {
+                    displayCount = count.toFixed(2);
+                }
+                div.innerHTML = `
                 <div class="impact-icon">${inv.icon}</div>
                 <div class="impact-text">
                     <div class="impact-name">${inv.name}</div>
                     <div class="impact-count">~${displayCount} / an din surplusul generat</div>
                 </div>
             `;
-                    list.appendChild(div);
-                }
+                list.appendChild(div);
             });
         }
 
