@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CartInspect - Calculator Impact Bugetar</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2a4a7f;
+            --accent: #e53e3e;
+            --accent-light: #fc8181;
+            --success: #38a169;
+            --success-light: #68d391;
+            --bg: #f7fafc;
+            --card: #ffffff;
+            --text: #1a202c;
+            --text-secondary: #4a5568;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .header-logo span {
+            color: var(--accent-light);
+        }
+
+        .header-sub {
+            font-size: 0.75rem;
+            opacity: 0.85;
+            margin-top: 0.15rem;
+            letter-spacing: 0.5px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0.75rem;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 0.75rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.35rem;
+        }
+
+        select,
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            color: var(--text);
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        input[type="number"] {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .slider-container {
+            margin-bottom: 1.25rem;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-value {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+            min-width: 50px;
+            text-align: right;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--border);
+            outline: none;
+            transition: background 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-block {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+        }
+
+        .result-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-block.current {
+            background: #fff5f5;
+            border: 2px solid #fed7d7;
+        }
+
+        .result-block.after {
+            background: #f0fff4;
+            border: 2px solid #c6f6d5;
+        }
+
+        .result-block.delta {
+            background: #ebf8ff;
+            border: 2px solid #bee3f8;
+        }
+
+        .result-block.roi {
+            background: #faf5ff;
+            border: 2px solid #e9d8fd;
+        }
+
+        .result-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin: 0.25rem 0;
+        }
+
+        .result-value.red {
+            color: var(--accent);
+        }
+
+        .result-value.green {
+            color: var(--success);
+        }
+
+        .result-value.blue {
+            color: #3182ce;
+        }
+
+        .result-value.purple {
+            color: #805ad5;
+        }
+
+        .result-detail {
+            font-size: 0.7rem;
+            color: #2d3748;
+        }
+
+        .impact-item {
+            display: flex;
+            align-items: center;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .impact-item:last-child {
+            border-bottom: none;
+        }
+
+        .impact-icon {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            width: 2rem;
+            text-align: center;
+        }
+
+        .impact-text {
+            flex: 1;
+        }
+
+        .impact-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .impact-count {
+            font-size: 0.75rem;
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #48bb78);
+            color: white;
+            box-shadow: var(--shadow);
+            margin-top: 0.5rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-weight: 700;
+        }
+
+        .rang-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .disclaimer {
+            font-size: 0.65rem;
+            color: #2d3748;
+            text-align: center;
+            padding: 0.75rem;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        .error-banner {
+            background: #fff5f5;
+            border: 2px solid #fed7d7;
+            color: #c53030;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .ten-year-highlight {
+            background: linear-gradient(135deg, #1a365d, #2a4a7f);
+            color: white;
+            padding: 1.25rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .ten-year-highlight .result-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .ten-year-highlight .result-value {
+            color: #68d391;
+            font-size: 2rem;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0.75rem 0;
+        }
+
+        .fiscal-detail {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .fiscal-detail-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.35rem;
+        }
+
+        @media (max-width: 360px) {
+            .result-value {
+                font-size: 1.4rem;
+            }
+
+            .container {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="header-logo">VISORO <span>CartInspect</span></div>
+        <div class="header-sub">CALCULATOR IMPACT BUGETAR</div>
+    </div>
+
+    <div class="container">
+
+        <!-- Error banner (shown if romania_uat.js fails to load) -->
+        <div class="error-banner" id="errorBanner" style="display:none"></div>
+
+        <!-- SECTION 1: Administrative Data -->
+        <div class="card">
+            <div class="card-title">Date administrative</div>
+
+            <div class="form-group">
+                <label>Nume agent</label>
+                <input type="text" id="agentName" placeholder="Introduceți numele agentului">
+            </div>
+
+            <div class="form-group">
+                <label>Județ</label>
+                <select id="county" onchange="onCountyChange()">
+                    <option value="">Selectați județul</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Comună / Oraș / Municipiu</label>
+                <select id="commune" onchange="onCommuneChange()" disabled>
+                    <option value="">Selectați mai întâi județul</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="rankDisplay" style="display:none">
+                <div class="info-row">
+                    <span class="info-label">Rang localitate (Legea 351/2001)</span>
+                    <span class="info-value"><span class="rang-badge" id="rankBadge"></span></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Zonă fiscală</span>
+                    <span class="info-value">Zona A (maxim legal)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Input -->
+        <div class="card">
+            <div class="card-title">Date imobile</div>
+
+            <div class="form-group">
+                <label>Număr imobile intravilan</label>
+                <input type="number" id="nrImobile" placeholder="ex: 2556" min="1" max="100000" oninput="calculate()">
+                <div style="font-size:0.65rem; color:var(--text-secondary); margin-top:0.25rem; text-align:center;">
+                    Imobil = teren cu sau fără construcție (conform Cod Fiscal)
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Sliders -->
+        <div class="card">
+            <div class="card-title">Parametri colectare</div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>Rata actuală de colectare</label>
+                    <span class="slider-value" id="currentRateDisplay">80%</span>
+                </div>
+                <input type="range" id="currentRate" min="10" max="90" value="80" step="5"
+                    oninput="updateSlider('currentRate'); calculate()" aria-label="Rata actuală de colectare">
+                <div
+                    style="display:flex; justify-content:space-between; font-size:0.6rem; color:var(--text-secondary); margin-top:0.15rem;">
+                    <span>10%</span>
+                    <span>90%</span>
+                </div>
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>Rata potențială de colectare</label>
+                    <span class="slider-value" id="targetRateDisplay">90%</span>
+                </div>
+                <input type="range" id="targetRate" min="10" max="100" value="90" step="5"
+                    oninput="updateSlider('targetRate'); calculate()" aria-label="Rata potențială de colectare">
+                <div
+                    style="display:flex; justify-content:space-between; font-size:0.6rem; color:var(--text-secondary); margin-top:0.15rem;">
+                    <span>10%</span>
+                    <span>100%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: Results -->
+        <div class="card" id="resultsCard" style="display:none">
+            <div class="card-title">Rezultate simulare</div>
+
+            <!-- Fiscal breakdown -->
+            <div class="fiscal-detail">
+                <div class="fiscal-detail-title">DETALII FISCALE PER IMOBIL (medie)</div>
+                <div class="info-row">
+                    <span class="info-label">Impozit clădire (100 m², Tip A, cu utilități)</span>
+                    <span class="info-value" id="taxBuildingPerImobil">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Impozit teren curți-construcții (500 m²)</span>
+                    <span class="info-value" id="taxLandCCPerImobil">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Impozit teren grădină (500 m²)</span>
+                    <span class="info-value" id="taxLandGardenPerImobil">-</span>
+                </div>
+                <div class="info-row"
+                    style="border-top: 2px solid var(--primary); margin-top: 0.25rem; padding-top: 0.5rem;">
+                    <span class="info-label" style="font-weight:700;">Total per imobil (medie)</span>
+                    <span class="info-value" id="taxTotalPerImobil" style="color: var(--primary);">-</span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Current situation -->
+            <div class="result-block current">
+                <div class="result-label">Încasare anuală estimată actuală</div>
+                <div class="result-value red" id="collectedNow">0 RON</div>
+                <div class="result-detail" id="collectedNowDetail"></div>
+            </div>
+
+            <!-- After CartInspect -->
+            <div class="result-block after">
+                <div class="result-label">Încasare anuală după CartInspect</div>
+                <div class="result-value green" id="collectedAfter">0 RON</div>
+                <div class="result-detail">Cu rata potențială de colectare selectată</div>
+            </div>
+
+            <!-- Annual delta -->
+            <div class="result-block delta">
+                <div class="result-label">Diferență anuală suplimentară</div>
+                <div class="result-value blue" id="deltaYear">0 RON</div>
+                <div class="result-detail" id="deltaYearPercent"></div>
+            </div>
+
+            <!-- 10 year highlight -->
+            <div class="ten-year-highlight">
+                <div class="result-label">IMPACT PE 10 ANI</div>
+                <div class="result-value" id="delta10Y">0 RON</div>
+                <div class="result-detail" style="color:rgba(255,255,255,0.7);">Venituri suplimentare cumulate pe 10 ani
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 5: Cost & ROI -->
+        <div class="card" id="roiCard" style="display:none">
+            <div class="card-title">Cost și recuperare investiție</div>
+
+            <div class="info-row">
+                <span class="info-label">Cost proiect CartInspect</span>
+                <span class="info-value" id="costTotal">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Preț per imobil</span>
+                <span class="info-value">120 RON</span>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="result-block roi">
+                <div class="result-label">ROI pe 10 ani</div>
+                <div class="result-value purple" id="roiValue">0%</div>
+            </div>
+
+            <div class="result-block" style="background:#fffaf0; border:2px solid #feebc8;">
+                <div class="result-label">Perioadă recuperare investiție</div>
+                <div class="result-value" style="color:#c05621;" id="paybackValue">0</div>
+                <div class="result-detail" id="paybackDetail"></div>
+            </div>
+        </div>
+
+        <!-- SECTION 6: What can be funded -->
+        <div class="card" id="impactCard" style="display:none">
+            <div class="card-title">Ce se poate realiza din surplus</div>
+            <div style="font-size:0.7rem; color:var(--text-secondary); margin-bottom:0.5rem;">
+                Estimare orientativă pe baza surplusului anual:
+            </div>
+            <div id="impactList"></div>
+        </div>
+
+        <!-- SECTION 7: Generate PDF -->
+        <div class="card" id="pdfCard" style="display:none">
+            <button class="btn btn-primary" onclick="generatePDF()">
+                GENEREAZĂ PDF
+            </button>
+            <div class="disclaimer">
+                Simulare realizată conform Codului Fiscal în vigoare (Legea 227/2015, actualizat 2026).<br>
+                Valorile sunt estimative.
+            </div>
+        </div>
+
+    </div>
+
+    <script src="romania_uat.js"></script>
+    <script src="roboto-fonts.js"></script>
+    <script>
+        // ============================================================
+        // FISCAL DATA TABLES (Cod Fiscal 2026 - Art. 457, 465)
+        // ============================================================
+
+        // Art. 457 - Building value per m² (2026 values)
+        const BUILDING_VALUES = {
+            // Type A: reinforced concrete / fired brick
+            A: { cu_utilitati: 2677, fara_utilitati: 1606 },
+            B: { cu_utilitati: 803, fara_utilitati: 535 },
+            C: { cu_utilitati: 535, fara_utilitati: 469 },
+            D: { cu_utilitati: 335, fara_utilitati: 201 }
+        };
+
+        // Art. 457 alin. (6) - Correction coefficients by rank and zone
+        const COEF_CORECTIE_CLADIRE = {
+            '0': { A: 2.60, B: 2.50, C: 2.40, D: 2.30 },
+            'I': { A: 2.50, B: 2.40, C: 2.30, D: 2.20 },
+            'II': { A: 2.40, B: 2.30, C: 2.20, D: 2.10 },
+            'III': { A: 2.30, B: 2.20, C: 2.10, D: 2.00 },
+            'IV': { A: 1.10, B: 1.05, C: 1.00, D: 0.95 },
+            'V': { A: 1.05, B: 1.00, C: 0.95, D: 0.90 }
+        };
+
+        // Art. 465 alin. (2) - Land tax for curti-constructii (lei/ha)
+        // Using MAXIMUM values from the legal range (as specified)
+        const LAND_TAX_CC = {
+            '0': { A: 20706, B: 17194, C: 12998, D: 8894 },
+            'I': { A: 17194, B: 12998, C: 8894, D: 4226 },
+            'II': { A: 15106, B: 10538, C: 6670, D: 3526 },
+            'III': { A: 13090, B: 8894, C: 4226, D: 2439 },
+            'IV': { A: 1788, B: 1422, C: 1068, D: 696 },
+            'V': { A: 1422, B: 1068, C: 710, D: 356 }
+        };
+
+        // Art. 465 alin. (4) - Land tax for other intravilan categories (lei/ha)
+        // Gradina = same as arabil for intravilan
+        const LAND_TAX_OTHER = {
+            arabil: { A: 75, B: 56, C: 51, D: 41 },
+            pasune: { A: 56, B: 51, C: 41, D: 36 },
+            gradina: { A: 75, B: 56, C: 51, D: 41 } // same as arabil
+        };
+
+        // Art. 465 alin. (5) - Correction coefficients for other land categories
+        const COEF_CORECTIE_TEREN = {
+            '0': 8.00,
+            'I': 5.00,
+            'II': 4.00,
+            'III': 3.00,
+            'IV': 1.10,
+            'V': 1.00
+        };
+
+        // ============================================================
+        // MODEL CONSTANTS
+        // ============================================================
+        const MODEL = {
+            BUILDING_AREA_M2: 100,       // Average building area
+            LAND_TOTAL_M2: 1000,         // Total land per imobil
+            LAND_CC_M2: 500,             // Curti-constructii area
+            LAND_GARDEN_M2: 500,         // Gradina area
+            BUILDING_SHARE: 0.80,        // 80% of imobile have buildings
+            GROWTH_FACTOR: 0.80,         // +80% growth after CartInspect
+            PRICE_PER_IMOBIL: 120,       // RON per imobil
+            BUILDING_TYPE: 'A',          // Default building type
+            CU_UTILITATI: true,          // Default: with utilities
+            ZONA: 'A',                   // Always Zone A (max legal)
+            TAX_RATE_BUILDING: 0.001     // 0.1% of taxable value
+        };
+
+        // Public investment examples (realistic Romanian prices)
+        const INVESTMENTS = [
+            { name: 'km drum asfaltat', cost: 1200000, icon: '🛣️' },
+            { name: 'loc de joacă modernizat', cost: 1000000, icon: '🎡' },
+            { name: 'km iluminat public extins', cost: 150000, icon: '💡' },
+            { name: 'sală sport / multifuncțională', cost: 5000000, icon: '🏟️' },
+            { name: 'ambulanță / autospecială', cost: 500000, icon: '🚑' },
+            { name: 'alimentare apă (km rețea)', cost: 800000, icon: '💧' }
+        ];
+
+        // ============================================================
+        // STATE
+        // ============================================================
+        let currentRang = null;
+        let calculationResults = null;
+
+        // ============================================================
+        // UI INITIALIZATION
+        // ============================================================
+        function init() {
+            populateCounties();
+            updateSlider('currentRate');
+            updateSlider('targetRate');
+        }
+
+        function populateCounties() {
+            const sel = document.getElementById('county');
+            if (typeof ROMANIA_UAT === 'undefined') {
+                const banner = document.getElementById('errorBanner');
+                banner.textContent = 'Eroare: Datele administrative (romania_uat.js) nu s-au putut încărca. Reîncărcați pagina.';
+                banner.style.display = 'block';
+                console.error('romania_uat.js not loaded');
+                return;
+            }
+            const counties = Object.keys(ROMANIA_UAT).sort();
+            counties.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = c;
+                sel.appendChild(opt);
+            });
+        }
+
+        function onCountyChange() {
+            const county = document.getElementById('county').value;
+            const communeSel = document.getElementById('commune');
+            communeSel.innerHTML = '<option value="">Selectați UAT-ul</option>';
+            communeSel.disabled = !county;
+            document.getElementById('rankDisplay').style.display = 'none';
+
+            if (!county || !ROMANIA_UAT[county]) return;
+
+            const uats = Object.keys(ROMANIA_UAT[county]).sort();
+            uats.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = u;
+                const info = ROMANIA_UAT[county][u];
+                const tipLabel = info.tip.charAt(0).toUpperCase() + info.tip.slice(1);
+                opt.textContent = `${u} (${tipLabel})`;
+                communeSel.appendChild(opt);
+            });
+        }
+
+        function onCommuneChange() {
+            const county = document.getElementById('county').value;
+            const commune = document.getElementById('commune').value;
+
+            if (!county || !commune || !ROMANIA_UAT[county] || !ROMANIA_UAT[county][commune]) {
+                document.getElementById('rankDisplay').style.display = 'none';
+                currentRang = null;
+                calculate();
+                return;
+            }
+
+            const info = ROMANIA_UAT[county][commune];
+            currentRang = info.rang;
+
+            document.getElementById('rankDisplay').style.display = 'block';
+            document.getElementById('rankBadge').textContent = `Rang ${currentRang}`;
+            calculate();
+        }
+
+        function updateSlider(id) {
+            const val = parseInt(document.getElementById(id).value);
+            document.getElementById(id + 'Display').textContent = val + '%';
+
+            // Validate: targetRate must be >= currentRate
+            const currentVal = parseInt(document.getElementById('currentRate').value);
+            const targetVal = parseInt(document.getElementById('targetRate').value);
+            if (targetVal < currentVal) {
+                if (id === 'targetRate') {
+                    document.getElementById('targetRate').value = currentVal;
+                    document.getElementById('targetRateDisplay').textContent = currentVal + '%';
+                } else {
+                    document.getElementById('currentRate').value = targetVal;
+                    document.getElementById('currentRateDisplay').textContent = targetVal + '%';
+                }
+            }
+        }
+
+        // ============================================================
+        // CALCULATION ENGINE
+        // ============================================================
+        function calculate() {
+            const rawN = parseInt(document.getElementById('nrImobile').value) || 0;
+            const N = Math.max(0, rawN);
+            const rCurrent = parseInt(document.getElementById('currentRate').value) / 100;
+            const rTarget = Math.max(rCurrent, parseInt(document.getElementById('targetRate').value) / 100);
+
+            if (!N || !currentRang) {
+                document.getElementById('resultsCard').style.display = 'none';
+                document.getElementById('roiCard').style.display = 'none';
+                document.getElementById('impactCard').style.display = 'none';
+                document.getElementById('pdfCard').style.display = 'none';
+                return;
+            }
+
+            const zona = MODEL.ZONA;
+            const rang = currentRang;
+
+            // 1. Building tax per imobil (Type A, cu utilitati)
+            const valPerM2 = BUILDING_VALUES[MODEL.BUILDING_TYPE][MODEL.CU_UTILITATI ? 'cu_utilitati' : 'fara_utilitati'];
+            const coefCladire = COEF_CORECTIE_CLADIRE[rang] ? COEF_CORECTIE_CLADIRE[rang][zona] : 1.0;
+            const valoareImpozabila = MODEL.BUILDING_AREA_M2 * valPerM2 * coefCladire;
+            const taxBuilding = valoareImpozabila * MODEL.TAX_RATE_BUILDING;
+
+            // 2. Land tax: curti-constructii (500 m² = 0.05 ha)
+            const leiPerHaCC = LAND_TAX_CC[rang] ? LAND_TAX_CC[rang][zona] : 0;
+            const taxLandCC = (leiPerHaCC / 10000) * MODEL.LAND_CC_M2;
+
+            // 3. Land tax: gradina (500 m² = 0.05 ha)
+            // For gradina (intravilan, alta categorie), apply base rate × correction coefficient
+            const leiPerHaGarden = LAND_TAX_OTHER.gradina[zona] || 0;
+            const coefTeren = COEF_CORECTIE_TEREN[rang] || 1.0;
+            const taxLandGarden = (leiPerHaGarden * coefTeren / 10000) * MODEL.LAND_GARDEN_M2;
+
+            // 4. Average tax per imobil (80% have building, 20% only land)
+            const taxWithBuilding = taxBuilding + taxLandCC + taxLandGarden;
+            const taxLandOnly = taxLandCC + taxLandGarden;
+            const taxPerImobil = MODEL.BUILDING_SHARE * taxWithBuilding + (1 - MODEL.BUILDING_SHARE) * taxLandOnly;
+
+            // 5. Total theoretical tax (100% collection)
+            const tax100 = N * taxPerImobil;
+
+            // 6. Current collected
+            const collectedNow = tax100 * rCurrent;
+
+            // 7. After CartInspect (same collection rate)
+            const collectedAfterSame = collectedNow * (1 + MODEL.GROWTH_FACTOR);
+
+            // 8. After CartInspect (with target collection rate)
+            const collectedAfterTarget = (tax100 * rTarget) * (1 + MODEL.GROWTH_FACTOR);
+
+            // 9. Deltas
+            const deltaYear = collectedAfterTarget - collectedNow;
+            const delta10Y = deltaYear * 10;
+
+            // 10. Cost & ROI
+            const cost = N * MODEL.PRICE_PER_IMOBIL;
+            const roi10Y = (delta10Y - cost) / cost;
+            const paybackYears = deltaYear > 0 ? cost / deltaYear : Infinity;
+
+            // Store results
+            calculationResults = {
+                N, rCurrent, rTarget, rang, zona,
+                taxBuilding, taxLandCC, taxLandGarden,
+                taxPerImobil, tax100,
+                collectedNow, collectedAfterSame, collectedAfterTarget,
+                deltaYear, delta10Y,
+                cost, roi10Y, paybackYears,
+                valoareImpozabila, coefCladire, leiPerHaCC, leiPerHaGarden, coefTeren
+            };
+
+            // Update UI
+            renderResults();
+        }
+
+        function formatRON(value) {
+            return new Intl.NumberFormat('ro-RO', { maximumFractionDigits: 0 }).format(Math.round(value)) + ' RON';
+        }
+
+        function renderResults() {
+            const r = calculationResults;
+            if (!r) return;
+
+            // Show all result sections
+            document.getElementById('resultsCard').style.display = 'block';
+            document.getElementById('roiCard').style.display = 'block';
+            document.getElementById('impactCard').style.display = 'block';
+            document.getElementById('pdfCard').style.display = 'block';
+
+            // Fiscal details per imobil
+            document.getElementById('taxBuildingPerImobil').textContent = formatRON(r.taxBuilding);
+            document.getElementById('taxLandCCPerImobil').textContent = formatRON(r.taxLandCC);
+            document.getElementById('taxLandGardenPerImobil').textContent = formatRON(r.taxLandGarden);
+            document.getElementById('taxTotalPerImobil').textContent = formatRON(r.taxPerImobil);
+
+            // Current
+            document.getElementById('collectedNow').textContent = formatRON(r.collectedNow);
+            document.getElementById('collectedNowDetail').textContent =
+                `${r.N} imobile × ${formatRON(r.taxPerImobil)}/imobil × ${Math.round(r.rCurrent * 100)}% colectare`;
+
+            // After
+            document.getElementById('collectedAfter').textContent = formatRON(r.collectedAfterTarget);
+
+            // Delta
+            document.getElementById('deltaYear').textContent = '+ ' + formatRON(r.deltaYear);
+            const deltaPercent = r.collectedNow > 0 ? Math.round((r.deltaYear / r.collectedNow) * 100) : 0;
+            document.getElementById('deltaYearPercent').textContent = `Creștere de ${deltaPercent}% față de situația actuală`;
+
+            // 10 year
+            document.getElementById('delta10Y').textContent = '+ ' + formatRON(r.delta10Y);
+
+            // Cost & ROI
+            document.getElementById('costTotal').textContent = formatRON(r.cost);
+            document.getElementById('roiValue').textContent = Math.round(r.roi10Y * 100) + '%';
+
+            if (r.paybackYears < 1) {
+                const months = Math.max(1, Math.round(r.paybackYears * 12));
+                document.getElementById('paybackValue').textContent = months + ' luni';
+                document.getElementById('paybackDetail').textContent = 'Investiția se recuperează în mai puțin de 1 an';
+            } else {
+                const years = r.paybackYears.toFixed(1);
+                document.getElementById('paybackValue').textContent = years + ' ani';
+                document.getElementById('paybackDetail').textContent = 'Investiția se recuperează din surplusul anual';
+            }
+
+            // Impact items
+            renderImpact(r.deltaYear);
+        }
+
+        function renderImpact(deltaYear) {
+            const list = document.getElementById('impactList');
+            list.innerHTML = '';
+
+            INVESTMENTS.forEach(inv => {
+                const count = deltaYear / inv.cost;
+                if (count >= 0.1) {
+                    const div = document.createElement('div');
+                    div.className = 'impact-item';
+                    let displayCount;
+                    if (count >= 1) {
+                        displayCount = count.toFixed(1);
+                    } else {
+                        displayCount = count.toFixed(2);
+                    }
+                    div.innerHTML = `
+                <div class="impact-icon">${inv.icon}</div>
+                <div class="impact-text">
+                    <div class="impact-name">${inv.name}</div>
+                    <div class="impact-count">~${displayCount} / an din surplusul generat</div>
+                </div>
+            `;
+                    list.appendChild(div);
+                }
+            });
+        }
+
+        // ============================================================
+        // PDF GENERATION (Roboto font + Visoro logo)
+        // ============================================================
+        function generatePDF() {
+            const r = calculationResults;
+            if (!r) return;
+
+            const agentName = document.getElementById('agentName').value || 'N/A';
+            const county = document.getElementById('county').value || 'N/A';
+            const communeName = document.getElementById('commune').value || 'N/A';
+            const today = new Date().toLocaleDateString('ro-RO');
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const pageW = 210;
+            const pageH = 297;
+            const margin = 15;
+            const contentW = pageW - 2 * margin;
+
+            // Register Roboto fonts (supports Romanian diacritics: ț, ș, ă, î, â)
+            registerRobotoFonts(doc);
+
+            // Colors
+            const primary = [26, 54, 93];
+            const accent = [229, 62, 62];
+            const success = [56, 161, 105];
+            const textColor = [26, 32, 44];
+            const gray = [74, 85, 104];
+            const gold = [196, 164, 52];
+
+            // Helper: check page break
+            let y = 0;
+            function checkPageBreak(needed) {
+                if (y + needed > pageH - 30) {
+                    drawFooter(doc, pageW, margin, contentW, primary, gray);
+                    doc.addPage();
+                    y = 20;
+                    return true;
+                }
+                return false;
+            }
+
+            // ========= HEADER WITH LOGO =========
+            // Dark blue header bar
+            doc.setFillColor(...primary);
+            doc.rect(0, 0, pageW, 36, 'F');
+
+            // Gold accent line at bottom of header
+            doc.setFillColor(...gold);
+            doc.rect(0, 36, pageW, 1.2, 'F');
+
+            // Logo on the left
+            try {
+                doc.addImage(LOGO_B64, 'PNG', margin, 3, 30, 30);
+            } catch (e) {
+                console.warn('Logo could not be embedded:', e);
+            }
+
+            // Title text
+            doc.setFont('Roboto', 'bold');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(20);
+            doc.text('VISORO CartInspect', margin + 35, 15);
+
+            doc.setFont('Roboto', 'normal');
+            doc.setFontSize(11);
+            doc.setTextColor(200, 210, 230);
+            doc.text('Calculator Impact Bugetar', margin + 35, 22);
+
+            doc.setFontSize(8);
+            doc.setTextColor(180, 195, 215);
+            doc.text('Data: ' + today + '  |  Agent: ' + agentName, margin + 35, 29);
+
+            y = 44;
+
+            // ========= ADMINISTRATIVE DATA =========
+            doc.setTextColor(...primary);
+            doc.setFontSize(12);
+            doc.setFont('Roboto', 'bold');
+            doc.text('DATE ADMINISTRATIVE', margin, y);
+            y += 2;
+            doc.setDrawColor(...primary);
+            doc.setLineWidth(0.6);
+            doc.line(margin, y, margin + contentW, y);
+            y += 7;
+
+            doc.setFontSize(9);
+            const adminData = [
+                ['Jude\u021b', county],
+                ['UAT', communeName],
+                ['Rang localitate', 'Rang ' + r.rang + ' (Legea 351/2001)'],
+                ['Zon\u0103 fiscal\u0103', 'Zona A (scenariu maxim legal)'],
+                ['Nr. imobile intravilan', r.N.toLocaleString('ro-RO')],
+                ['Rata actual\u0103 colectare', Math.round(r.rCurrent * 100) + '%'],
+                ['Rata poten\u021bial\u0103 colectare', Math.round(r.rTarget * 100) + '%']
+            ];
+
+            adminData.forEach(function (row) {
+                doc.setFont('Roboto', 'normal');
+                doc.setTextColor(...gray);
+                doc.text(row[0] + ':', margin, y);
+                doc.setFont('Roboto', 'bold');
+                doc.setTextColor(...textColor);
+                doc.text(String(row[1]), margin + 55, y);
+                y += 5.5;
+            });
+
+            y += 3;
+
+            // ========= MODEL DE CALCUL =========
+            checkPageBreak(50);
+            doc.setTextColor(...primary);
+            doc.setFontSize(12);
+            doc.setFont('Roboto', 'bold');
+            doc.text('MODEL DE CALCUL', margin, y);
+            y += 2;
+            doc.setDrawColor(...primary);
+            doc.setLineWidth(0.6);
+            doc.line(margin, y, margin + contentW, y);
+            y += 7;
+
+            doc.setFontSize(8);
+            doc.setTextColor(...gray);
+            doc.setFont('Roboto', 'normal');
+
+            var modelLines = [
+                'Modelul folose\u0219te o structur\u0103 medie: 80% imobile cu cl\u0103dire (100 m\u00B2) +',
+                '1000 m\u00B2 teren intravilan (500 m\u00B2 cur\u021bi-construc\u021bii, 500 m\u00B2 gr\u0103din\u0103).',
+                '',
+                'Impozit cl\u0103dire/imobil: ' + formatRON(r.taxBuilding) + ' (Tip A, cu utilit\u0103\u021bi, coef. ' + r.coefCladire + ')',
+                'Impozit teren cur\u021bi-constr./imobil: ' + formatRON(r.taxLandCC) + ' (' + r.leiPerHaCC + ' lei/ha)',
+                'Impozit teren gr\u0103din\u0103/imobil: ' + formatRON(r.taxLandGarden) + ' (' + r.leiPerHaGarden + ' lei/ha \u00D7 coef. ' + r.coefTeren + ')',
+                'Total mediu per imobil: ' + formatRON(r.taxPerImobil),
+                '',
+                'Cre\u0219tere estimat\u0103 dup\u0103 CartInspect: +80% (bazat pe rezultate documentate).'
+            ];
+
+            modelLines.forEach(function (line) {
+                if (line === '') { y += 2; return; }
+                doc.text(line, margin, y);
+                y += 4.5;
+            });
+
+            y += 5;
+
+            // ========= REZULTATE SIMULARE =========
+            checkPageBreak(80);
+            doc.setTextColor(...primary);
+            doc.setFontSize(12);
+            doc.setFont('Roboto', 'bold');
+            doc.text('REZULTATE SIMULARE', margin, y);
+            y += 2;
+            doc.setDrawColor(...primary);
+            doc.setLineWidth(0.6);
+            doc.line(margin, y, margin + contentW, y);
+            y += 8;
+
+            // Current - red box
+            doc.setFillColor(255, 245, 245);
+            doc.setDrawColor(254, 215, 215);
+            doc.roundedRect(margin, y - 4, contentW, 16, 2, 2, 'FD');
+            doc.setTextColor(...accent);
+            doc.setFontSize(9);
+            doc.setFont('Roboto', 'normal');
+            doc.text('\u00CEncasare anual\u0103 estimat\u0103 actual\u0103:', margin + 4, y + 1);
+            doc.setFontSize(14);
+            doc.setFont('Roboto', 'bold');
+            doc.text(formatRON(r.collectedNow), margin + 4, y + 9);
+            y += 20;
+
+            // After - green box
+            doc.setFillColor(240, 255, 244);
+            doc.setDrawColor(198, 246, 213);
+            doc.roundedRect(margin, y - 4, contentW, 16, 2, 2, 'FD');
+            doc.setTextColor(...success);
+            doc.setFontSize(9);
+            doc.setFont('Roboto', 'normal');
+            doc.text('\u00CEncasare anual\u0103 estimat\u0103 dup\u0103 CartInspect:', margin + 4, y + 1);
+            doc.setFontSize(14);
+            doc.setFont('Roboto', 'bold');
+            doc.text(formatRON(r.collectedAfterTarget), margin + 4, y + 9);
+            y += 20;
+
+            // Delta annual - blue box
+            doc.setFillColor(235, 248, 255);
+            doc.setDrawColor(190, 227, 248);
+            doc.roundedRect(margin, y - 4, contentW, 16, 2, 2, 'FD');
+            doc.setTextColor(49, 130, 206);
+            doc.setFontSize(9);
+            doc.setFont('Roboto', 'normal');
+            doc.text('Diferen\u021b\u0103 anual\u0103 suplimentar\u0103:', margin + 4, y + 1);
+            doc.setFontSize(14);
+            doc.setFont('Roboto', 'bold');
+            doc.text('+ ' + formatRON(r.deltaYear), margin + 4, y + 9);
+            y += 20;
+
+            // 10 year highlight - dark blue box
+            doc.setFillColor(...primary);
+            doc.setDrawColor(...primary);
+            doc.roundedRect(margin, y - 4, contentW, 20, 2, 2, 'FD');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(9);
+            doc.setFont('Roboto', 'normal');
+            doc.text('IMPACT PE 10 ANI \u2013 Venituri suplimentare cumulate:', margin + 4, y + 2);
+            doc.setFontSize(18);
+            doc.setFont('Roboto', 'bold');
+            doc.setTextColor(104, 211, 145);
+            doc.text('+ ' + formatRON(r.delta10Y), margin + 4, y + 13);
+            y += 26;
+
+            // ========= COST & ROI =========
+            checkPageBreak(40);
+            doc.setTextColor(...primary);
+            doc.setFontSize(12);
+            doc.setFont('Roboto', 'bold');
+            doc.text('COST \u0218I RECUPERARE', margin, y);
+            y += 2;
+            doc.setDrawColor(...primary);
+            doc.setLineWidth(0.6);
+            doc.line(margin, y, margin + contentW, y);
+            y += 7;
+
+            doc.setFontSize(9);
+            var roiData = [
+                ['Cost proiect CartInspect', formatRON(r.cost)],
+                ['Pre\u021b per imobil', '120 RON'],
+                ['ROI pe 10 ani', Math.round(r.roi10Y * 100) + '%'],
+                ['Perioad\u0103 recuperare', r.paybackYears < 1
+                    ? Math.max(1, Math.round(r.paybackYears * 12)) + ' luni'
+                    : r.paybackYears.toFixed(1) + ' ani'
+                ]
+            ];
+
+            roiData.forEach(function (row) {
+                doc.setFont('Roboto', 'normal');
+                doc.setTextColor(...gray);
+                doc.text(row[0] + ':', margin, y);
+                doc.setFont('Roboto', 'bold');
+                doc.setTextColor(...textColor);
+                doc.text(String(row[1]), margin + 55, y);
+                y += 5.5;
+            });
+
+            y += 5;
+
+            // ========= IMPACT / SURPLUS =========
+            checkPageBreak(40);
+            doc.setTextColor(...primary);
+            doc.setFontSize(12);
+            doc.setFont('Roboto', 'bold');
+            doc.text('CE SE POATE REALIZA DIN SURPLUS (orientativ)', margin, y);
+            y += 2;
+            doc.setDrawColor(...primary);
+            doc.setLineWidth(0.6);
+            doc.line(margin, y, margin + contentW, y);
+            y += 7;
+
+            doc.setFontSize(8.5);
+            doc.setTextColor(...textColor);
+            doc.setFont('Roboto', 'normal');
+
+            INVESTMENTS.forEach(function (inv) {
+                var count = r.deltaYear / inv.cost;
+                if (count >= 0.1) {
+                    checkPageBreak(6);
+                    var displayCount = count >= 1 ? count.toFixed(1) : count.toFixed(2);
+                    doc.text('\u2022 ~' + displayCount + ' ' + inv.name + ' / an (' + formatRON(inv.cost) + ' / buc.)', margin, y);
+                    y += 5;
+                }
+            });
+
+            // ========= FOOTER =========
+            drawFooter(doc, pageW, margin, contentW, primary, gray);
+
+            // Save
+            var filename = 'CartInspect_' + communeName.replace(/\s+/g, '_') + '_' + today.replace(/\./g, '-') + '.pdf';
+            doc.save(filename);
+
+            // Log simulation
+            logSimulation();
+        }
+
+        function drawFooter(doc, pageW, margin, contentW, primary, gray) {
+            // Footer background
+            doc.setFillColor(245, 247, 250);
+            doc.rect(0, 275, pageW, 22, 'F');
+
+            // Gold top line
+            doc.setFillColor(196, 164, 52);
+            doc.rect(0, 275, pageW, 0.6, 'F');
+
+            doc.setFont('Roboto', 'normal');
+            doc.setFontSize(6.5);
+            doc.setTextColor(...gray);
+            doc.text(
+                'Simulare realizat\u0103 conform Codului Fiscal \u00EEn vigoare (Legea 227/2015, actualizat 2026). Valorile sunt estimative.',
+                margin, 281
+            );
+            doc.text(
+                'Modelul folose\u0219te o structur\u0103 medie: 80% imobile cu cl\u0103dire (100 m\u00B2) + 1000 m\u00B2 teren intravilan (500 m\u00B2 cur\u021bi-construc\u021bii, 500 m\u00B2 gr\u0103din\u0103).',
+                margin, 285
+            );
+
+            doc.setFont('Roboto', 'bold');
+            doc.setFontSize(7);
+            doc.setTextColor(...primary);
+            doc.text('VISORO GROUP | CartInspect | www.visoro.ro', margin, 291);
+
+            // Logo in footer (small)
+            try {
+                doc.addImage(LOGO_B64, 'PNG', pageW - margin - 12, 277, 12, 12);
+            } catch (e) { }
+        }
+
+        function logSimulation() {
+            const r = calculationResults;
+            if (!r) return;
+
+            const simulation = {
+                created_at: new Date().toISOString(),
+                source: 'web',
+                app_version: '2.0.0',
+                county: document.getElementById('county').value,
+                commune: document.getElementById('commune').value,
+                rank: r.rang,
+                zone: r.zona,
+                agent_name: document.getElementById('agentName').value || 'N/A',
+                imobile_intravilan: r.N,
+                building_share: MODEL.BUILDING_SHARE,
+                building_area_m2: MODEL.BUILDING_AREA_M2,
+                land_total_m2: MODEL.LAND_TOTAL_M2,
+                land_cc_m2: MODEL.LAND_CC_M2,
+                land_garden_m2: MODEL.LAND_GARDEN_M2,
+                growth_factor: 1 + MODEL.GROWTH_FACTOR,
+                price_per_imobil_ron: MODEL.PRICE_PER_IMOBIL,
+                collection_current: r.rCurrent,
+                collection_target: r.rTarget,
+                tax_per_imobil_ron: r.taxPerImobil,
+                tax_100_total_ron: r.tax100,
+                collected_now_ron: r.collectedNow,
+                collected_after_same_ron: r.collectedAfterSame,
+                collected_after_target_ron: r.collectedAfterTarget,
+                delta_year_ron: r.deltaYear,
+                delta_10y_ron: r.delta10Y,
+                cost_total_ron: r.cost,
+                roi_10y: r.roi10Y,
+                payback_years: r.paybackYears,
+                pdf_generated: true,
+                device_id: getDeviceId()
+            };
+
+            console.log('Simulation logged:', simulation);
+
+            // Store locally (max 100 simulations)
+            let stored = JSON.parse(localStorage.getItem('cartinspect_simulations') || '[]');
+            stored.push(simulation);
+            if (stored.length > 100) {
+                stored = stored.slice(-100);
+            }
+            localStorage.setItem('cartinspect_simulations', JSON.stringify(stored));
+        }
+
+        function getDeviceId() {
+            let id = localStorage.getItem('cartinspect_device_id');
+            if (!id) {
+                id = 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('cartinspect_device_id', id);
+            }
+            return id;
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+</body>
+
+</html>
