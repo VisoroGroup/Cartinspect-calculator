@@ -1240,72 +1240,43 @@
 
             y = 40;
 
-            // ========= DATE ADMINISTRATIVE (left) + MODEL DE CALCUL (right) =========
+            // ========= DATE ADMINISTRATIVE =========
             var colLeft = margin;
             var colRight = margin + contentW / 2 + 4;
             var colW = contentW / 2 - 4;
 
-            // Section title – left
             doc.setTextColor(...primary);
             doc.setFontSize(10);
             doc.setFont('Roboto', 'bold');
-            doc.text('DATE ADMINISTRATIVE', colLeft, y);
+            doc.text('DATE ADMINISTRATIVE', margin, y);
             doc.setDrawColor(...primary);
             doc.setLineWidth(0.5);
-            doc.line(colLeft, y + 2, colLeft + colW, y + 2);
-
-            // Section title – right
-            doc.text('MODEL DE CALCUL', colRight, y);
-            doc.line(colRight, y + 2, colRight + colW, y + 2);
+            doc.line(margin, y + 2, margin + contentW, y + 2);
 
             y += 8;
 
-            // Admin data – left col
-            doc.setFontSize(8.5);
+            doc.setFontSize(9);
             var adminRows = [
                 ['Jude\u021b:', county],
                 ['UAT:', communeName],
-                ['Rang:', 'Rang ' + r.rang + ' (Legea 351/2001)'],
+                ['Rang localitate:', 'Rang ' + r.rang + ' (Legea 351/2001)'],
                 ['Zon\u0103 fiscal\u0103:', 'Zona A (maxim legal)'],
-                ['Nr. imobile:', r.N.toLocaleString('ro-RO')],
-                ['Rata actual\u0103:', Math.round(r.rCurrent * 100) + '%'],
-                ['Rata poten\u021bial\u0103:', Math.round(r.rTarget * 100) + '%']
+                ['Nr. imobile intravilan:', r.N.toLocaleString('ro-RO')],
+                ['Rata actual\u0103 colectare:', Math.round(r.rCurrent * 100) + '%'],
+                ['Rata poten\u021bial\u0103 colectare:', Math.round(r.rTarget * 100) + '%']
             ];
 
-            var adminY = y;
             adminRows.forEach(function (row) {
                 doc.setFont('Roboto', 'normal');
                 doc.setTextColor(...gray);
-                doc.text(row[0], colLeft, adminY);
+                doc.text(row[0], margin, y);
                 doc.setFont('Roboto', 'bold');
                 doc.setTextColor(...textColor);
-                doc.text(String(row[1]), colLeft + 30, adminY);
-                adminY += 5.5;
+                doc.text(String(row[1]), margin + 50, y);
+                y += 5.5;
             });
 
-            // Model de calcul – right col
-            doc.setFontSize(8);
-            doc.setFont('Roboto', 'normal');
-            doc.setTextColor(...gray);
-            var modelY = y;
-            var modelLines = [
-                'Structur\u0103 medie: 80% imobile cu cl\u0103dire',
-                '(100 m\u00B2) + 1000 m\u00B2 teren intravilan.',
-                '',
-                'Impozit cl\u0103dire: ' + formatRON(r.taxBuilding) + ' (coef. ' + r.coefCladire + ')',
-                'Teren cur\u021bi-constr.: ' + formatRON(r.taxLandCC) + ' (' + r.leiPerHaCC + ' lei/ha)',
-                'Teren gr\u0103din\u0103: ' + formatRON(r.taxLandGarden) + ' (' + r.leiPerHaGarden + ' lei/ha)',
-                'Total per imobil: ' + formatRON(r.taxPerImobil),
-                '',
-                'Cre\u0219tere dup\u0103 CartInspect: +80%'
-            ];
-            modelLines.forEach(function (line) {
-                if (line === '') { modelY += 2.5; return; }
-                doc.text(line, colRight, modelY);
-                modelY += 4.5;
-            });
-
-            y = Math.max(adminY, modelY) + 6;
+            y += 6;
 
             // ========= REZULTATE SIMULARE =========
             doc.setTextColor(...primary);
@@ -1452,11 +1423,7 @@
             doc.setTextColor(...gray);
             doc.text(
                 'Simulare realizat\u0103 conform Codului Fiscal \u00EEn vigoare (Legea 227/2015, actualizat 2026). Valorile sunt estimative.',
-                margin, 281
-            );
-            doc.text(
-                'Modelul folose\u0219te o structur\u0103 medie: 80% imobile cu cl\u0103dire (100 m\u00B2) + 1000 m\u00B2 teren intravilan (500 m\u00B2 cur\u021bi-construc\u021bii, 500 m\u00B2 gr\u0103din\u0103).',
-                margin, 285
+                margin, 282
             );
 
             doc.setFont('Roboto', 'bold');
