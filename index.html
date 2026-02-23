@@ -849,18 +849,6 @@
                         <span class="info-label">Locuințe efective (pt. calcul)</span>
                         <span class="info-value" id="effectiveHousingCount" style="color:var(--gold);">-</span>
                     </div>
-                    <div class="info-row">
-                        <span class="info-label">Încasat conform transparenta.eu</span>
-                        <span class="info-value" id="propertyTaxTotal">-</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Minimum estimat 2025 (150 RON/locuință)</span>
-                        <span class="info-value" id="minimumTax2025" style="color:var(--gold);">-</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Bază de calcul utilizată</span>
-                        <span class="info-value" id="usedBase" style="color:#4ade80; font-weight:700;">-</span>
-                    </div>
                     <div style="font-size:0.6rem; color:var(--text-muted); margin-top:0.5rem; text-align:center;">
                         Sursa: <span id="dataSourceInfo">transparenta.eu</span>
                     </div>
@@ -903,18 +891,19 @@
                     <div class="result-detail" id="collectedNowDetail"></div>
                 </div>
 
+                <!-- What it should have been -->
+                <div class="result-block"
+                    style="background:rgba(196,164,52,0.08); border:1px solid rgba(196,164,52,0.25);">
+                    <div class="result-label">Cât ar fi trebuit să fie în mod real</div>
+                    <div class="result-value" style="color:var(--gold-light);" id="realMinimum">0 RON</div>
+                    <div class="result-detail" id="realMinimumDetail"></div>
+                </div>
+
                 <!-- After CartInspect -->
                 <div class="result-block after">
                     <div class="result-label">Încasare anuală după CartInspect</div>
                     <div class="result-value green" id="collectedAfter">0 RON</div>
                     <div class="result-detail">Cu rata potențială de colectare selectată</div>
-                </div>
-
-                <!-- Annual delta -->
-                <div class="result-block delta">
-                    <div class="result-label">Diferență anuală suplimentară</div>
-                    <div class="result-value blue" id="deltaYear">0 RON</div>
-                    <div class="result-detail" id="deltaYearPercent"></div>
                 </div>
 
                 <!-- 10 year highlight -->
@@ -1203,8 +1192,6 @@
                 totalHouses.toLocaleString('ro-RO') + (data.housing?.year ? ` (${data.housing.year})` : '');
             document.getElementById('effectiveHousingCount').textContent =
                 effectiveHouses.toLocaleString('ro-RO') + (cityFactor < 1 ? ` (${Math.round(cityFactor * 100)}% — oraș/municipiu)` : '');
-            document.getElementById('propertyTaxTotal').textContent =
-                formatRON(totalTax) + (data.financial?.year ? ` (${data.financial.year})` : '');
 
             if (isOffline) {
                 document.getElementById('dataSourceInfo').textContent =
@@ -1279,12 +1266,7 @@
             const effectiveTax = Math.max(transparentaTotal * cityFactor, minimumBase);
             const usedMinimum = minimumBase > (transparentaTotal * cityFactor);
 
-            // 5. Update UI with minimum comparison
-            document.getElementById('minimumTax2025').textContent = formatRON(minimumBase);
-            document.getElementById('usedBase').textContent = formatRON(effectiveTax)
-                + (usedMinimum ? ' (minimum)' : ' (transparenta.eu)');
-
-            // 6. 2026 law changes
+            // 5. 2026 law changes
             const afterTaxIncrease = effectiveTax * MODEL.TAX_INCREASE;          // +80% tax increase
             const afterDiscountRemoval = afterTaxIncrease * MODEL.DISCOUNT_REMOVAL; // +50% for half houses
 
@@ -1340,13 +1322,15 @@
             document.getElementById('collectedNowDetail').textContent =
                 `Venituri actuale din impozite pe proprietate (transparenta.eu)`;
 
-            // After
-            document.getElementById('collectedAfter').textContent = formatRON(r.afterCartInspect);
+            // What it should have been (minimum base)
+            document.getElementById('realMinimum').textContent = formatRON(r.effectiveTax);
+            document.getElementById('realMinimumDetail').textContent =
+                r.usedMinimum
+                    ? `Minimum estimat: ${r.effectiveHouses.toLocaleString('ro-RO')} locuințe × 150 RON`
+                    : `Conform datelor transparenta.eu`;
 
-            // Delta
-            document.getElementById('deltaYear').textContent = '+ ' + formatRON(r.deltaYear);
-            const deltaPercent = r.currentRevenue > 0 ? Math.round((r.deltaYear / r.currentRevenue) * 100) : 0;
-            document.getElementById('deltaYearPercent').textContent = `Creștere de ${deltaPercent}% față de situația actuală`;
+            // After CartInspect
+            document.getElementById('collectedAfter').textContent = formatRON(r.afterCartInspect);
 
             // 10 year
             document.getElementById('delta10Y').textContent = '+ ' + formatRON(r.delta10Y);
