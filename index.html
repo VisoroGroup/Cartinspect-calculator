@@ -145,8 +145,8 @@
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
+            align-items: start;
             gap: 1rem;
-            align-items: stretch;
         }
 
         .grid-full {
@@ -851,9 +851,6 @@
                         <span class="info-label">Locuințe efective (pt. calcul)</span>
                         <span class="info-value" id="effectiveHousingCount" style="color:var(--gold);">-</span>
                     </div>
-                    <div style="font-size:0.6rem; color:var(--text-muted); margin-top:0.5rem; text-align:center;">
-                        Sursa: <span id="dataSourceInfo">transparenta.eu</span>
-                    </div>
                 </div>
             </div>
 
@@ -890,7 +887,6 @@
                 <div class="result-block current">
                     <div class="result-label">Încasare anuală estimată actuală</div>
                     <div class="result-value red" id="collectedNow">0 RON</div>
-                    <div class="result-detail" id="collectedNowDetail"></div>
                 </div>
 
                 <!-- What it should have been -->
@@ -898,7 +894,6 @@
                     style="background:rgba(196,164,52,0.08); border:1px solid rgba(196,164,52,0.25);">
                     <div class="result-label">Cât ar fi trebuit să fie în mod real</div>
                     <div class="result-value" style="color:var(--gold-light);" id="realMinimum">0 RON</div>
-                    <div class="result-detail" id="realMinimumDetail"></div>
                 </div>
 
                 <!-- After CartInspect -->
@@ -1196,12 +1191,8 @@
                 effectiveHouses.toLocaleString('ro-RO') + (cityFactor < 1 ? ` (${Math.round(cityFactor * 100)}% — oraș/municipiu)` : '');
 
             if (isOffline) {
-                document.getElementById('dataSourceInfo').textContent =
-                    `Date offline · transparenta.eu (${data.financial?.year || ''})`;
                 setDataStatus('success', '✓ Date încărcate din cache local (offline)');
             } else {
-                document.getElementById('dataSourceInfo').textContent =
-                    `transparenta.eu · ${data.entity?.name || ''}`;
                 setDataStatus('success', '✓ Datele au fost încărcate cu succes');
             }
 
@@ -1321,15 +1312,9 @@
 
             // Current
             document.getElementById('collectedNow').textContent = formatRON(r.currentRevenue);
-            document.getElementById('collectedNowDetail').textContent =
-                `Venituri actuale din impozite pe proprietate (transparenta.eu)`;
 
             // What it should have been (minimum base)
             document.getElementById('realMinimum').textContent = formatRON(r.effectiveTax);
-            document.getElementById('realMinimumDetail').textContent =
-                r.usedMinimum
-                    ? `Minimum estimat: ${r.effectiveHouses.toLocaleString('ro-RO')} locuințe × 150 RON`
-                    : `Conform datelor transparenta.eu`;
 
             // After CartInspect
             document.getElementById('collectedAfter').textContent = formatRON(r.afterCartInspect);
