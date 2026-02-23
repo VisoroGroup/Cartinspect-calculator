@@ -145,8 +145,8 @@
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            align-items: start;
             gap: 1rem;
+            align-items: stretch;
         }
 
         .grid-full {
@@ -832,11 +832,9 @@
                         <span class="info-value"><span class="rang-badge" id="rankBadge"></span></span>
                     </div>
                 </div>
-            </div>
+                <div class="divider" style="margin:1rem 0;"></div>
 
-            <!-- SECTION 2: Transparenta.eu Data (auto-loaded) -->
-            <div class="card">
-                <div class="card-title">Date din Transparenta.eu</div>
+                <div class="card-title" style="font-size:0.7rem;">Date din Transparenta.eu</div>
 
                 <div id="dataStatusContainer" style="display:none">
                     <div class="data-status" id="dataStatus"></div>
