@@ -403,7 +403,7 @@
         .impact-item {
             display: flex;
             align-items: center;
-            padding: 0.75rem 0;
+            padding: 0.5rem 0;
             border-bottom: 1px solid var(--border);
             transition: background 0.2s;
         }
@@ -418,9 +418,9 @@
         }
 
         .impact-icon {
-            font-size: 1.5rem;
-            margin-right: 0.75rem;
-            width: 2.2rem;
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+            width: 1.8rem;
             text-align: center;
         }
 
@@ -962,16 +962,16 @@
             </div>
 
             <!-- SECTION 6: What can be funded -->
-            <div class="card grid-full" id="impactCard" style="display:none">
-                <div class="card-title">Ce se poate realiza din surplus</div>
-                <div style="font-size:0.7rem; color:var(--text-secondary); margin-bottom:0.5rem;">
+            <div class="card" id="impactCard" style="display:none">
+                <div class="card-title" style="font-size:0.7rem;">Ce se poate realiza din surplus</div>
+                <div style="font-size:0.65rem; color:var(--text-secondary); margin-bottom:0.4rem;">
                     Estimare orientativă pe baza surplusului anual:
                 </div>
-                <div id="impactList"></div>
+                <div id="impactList" style="font-size:0.75rem;"></div>
             </div>
 
             <!-- SECTION 7: Generate PDF -->
-            <div class="card grid-full" id="pdfCard" style="display:none">
+            <div class="card" id="pdfCard" style="display:none">
                 <button class="btn btn-primary" onclick="generatePDF()">
                     ⬇ GENEREAZĂ PDF
                 </button>
