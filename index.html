@@ -998,6 +998,7 @@
     </footer>
 
     <script src="romania_uat.js"></script>
+    <script src="uat_data.js"></script>
     <script src="roboto-fonts.js"></script>
     <script>
         // ============================================================
@@ -1138,51 +1139,80 @@
             setDataStatus('loading', 'Se încarcă datele din transparenta.eu...');
             hideResults();
 
+            let data = null;
+            let isOffline = false;
+
+            // 1. Try online (proxy API)
             try {
                 const url = `${PROXY_URL}/api/entity-data?county=${encodeURIComponent(county)}&name=${encodeURIComponent(commune)}`;
-                const response = await fetch(url);
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 15000);
+                const response = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeout);
 
-                if (!response.ok) {
-                    const err = await response.json().catch(() => ({}));
-                    throw new Error(err.error || `HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                data = await response.json();
+                if (!data.financial && !data.housing) data = null;
+            } catch (err) {
+                console.warn('Online fetch failed:', err.message);
+                data = null;
+            }
 
-                const data = await response.json();
+            // 2. Fallback to offline data if online failed
+            if (!data && typeof UAT_DATA !== 'undefined' && UAT_DATA[county]?.[commune]) {
+                const offline = UAT_DATA[county][commune];
+                data = {
+                    entity: { name: commune, county: county },
+                    financial: offline.tax > 0 ? {
+                        year: offline.taxYear,
+                        impozitCladiriFizice: offline.tax,
+                        total: offline.tax
+                    } : null,
+                    housing: offline.houses > 0 ? {
+                        year: offline.housesYear,
+                        count: offline.houses
+                    } : null
+                };
+                isOffline = true;
+            }
 
-                if (!data.financial && !data.housing) {
-                    throw new Error('Nu s-au găsit date pentru această localitate');
-                }
+            if (!data || (!data.financial && !data.housing)) {
+                setDataStatus('error', '✗ Nu s-au găsit date pentru această localitate');
+                isLoadingData = false;
+                return;
+            }
 
-                transparentaData = data;
+            transparentaData = data;
 
-                // Display the loaded data
-                const tip = currentTip;
-                const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
-                const totalHouses = data.housing?.count || 0;
-                const effectiveHouses = Math.round(totalHouses * cityFactor);
-                const totalTax = data.financial?.total || 0;
+            // Display the loaded data
+            const tip = currentTip;
+            const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
+            const totalHouses = data.housing?.count || 0;
+            const effectiveHouses = Math.round(totalHouses * cityFactor);
+            const totalTax = data.financial?.total || 0;
 
-                document.getElementById('housingCount').textContent =
-                    totalHouses.toLocaleString('ro-RO') + (data.housing?.year ? ` (${data.housing.year})` : '');
-                document.getElementById('effectiveHousingCount').textContent =
-                    effectiveHouses.toLocaleString('ro-RO') + (cityFactor < 1 ? ` (${Math.round(cityFactor * 100)}% — oraș/municipiu)` : '');
-                document.getElementById('propertyTaxTotal').textContent =
-                    formatRON(totalTax) + (data.financial?.year ? ` (${data.financial.year})` : '');
+            document.getElementById('housingCount').textContent =
+                totalHouses.toLocaleString('ro-RO') + (data.housing?.year ? ` (${data.housing.year})` : '');
+            document.getElementById('effectiveHousingCount').textContent =
+                effectiveHouses.toLocaleString('ro-RO') + (cityFactor < 1 ? ` (${Math.round(cityFactor * 100)}% — oraș/municipiu)` : '');
+            document.getElementById('propertyTaxTotal').textContent =
+                formatRON(totalTax) + (data.financial?.year ? ` (${data.financial.year})` : '');
+
+            if (isOffline) {
+                document.getElementById('dataSourceInfo').textContent =
+                    `Date offline · transparenta.eu (${data.financial?.year || ''})`;
+                setDataStatus('success', '✓ Date încărcate din cache local (offline)');
+            } else {
                 document.getElementById('dataSourceInfo').textContent =
                     `transparenta.eu · ${data.entity?.name || ''}`;
-
-                document.getElementById('transparentaDataDisplay').style.display = 'block';
                 setDataStatus('success', '✓ Datele au fost încărcate cu succes');
-
-                // Auto-calculate
-                calculate();
-            } catch (err) {
-                console.error('Fetch error:', err);
-                setDataStatus('error', '✗ ' + err.message);
-                transparentaData = null;
-            } finally {
-                isLoadingData = false;
             }
+
+            document.getElementById('transparentaDataDisplay').style.display = 'block';
+
+            // Auto-calculate
+            calculate();
+            isLoadingData = false;
         }
 
         function hideResults() {
