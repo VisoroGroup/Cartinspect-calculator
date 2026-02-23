@@ -128,7 +128,7 @@ async function fetchFinancialData(cui) {
                     account_category: "vn",
                     report_type: "PRINCIPAL_AGGREGATED",
                     entity_cuis: [cui],
-                    functional_prefixes: ["07"],
+                    functional_prefixes: ["07.01.01"],
                     is_uat: true,
                     normalization: "total",
                     show_period_growth: false,
@@ -141,34 +141,23 @@ async function fetchFinancialData(cui) {
             const nodes = data.aggregatedLineItems?.nodes || [];
             if (nodes.length === 0) continue;
 
-            // Extract the three tax categories
-            let impozitTerenuri = 0;     // sum of 07.02.xx
-            let impozitCladiri = 0;      // 07.01.01
-            let alteImpozite = 0;        // 07.50.00
+            // Only use fn:07.01.01 – Impozit pe clădiri de la persoane fizice
+            let impozitCladiriFizice = 0;
 
             for (const node of nodes) {
                 const code = node.fn_c || '';
                 const amount = parseFloat(node.amount) || 0;
 
-                if (code.startsWith('07.02')) {
-                    // Sum all 07.02.xx sub-codes (terenuri)
-                    impozitTerenuri += amount;
-                } else if (code === '07.01.01') {
-                    impozitCladiri = amount;
-                } else if (code === '07.50.00' || code === '07.50') {
-                    alteImpozite = amount;
+                if (code === '07.01.01') {
+                    impozitCladiriFizice = amount;
                 }
-                // Note: 07.01.02 (persoane juridice) is intentionally excluded
             }
 
-            const total = impozitTerenuri + impozitCladiri + alteImpozite;
-            if (total > 0) {
+            if (impozitCladiriFizice > 0) {
                 return {
                     year,
-                    impozitTerenuri: Math.round(impozitTerenuri * 100) / 100,
-                    impozitCladiri: Math.round(impozitCladiri * 100) / 100,
-                    alteImpozite: Math.round(alteImpozite * 100) / 100,
-                    total: Math.round(total * 100) / 100
+                    impozitCladiriFizice: Math.round(impozitCladiriFizice * 100) / 100,
+                    total: Math.round(impozitCladiriFizice * 100) / 100
                 };
             }
         } catch (e) {
