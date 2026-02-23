@@ -850,8 +850,16 @@
                         <span class="info-value" id="effectiveHousingCount" style="color:var(--gold);">-</span>
                     </div>
                     <div class="info-row">
-                        <span class="info-label">Venituri din impozite proprietate</span>
-                        <span class="info-value" id="propertyTaxTotal" style="color:var(--gold);">-</span>
+                        <span class="info-label">Încasat conform transparenta.eu</span>
+                        <span class="info-value" id="propertyTaxTotal">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Minimum estimat 2025 (150 RON/locuință)</span>
+                        <span class="info-value" id="minimumTax2025" style="color:var(--gold);">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Bază de calcul utilizată</span>
+                        <span class="info-value" id="usedBase" style="color:#4ade80; font-weight:700;">-</span>
                     </div>
                     <div style="font-size:0.6rem; color:var(--text-muted); margin-top:0.5rem; text-align:center;">
                         Sursa: <span id="dataSourceInfo">transparenta.eu</span>
@@ -1257,32 +1265,42 @@
             const rang = currentRang;
 
             // 1. Base data from transparenta.eu
-            const transparentaTotal = transparentaData.financial.total;   // Total property tax
+            const transparentaTotal = transparentaData.financial.total;   // Actual collected
             const totalHouses = transparentaData.housing.count;          // Total houses
 
             // 2. City/municipium adjustment
             const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
             const effectiveHouses = Math.round(totalHouses * cityFactor);
-            const effectiveTax = transparentaTotal * cityFactor;
 
-            // 3. 2026 law changes
+            // 3. Minimum 2025 base: houses × 150 RON
+            const minimumBase = effectiveHouses * 150;
+
+            // 4. Use the HIGHER of transparenta.eu or minimum as effective base
+            const effectiveTax = Math.max(transparentaTotal * cityFactor, minimumBase);
+            const usedMinimum = minimumBase > (transparentaTotal * cityFactor);
+
+            // 5. Update UI with minimum comparison
+            document.getElementById('minimumTax2025').textContent = formatRON(minimumBase);
+            document.getElementById('usedBase').textContent = formatRON(effectiveTax)
+                + (usedMinimum ? ' (minimum)' : ' (transparenta.eu)');
+
+            // 6. 2026 law changes
             const afterTaxIncrease = effectiveTax * MODEL.TAX_INCREASE;          // +80% tax increase
             const afterDiscountRemoval = afterTaxIncrease * MODEL.DISCOUNT_REMOVAL; // +50% for half houses
 
-            // 4. Collection rate adjustment
-            // Transparenta data assumed at 80% collection rate
+            // 7. Collection rate adjustment
             const collectionAdjustment = rTarget / rCurrent;
             const adjustedBase = afterDiscountRemoval * collectionAdjustment;
 
-            // 5. CartInspect effect (+80%)
+            // 8. CartInspect effect (+80%)
             const afterCartInspect = adjustedBase * MODEL.CARTINSPECT_FACTOR;
 
-            // 6. Results
+            // 9. Results
             const currentRevenue = transparentaTotal;
             const deltaYear = afterCartInspect - currentRevenue;
             const delta10Y = deltaYear * 10;
 
-            // 7. Cost & ROI
+            // 10. Cost & ROI
             const cost = effectiveHouses * MODEL.PRICE_PER_IMOBIL;
             const roi10Y = cost > 0 ? (delta10Y - cost) / cost : 0;
             const paybackYears = deltaYear > 0 ? cost / deltaYear : Infinity;
@@ -1290,7 +1308,7 @@
             // Store results
             calculationResults = {
                 totalHouses, effectiveHouses, cityFactor,
-                transparentaTotal, effectiveTax,
+                transparentaTotal, effectiveTax, minimumBase, usedMinimum,
                 rCurrent, rTarget, rang, tip,
                 afterTaxIncrease, afterDiscountRemoval,
                 collectionAdjustment, adjustedBase,
