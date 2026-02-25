@@ -273,7 +273,7 @@
             width: 100%;
             height: 6px;
             border-radius: 3px;
-            background: linear-gradient(90deg, var(--primary-mid), rgba(196, 164, 52, 0.3));
+            background: linear-gradient(90deg, var(--gold) 0%, rgba(196, 164, 52, 0.3) 0%);
             outline: none;
             transition: background 0.2s;
         }
@@ -1039,6 +1039,8 @@
             updateSlider('currentRate');
             updateSlider('targetRate');
             updateInstallmentSlider();
+            // Initialize fill for all range inputs on page load
+            document.querySelectorAll('input[type="range"]').forEach(updateSliderFill);
         }
 
         function populateCounties() {
@@ -1210,21 +1212,35 @@
             document.getElementById('pdfCard').style.display = 'none';
         }
 
+        function updateSliderFill(el) {
+            const min = parseFloat(el.min) || 0;
+            const max = parseFloat(el.max) || 100;
+            const val = parseFloat(el.value);
+            const pct = ((val - min) / (max - min)) * 100;
+            el.style.background = `linear-gradient(90deg, var(--gold) ${pct}%, rgba(196,164,52,0.25) ${pct}%)`;
+        }
+
         function updateSlider(id) {
-            const val = parseInt(document.getElementById(id).value);
+            const el = document.getElementById(id);
+            const val = parseInt(el.value);
             document.getElementById(id + 'Display').textContent = val + '%';
+            updateSliderFill(el);
 
             // Validate: targetRate must be >= currentRate
             const currentVal = parseInt(document.getElementById('currentRate').value);
             const targetVal = parseInt(document.getElementById('targetRate').value);
             if (id === 'currentRate' && currentVal > targetVal) {
                 // Push targetRate UP to follow currentRate
-                document.getElementById('targetRate').value = currentVal;
+                const targetEl = document.getElementById('targetRate');
+                targetEl.value = currentVal;
                 document.getElementById('targetRateDisplay').textContent = currentVal + '%';
+                updateSliderFill(targetEl);
             } else if (id === 'targetRate' && targetVal < currentVal) {
                 // Don't let targetRate go below currentRate
-                document.getElementById('targetRate').value = currentVal;
+                const targetEl = document.getElementById('targetRate');
+                targetEl.value = currentVal;
                 document.getElementById('targetRateDisplay').textContent = currentVal + '%';
+                updateSliderFill(targetEl);
             }
         }
 
@@ -1270,6 +1286,10 @@
             const afterCartInspect = (afterDiscountRemoval * MODEL.CARTINSPECT_FACTOR) * rTarget;
 
             // 7. Deltas and impact
+            // The "real baseline" is what they SHOULD be collecting now (= the transparenta
+            // data was recorded at 80% assumed collection, so potential100 * 0.80 = baseValue)
+            const realBaseline = potential100 * MODEL.ASSUMED_COLLECTION; // = baseValue
+            // Impact = what CartInspect adds vs. the properly-collected current baseline
             const deltaYear = afterCartInspect - currentRevenue;
             const delta10Y = deltaYear * 10;
 
@@ -1311,8 +1331,9 @@
             // Current
             document.getElementById('collectedNow').textContent = formatRON(r.currentRevenue);
 
-            // What it should have been (minimum base)
-            document.getElementById('realMinimum').textContent = formatRON(r.effectiveTax);
+            // What it should have been (= potential100 * 0.80, the properly-collected baseline)
+            // This is FIXED – it doesn't move with the current rate slider (it's the "correct" baseline)
+            document.getElementById('realMinimum').textContent = formatRON(r.potential100 * MODEL.ASSUMED_COLLECTION);
 
             // After CartInspect
             document.getElementById('collectedAfter').textContent = formatRON(r.afterCartInspect);
@@ -1668,9 +1689,11 @@
         const MAX_CONTRACT = 270000; // Romanian public procurement direct limit
 
         function updateInstallmentSlider() {
-            const val = parseInt(document.getElementById('installmentRate').value);
+            const el = document.getElementById('installmentRate');
+            const val = parseInt(el.value);
             document.getElementById('installmentDisplay').textContent =
                 new Intl.NumberFormat('ro-RO').format(val) + ' RON';
+            updateSliderFill(el);
         }
 
         function calculateInstallments() {
