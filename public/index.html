@@ -1226,21 +1226,21 @@
             document.getElementById(id + 'Display').textContent = val + '%';
             updateSliderFill(el);
 
-            // Validate: targetRate must be >= currentRate
+            // Validate: currentRate must never exceed targetRate
             const currentVal = parseInt(document.getElementById('currentRate').value);
             const targetVal = parseInt(document.getElementById('targetRate').value);
             if (id === 'currentRate' && currentVal > targetVal) {
-                // Push targetRate UP to follow currentRate
-                const targetEl = document.getElementById('targetRate');
-                targetEl.value = currentVal;
-                document.getElementById('targetRateDisplay').textContent = currentVal + '%';
-                updateSliderFill(targetEl);
+                // Cap currentRate at targetRate (don't change targetRate!)
+                const currentEl = document.getElementById('currentRate');
+                currentEl.value = targetVal;
+                document.getElementById('currentRateDisplay').textContent = targetVal + '%';
+                updateSliderFill(currentEl);
             } else if (id === 'targetRate' && targetVal < currentVal) {
-                // Don't let targetRate go below currentRate
-                const targetEl = document.getElementById('targetRate');
-                targetEl.value = currentVal;
-                document.getElementById('targetRateDisplay').textContent = currentVal + '%';
-                updateSliderFill(targetEl);
+                // If targetRate pulled below currentRate, pull currentRate down too
+                const currentEl = document.getElementById('currentRate');
+                currentEl.value = targetVal;
+                document.getElementById('currentRateDisplay').textContent = targetVal + '%';
+                updateSliderFill(currentEl);
             }
         }
 
@@ -1254,7 +1254,8 @@
             }
 
             const rCurrent = parseInt(document.getElementById('currentRate').value) / 100;
-            const rTarget = Math.max(rCurrent, parseInt(document.getElementById('targetRate').value) / 100);
+            // rTarget comes ONLY from the target slider, independent of rCurrent
+            const rTarget = parseInt(document.getElementById('targetRate').value) / 100;
 
             const tip = currentTip;
             const rang = currentRang;
@@ -1286,11 +1287,10 @@
             const afterCartInspect = (afterDiscountRemoval * MODEL.CARTINSPECT_FACTOR) * rTarget;
 
             // 7. Deltas and impact
-            // The "real baseline" is what they SHOULD be collecting now (= the transparenta
-            // data was recorded at 80% assumed collection, so potential100 * 0.80 = baseValue)
-            const realBaseline = potential100 * MODEL.ASSUMED_COLLECTION; // = baseValue
-            // Impact = what CartInspect adds vs. the properly-collected current baseline
-            const deltaYear = afterCartInspect - currentRevenue;
+            // Impact is ALWAYS calculated against the FIXED transparenta baseline (baseValue).
+            // This ensures "Impact pe 10 ani" is stable and only changes with the TARGET slider.
+            // "Actuală" (currentRevenue) is just informational, it does NOT affect the impact.
+            const deltaYear = afterCartInspect - baseValue;
             const delta10Y = deltaYear * 10;
 
             // 8. Cost & ROI
