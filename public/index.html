@@ -1243,39 +1243,37 @@
             const tip = currentTip;
             const rang = currentRang;
 
-            // 1. Base data from transparenta.eu
-            const transparentaTotal = transparentaData.financial.total;   // Actual collected
-            const totalHouses = transparentaData.housing.count;          // Total houses
-
-            // 2. City/municipium adjustment
+            // 1. Base data
+            const transparentaTotal = transparentaData.financial.total;
+            const totalHouses = transparentaData.housing.count;
             const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
             const effectiveHouses = Math.round(totalHouses * cityFactor);
-
-            // 3. Minimum 2025 base: houses × 150 RON
             const minimumBase = effectiveHouses * 150;
 
-            // 4. Use the HIGHER of transparenta.eu or minimum as effective base
-            const effectiveTax = Math.max(transparentaTotal * cityFactor, minimumBase);
+            // 2. The core assumption: The REAL data we have (transparentaTotal or minimumBase)
+            // represents an assumed 80% average collection rate nationwide.
+            const baseValue = Math.max(transparentaTotal * cityFactor, minimumBase);
             const usedMinimum = minimumBase > (transparentaTotal * cityFactor);
 
-            // 5. 2026 law changes
-            const afterTaxIncrease = effectiveTax * MODEL.TAX_INCREASE;          // +80% tax increase
-            const afterDiscountRemoval = afterTaxIncrease * MODEL.DISCOUNT_REMOVAL; // +50% for half houses
+            // 3. What is the implied 100% potential?
+            const potential100 = baseValue / 0.80; // Hardcoded absolute assumption based on real data
 
-            // 7. Collection rate adjustment (relative to ASSUMED_COLLECTION baseline)
-            // Transparenta data is assumed at ASSUMED_COLLECTION (80%) rate
-            const collectionAdjustment = rTarget / MODEL.ASSUMED_COLLECTION;
-            const adjustedBase = afterDiscountRemoval * collectionAdjustment;
+            // 4. Slider calculations
+            // "Current Revenue" dynamically moves with the CURRENT slider based on the 100% potential
+            const currentRevenue = potential100 * rCurrent;
 
-            // 8. CartInspect effect (+80%)
-            const afterCartInspect = adjustedBase * MODEL.CARTINSPECT_FACTOR;
+            // 5. Future calculations (2026 law) applied to the 100% potential
+            const afterTaxIncrease = potential100 * MODEL.TAX_INCREASE;
+            const afterDiscountRemoval = afterTaxIncrease * MODEL.DISCOUNT_REMOVAL;
 
-            // 9. Results — currentRevenue adjusts based on rCurrent vs assumed baseline
-            const currentRevenue = transparentaTotal * (rCurrent / MODEL.ASSUMED_COLLECTION);
+            // 6. With CartInspect (+80%) multiplied by TARGET collection rate
+            const afterCartInspect = (afterDiscountRemoval * MODEL.CARTINSPECT_FACTOR) * rTarget;
+
+            // 7. Deltas and impact
             const deltaYear = afterCartInspect - currentRevenue;
             const delta10Y = deltaYear * 10;
 
-            // 10. Cost & ROI
+            // 8. Cost & ROI
             const cost = effectiveHouses * MODEL.PRICE_PER_IMOBIL;
             const roi10Y = cost > 0 ? (delta10Y - cost) / cost : 0;
             const paybackYears = deltaYear > 0 ? cost / deltaYear : Infinity;
@@ -1283,11 +1281,11 @@
             // Store results
             calculationResults = {
                 totalHouses, effectiveHouses, cityFactor,
-                transparentaTotal, effectiveTax, minimumBase, usedMinimum,
+                transparentaTotal, effectiveTax: baseValue, minimumBase, usedMinimum,
                 rCurrent, rTarget, rang, tip,
                 afterTaxIncrease, afterDiscountRemoval,
-                collectionAdjustment, adjustedBase,
-                afterCartInspect,
+                potential100,
+                afterCartInspect, improvedStatusQuo: 0,
                 currentRevenue, deltaYear, delta10Y,
                 cost, roi10Y, paybackYears
             };
