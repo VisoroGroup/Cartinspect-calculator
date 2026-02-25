@@ -1,5 +1,4 @@
 .DS_Store
 *.docx
 .wrangler/
-public/
 proxy/node_modules/

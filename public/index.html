@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="CartInspect - Calculator Impact Bugetar. Simulare venituri fiscale pentru administrații publice locale din România.">
+    <title>CartInspect - Calculator Impact Bugetar</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #0f2744;
+            --primary-light: #1a3a5c;
+            --primary-mid: #1e4976;
+            --accent: #e53e3e;
+            --accent-light: #fc8181;
+            --success: #22c55e;
+            --success-dark: #16a34a;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --gold: #c4a434;
+            --gold-light: #d4b84a;
+            --bg: #0c1829;
+            --bg-surface: rgba(255, 255, 255, 0.03);
+            --card: rgba(255, 255, 255, 0.06);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --card-hover: rgba(255, 255, 255, 0.09);
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: rgba(255, 255, 255, 0.08);
+            --input-bg: rgba(255, 255, 255, 0.07);
+            --input-border: rgba(255, 255, 255, 0.15);
+            --input-focus: var(--gold);
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.35);
+            --glass: blur(20px) saturate(180%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated gradient mesh background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(26, 58, 92, 0.5) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(196, 164, 52, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+            z-index: -1;
+            animation: meshShift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshShift {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: rgba(15, 39, 68, 0.85);
+            backdrop-filter: var(--glass);
+            -webkit-backdrop-filter: var(--glass);
+            border-bottom: 1px solid var(--gold);
+            padding: 0.75rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .header-logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+        }
+
+        .header-text {
+            text-align: left;
+        }
+
+        .header-logo {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: #fff;
+        }
+
+        .header-logo span {
+            color: var(--gold-light);
+        }
+
+        .header-sub {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        /* ===== LAYOUT ===== */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            align-items: stretch;
+        }
+
+        .grid-full {
+            grid-column: 1 / -1;
+        }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--card);
+            backdrop-filter: var(--glass);
+            -webkit-backdrop-filter: var(--glass);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--card-border);
+            transition: background 0.3s, border-color 0.3s, transform 0.2s;
+        }
+
+        .card:hover {
+            background: var(--card-hover);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-title::before {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 14px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+
+        /* ===== FORMS ===== */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.3px;
+        }
+
+        select,
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            background: var(--input-bg);
+            color: var(--text);
+            transition: all 0.25s ease;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(196, 164, 52, 0.15);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        select option {
+            background: #1a2e44;
+            color: #f1f5f9;
+        }
+
+        input[type="number"] {
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        /* ===== SLIDERS ===== */
+        .slider-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .slider-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--gold);
+            min-width: 55px;
+            text-align: right;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--primary-mid), rgba(196, 164, 52, 0.3));
+            outline: none;
+            transition: background 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(196, 164, 52, 0.4);
+            transition: transform 0.15s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 10px rgba(196, 164, 52, 0.4);
+        }
+
+        /* ===== RESULT BLOCKS ===== */
+        .result-block {
+            text-align: center;
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            transition: transform 0.2s;
+        }
+
+        .result-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-block.current {
+            background: rgba(229, 62, 62, 0.08);
+            border: 1px solid rgba(229, 62, 62, 0.2);
+        }
+
+        .result-block.after {
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .result-block.delta {
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .result-block.roi {
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .result-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .result-value {
+            font-size: 1.85rem;
+            font-weight: 800;
+            margin: 0.35rem 0;
+            letter-spacing: -0.5px;
+        }
+
+        .result-value.red {
+            color: #f87171;
+        }
+
+        .result-value.green {
+            color: var(--success);
+        }
+
+        .result-value.blue {
+            color: var(--blue);
+        }
+
+        .result-value.purple {
+            color: var(--purple);
+        }
+
+        .result-detail {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== 10 YEAR HIGHLIGHT ===== */
+        .ten-year-highlight {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border: 1px solid var(--gold);
+            padding: 1.5rem;
+            border-radius: 14px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ten-year-highlight::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(196, 164, 52, 0.1), transparent 60%);
+            pointer-events: none;
+        }
+
+        .ten-year-highlight .result-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .ten-year-highlight .result-value {
+            color: var(--success);
+            font-size: 2.2rem;
+        }
+
+        /* ===== IMPACT ITEMS ===== */
+        .impact-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .impact-item:last-child {
+            border-bottom: none;
+        }
+
+        .impact-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+        }
+
+        .impact-icon {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+            width: 1.8rem;
+            text-align: center;
+        }
+
+        .impact-text {
+            flex: 1;
+        }
+
+        .impact-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .impact-count {
+            font-size: 0.75rem;
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--primary);
+            box-shadow: 0 4px 20px rgba(196, 164, 52, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(196, 164, 52, 0.45);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* ===== INFO ROWS ===== */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .rang-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--primary);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* ===== MISC ===== */
+        .disclaimer {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 0.75rem;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .error-banner {
+            background: rgba(229, 62, 62, 0.1);
+            border: 1px solid rgba(229, 62, 62, 0.3);
+            color: #f87171;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            grid-column: 1 / -1;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 1rem 0;
+        }
+
+        /* ===== LOADING SPINNER ===== */
+        .loading-spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(196, 164, 52, 0.3);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .data-status {
+            font-size: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        .data-status.loading {
+            background: rgba(196, 164, 52, 0.1);
+            border: 1px solid rgba(196, 164, 52, 0.2);
+            color: var(--gold);
+        }
+
+        .data-status.success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .data-status.error {
+            background: rgba(229, 62, 62, 0.1);
+            border: 1px solid rgba(229, 62, 62, 0.2);
+            color: var(--accent);
+        }
+
+        .transparenta-data {
+            margin-top: 0.75rem;
+        }
+
+        .transparenta-data .info-row {
+            font-size: 0.75rem;
+        }
+
+        .fiscal-detail {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        .fiscal-detail-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ===== INSTALLMENT PLAN ===== */
+        .contract-box {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .contract-box-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-bar {
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 28px;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: white;
+            white-space: nowrap;
+            min-width: 30px;
+        }
+
+        .timeline-segment.paying {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+        }
+
+        .timeline-segment.paid-surplus {
+            background: linear-gradient(135deg, #d69e2e, #b7791f);
+        }
+
+        .timeline-segment.free {
+            background: linear-gradient(135deg, #38a169, #2f855a);
+        }
+
+        .timeline-legend {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .timeline-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+        }
+
+        .installment-summary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            margin-top: 0.75rem;
+        }
+
+        .installment-summary .result-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .installment-summary .result-value {
+            color: var(--success);
+        }
+
+        /* ===== FOOTER ===== */
+        .site-footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .site-footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.4s ease both;
+        }
+
+        .grid>*:nth-child(2) {
+            animation-delay: 0.05s;
+        }
+
+        .grid>*:nth-child(3) {
+            animation-delay: 0.1s;
+        }
+
+        .grid>*:nth-child(4) {
+            animation-delay: 0.15s;
+        }
+
+        .grid>*:nth-child(5) {
+            animation-delay: 0.2s;
+        }
+
+        .grid>*:nth-child(6) {
+            animation-delay: 0.25s;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0.75rem;
+            }
+
+            .header {
+                padding: 0.6rem 1rem;
+            }
+
+            .header-logo {
+                font-size: 1.15rem;
+            }
+
+            .header-logo-img {
+                width: 34px;
+                height: 34px;
+            }
+
+            .result-value {
+                font-size: 1.5rem;
+            }
+
+            .ten-year-highlight .result-value {
+                font-size: 1.75rem;
+            }
+
+            .card {
+                padding: 1.15rem;
+                border-radius: 14px;
+            }
+        }
+
+        @media (min-width: 701px) {
+            .container {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <img src="logo-01.png" alt="Visoro Group" class="header-logo-img">
+        <div class="header-text">
+            <div class="header-logo">VISORO <span>CartInspect</span></div>
+            <div class="header-sub">Calculator Impact Bugetar</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="grid">
+
+            <!-- Error banner (shown if romania_uat.js fails to load) -->
+            <div class="error-banner" id="errorBanner" style="display:none"></div>
+
+            <!-- SECTION 1: Administrative Data -->
+            <div class="card">
+                <div class="card-title">Date administrative</div>
+
+                <div class="form-group">
+                    <label>Nume agent</label>
+                    <input type="text" id="agentName" placeholder="Introduceți numele agentului">
+                </div>
+
+                <div class="form-group">
+                    <label>Județ</label>
+                    <select id="county" onchange="onCountyChange()">
+                        <option value="">Selectați județul</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Comună / Oraș / Municipiu</label>
+                    <select id="commune" onchange="onCommuneChange()" disabled>
+                        <option value="">Selectați mai întâi județul</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="rankDisplay" style="display:none">
+                    <div class="info-row">
+                        <span class="info-label">Rang localitate (Legea 351/2001)</span>
+                        <span class="info-value"><span class="rang-badge" id="rankBadge"></span></span>
+                    </div>
+                </div>
+                <div class="divider" style="margin:1rem 0;"></div>
+
+                <div class="card-title" style="font-size:0.7rem;">Date din Transparenta.eu</div>
+
+                <div id="dataStatusContainer" style="display:none">
+                    <div class="data-status" id="dataStatus"></div>
+                </div>
+
+                <div id="transparentaDataDisplay" class="transparenta-data" style="display:none">
+                    <div class="info-row">
+                        <span class="info-label">Locuințe existente</span>
+                        <span class="info-value" id="housingCount">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Locuințe efective (pt. calcul)</span>
+                        <span class="info-value" id="effectiveHousingCount" style="color:var(--gold);">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- #2: Results (high priority) -->
+            <div class="card" id="resultsCard" style="display:none">
+                <div class="card-title">Rezultate simulare</div>
+
+                <!-- Current situation -->
+                <div class="result-block current">
+                    <div class="result-label">Încasare anuală estimată actuală</div>
+                    <div class="result-value red" id="collectedNow">0 RON</div>
+                </div>
+
+                <!-- What it should have been -->
+                <div class="result-block"
+                    style="background:rgba(196,164,52,0.08); border:1px solid rgba(196,164,52,0.25);">
+                    <div class="result-label">Cât ar fi trebuit să fie în mod real</div>
+                    <div class="result-value" style="color:var(--gold-light);" id="realMinimum">0 RON</div>
+                </div>
+
+                <!-- After CartInspect -->
+                <div class="result-block after">
+                    <div class="result-label">Încasare anuală după CartInspect</div>
+                    <div class="result-value green" id="collectedAfter">0 RON</div>
+                    <div class="result-detail">Cu rata potențială de colectare selectată</div>
+                </div>
+
+                <!-- 10 year highlight -->
+                <div class="ten-year-highlight">
+                    <div class="result-label">IMPACT PE 10 ANI</div>
+                    <div class="result-value" id="delta10Y">0 RON</div>
+                    <div class="result-detail" style="color:rgba(255,255,255,0.7);">Venituri suplimentare cumulate pe 10
+                        ani
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost & ROI -->
+            <div class="card" id="roiCard" style="display:none">
+                <div class="card-title">Cost și recuperare investiție</div>
+
+                <div class="info-row">
+                    <span class="info-label">Cost proiect CartInspect</span>
+                    <span class="info-value" id="costTotal">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Preț per imobil</span>
+                    <span class="info-value">130 RON</span>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="result-block roi">
+                    <div class="result-label">ROI pe 10 ani</div>
+                    <div class="result-value purple" id="roiValue">0%</div>
+                </div>
+
+                <div class="result-block"
+                    style="background:rgba(196,164,52,0.08); border:1px solid rgba(196,164,52,0.2);">
+                    <div class="result-label">Perioadă recuperare investiție</div>
+                    <div class="result-value" style="color:var(--gold-light);" id="paybackValue">0</div>
+                    <div class="result-detail" id="paybackDetail"></div>
+                </div>
+            </div>
+
+            <!-- #3: What can be funded (compact, right column) -->
+            <div class="card" id="impactCard" style="display:none">
+                <div class="card-title" style="font-size:0.7rem;">Ce se poate realiza din surplus</div>
+                <div style="font-size:0.65rem; color:var(--text-secondary); margin-bottom:0.4rem;">
+                    Estimare orientativă pe baza surplusului anual:
+                </div>
+                <div id="impactList" style="font-size:0.75rem;"></div>
+            </div>
+
+            <!-- Installment Payment Plan -->
+            <div class="card" id="installmentCard" style="display:none">
+                <div class="card-title">Plan de plată în rate</div>
+
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <label>Rată lunară per contract</label>
+                        <span class="slider-value" id="installmentDisplay">5.000 RON</span>
+                    </div>
+                    <input type="range" id="installmentRate" min="5000" max="15000" value="5000" step="1000"
+                        oninput="updateInstallmentSlider(); calculate()" aria-label="Rată lunară">
+
+                </div>
+
+                <div id="installmentDetails"></div>
+
+                <div class="divider"></div>
+
+                <!-- Timeline visualization -->
+                <div id="installmentTimeline"></div>
+            </div>
+
+            <!-- #4: Sliders (least important, at bottom) -->
+            <div class="card">
+                <div class="card-title">Parametri colectare</div>
+
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <label>Rata actuală de colectare</label>
+                        <span class="slider-value" id="currentRateDisplay">60%</span>
+                    </div>
+                    <input type="range" id="currentRate" min="10" max="90" value="60" step="5"
+                        oninput="updateSlider('currentRate'); calculate()" aria-label="Rata actuală de colectare">
+
+                </div>
+
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <label>Rata potențială de colectare</label>
+                        <span class="slider-value" id="targetRateDisplay">80%</span>
+                    </div>
+                    <input type="range" id="targetRate" min="10" max="100" value="80" step="5"
+                        oninput="updateSlider('targetRate'); calculate()" aria-label="Rata potențială de colectare">
+
+                </div>
+            </div>
+
+            <!-- Generate PDF -->
+            <div class="card grid-full" id="pdfCard" style="display:none">
+                <button class="btn btn-primary" onclick="generatePDF()">
+                    ⬇ GENEREAZĂ PDF
+                </button>
+                <div class="disclaimer">
+                    Simulare realizată pe baza datelor publice de pe transparenta.eu.<br>
+                    Valorile sunt estimative.
+                </div>
+            </div>
+
+        </div><!-- /grid -->
+    </div><!-- /container -->
+
+    <footer class="site-footer">
+        © 2026 <a href="https://www.visoro-global.ro" target="_blank">VISORO GROUP</a> · CartInspect · Calculator Impact
+        Bugetar
+    </footer>
+
+    <script src="romania_uat.js"></script>
+    <script src="uat_data.js"></script>
+    <script src="roboto-fonts.js"></script>
+    <script>
+        // ============================================================
+        // PROXY SERVER CONFIGURATION
+        // ============================================================
+        const PROXY_URL = 'https://cartinspect-calculator-production.up.railway.app';
+        // Local development:
+        // const PROXY_URL = 'http://localhost:3001';
+
+        // ============================================================
+        // MODEL CONSTANTS
+        // ============================================================
+        const MODEL = {
+            PRICE_PER_IMOBIL: 130,       // RON per imobil
+            TAX_INCREASE: 1.8,           // +80% tax increase (2026 law)
+            DISCOUNT_REMOVAL: 1.25,      // +50% for half houses (average: ×1.25)
+            CARTINSPECT_FACTOR: 1.8,     // +80% from CartInspect measurement
+            ASSUMED_COLLECTION: 0.80     // Transparenta data assumed at 80% collection
+        };
+
+        // Public investment examples (realistic Romanian prices)
+        const INVESTMENTS = [
+            { name: 'm² clădire finisată (la cheie)', cost: 5000, icon: '🏗️' },
+            { name: 'loc de joacă modernizat', cost: 500000, icon: '🛝' },
+            { name: 'ml drum pietruit (4m lățime)', cost: 200, icon: '🪨' },
+            { name: 'm² renovare clădire publică', cost: 2500, icon: '🏫' },
+            { name: 'bancă parc instalată', cost: 5000, icon: '🪑' },
+            { name: 'loc de parcare amenajat', cost: 375, icon: '🅿️' }
+        ];
+
+        // ============================================================
+        // STATE
+        // ============================================================
+        let currentRang = null;
+        let currentTip = null;
+        let calculationResults = null;
+        let transparentaData = null; // { financial, housing }
+        let isLoadingData = false;
+
+        // ============================================================
+        // UI INITIALIZATION
+        // ============================================================
+        function init() {
+            populateCounties();
+            updateSlider('currentRate');
+            updateSlider('targetRate');
+            updateInstallmentSlider();
+        }
+
+        function populateCounties() {
+            const sel = document.getElementById('county');
+            if (typeof ROMANIA_UAT === 'undefined') {
+                const banner = document.getElementById('errorBanner');
+                banner.textContent = 'Eroare: Datele administrative (romania_uat.js) nu s-au putut încărca. Reîncărcați pagina.';
+                banner.style.display = 'block';
+                console.error('romania_uat.js not loaded');
+                return;
+            }
+            const counties = Object.keys(ROMANIA_UAT).sort();
+            counties.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = c;
+                sel.appendChild(opt);
+            });
+        }
+
+        function onCountyChange() {
+            const county = document.getElementById('county').value;
+            const communeSel = document.getElementById('commune');
+            communeSel.innerHTML = '<option value="">Selectați UAT-ul</option>';
+            communeSel.disabled = !county;
+            document.getElementById('rankDisplay').style.display = 'none';
+            resetTransparentaData();
+
+            if (!county || !ROMANIA_UAT[county]) return;
+
+            const uats = Object.keys(ROMANIA_UAT[county]).sort();
+            uats.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = u;
+                const info = ROMANIA_UAT[county][u];
+                const tipLabel = info.tip.charAt(0).toUpperCase() + info.tip.slice(1);
+                opt.textContent = `${u} (${tipLabel})`;
+                communeSel.appendChild(opt);
+            });
+        }
+
+        function onCommuneChange() {
+            const county = document.getElementById('county').value;
+            const commune = document.getElementById('commune').value;
+
+            if (!county || !commune || !ROMANIA_UAT[county] || !ROMANIA_UAT[county][commune]) {
+                document.getElementById('rankDisplay').style.display = 'none';
+                currentRang = null;
+                currentTip = null;
+                resetTransparentaData();
+                hideResults();
+                return;
+            }
+
+            const info = ROMANIA_UAT[county][commune];
+            currentRang = info.rang;
+            currentTip = info.tip;
+
+            document.getElementById('rankDisplay').style.display = 'block';
+            document.getElementById('rankBadge').textContent = `Rang ${currentRang}`;
+
+            // Auto-fetch data from transparenta.eu
+            fetchEntityData(county, commune);
+        }
+
+        // ============================================================
+        // TRANSPARENTA.EU DATA FETCHING
+        // ============================================================
+        function resetTransparentaData() {
+            transparentaData = null;
+            document.getElementById('dataStatusContainer').style.display = 'none';
+            document.getElementById('transparentaDataDisplay').style.display = 'none';
+        }
+
+        function setDataStatus(type, message) {
+            const container = document.getElementById('dataStatusContainer');
+            const status = document.getElementById('dataStatus');
+            container.style.display = 'block';
+            status.className = 'data-status ' + type;
+            if (type === 'loading') {
+                status.innerHTML = '<span class="loading-spinner"></span>' + message;
+            } else {
+                status.textContent = message;
+            }
+        }
+
+        async function fetchEntityData(county, commune) {
+            if (isLoadingData) return;
+            isLoadingData = true;
+
+            setDataStatus('loading', 'Se încarcă datele din transparenta.eu...');
+            hideResults();
+
+            let data = null;
+            let isOffline = false;
+
+            // 1. Try online (proxy API)
+            try {
+                const url = `${PROXY_URL}/api/entity-data?county=${encodeURIComponent(county)}&name=${encodeURIComponent(commune)}`;
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 15000);
+                const response = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeout);
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                data = await response.json();
+                if (!data.financial && !data.housing) data = null;
+            } catch (err) {
+                console.warn('Online fetch failed:', err.message);
+                data = null;
+            }
+
+            // 2. Fallback to offline data if online failed
+            if (!data && typeof UAT_DATA !== 'undefined' && UAT_DATA[county]?.[commune]) {
+                const offline = UAT_DATA[county][commune];
+                data = {
+                    entity: { name: commune, county: county },
+                    financial: offline.tax > 0 ? {
+                        year: offline.taxYear,
+                        impozitCladiriFizice: offline.tax,
+                        total: offline.tax
+                    } : null,
+                    housing: offline.houses > 0 ? {
+                        year: offline.housesYear,
+                        count: offline.houses
+                    } : null
+                };
+                isOffline = true;
+            }
+
+            if (!data || (!data.financial && !data.housing)) {
+                setDataStatus('error', '✗ Nu s-au găsit date pentru această localitate');
+                isLoadingData = false;
+                return;
+            }
+
+            transparentaData = data;
+
+            // Display the loaded data
+            const tip = currentTip;
+            const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
+            const totalHouses = data.housing?.count || 0;
+            const effectiveHouses = Math.round(totalHouses * cityFactor);
+            const totalTax = data.financial?.total || 0;
+
+            document.getElementById('housingCount').textContent =
+                totalHouses.toLocaleString('ro-RO') + (data.housing?.year ? ` (${data.housing.year})` : '');
+            document.getElementById('effectiveHousingCount').textContent =
+                effectiveHouses.toLocaleString('ro-RO') + (cityFactor < 1 ? ` (${Math.round(cityFactor * 100)}% — oraș/municipiu)` : '');
+
+            if (isOffline) {
+                setDataStatus('success', '✓ Date încărcate din cache local (offline)');
+            } else {
+                setDataStatus('success', '✓ Datele au fost încărcate cu succes');
+            }
+
+            document.getElementById('transparentaDataDisplay').style.display = 'block';
+
+            // Auto-calculate
+            calculate();
+            isLoadingData = false;
+        }
+
+        function hideResults() {
+            document.getElementById('resultsCard').style.display = 'none';
+            document.getElementById('roiCard').style.display = 'none';
+            document.getElementById('impactCard').style.display = 'none';
+            document.getElementById('installmentCard').style.display = 'none';
+            document.getElementById('pdfCard').style.display = 'none';
+        }
+
+        function updateSlider(id) {
+            const val = parseInt(document.getElementById(id).value);
+            document.getElementById(id + 'Display').textContent = val + '%';
+
+            // Validate: targetRate must be >= currentRate
+            const currentVal = parseInt(document.getElementById('currentRate').value);
+            const targetVal = parseInt(document.getElementById('targetRate').value);
+            if (id === 'currentRate' && currentVal > targetVal) {
+                // Push targetRate UP to follow currentRate
+                document.getElementById('targetRate').value = currentVal;
+                document.getElementById('targetRateDisplay').textContent = currentVal + '%';
+            } else if (id === 'targetRate' && targetVal < currentVal) {
+                // Don't let targetRate go below currentRate
+                document.getElementById('targetRate').value = currentVal;
+                document.getElementById('targetRateDisplay').textContent = currentVal + '%';
+            }
+        }
+
+        // ============================================================
+        // CALCULATION ENGINE (Transparenta.eu based)
+        // ============================================================
+        function calculate() {
+            if (!transparentaData || !transparentaData.financial || !transparentaData.housing) {
+                hideResults();
+                return;
+            }
+
+            const rCurrent = parseInt(document.getElementById('currentRate').value) / 100;
+            const rTarget = Math.max(rCurrent, parseInt(document.getElementById('targetRate').value) / 100);
+
+            const tip = currentTip;
+            const rang = currentRang;
+
+            // 1. Base data from transparenta.eu
+            const transparentaTotal = transparentaData.financial.total;   // Actual collected
+            const totalHouses = transparentaData.housing.count;          // Total houses
+
+            // 2. City/municipium adjustment
+            const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
+            const effectiveHouses = Math.round(totalHouses * cityFactor);
+
+            // 3. Minimum 2025 base: houses × 150 RON
+            const minimumBase = effectiveHouses * 150;
+
+            // 4. Use the HIGHER of transparenta.eu or minimum as effective base
+            const effectiveTax = Math.max(transparentaTotal * cityFactor, minimumBase);
+            const usedMinimum = minimumBase > (transparentaTotal * cityFactor);
+
+            // 5. 2026 law changes
+            const afterTaxIncrease = effectiveTax * MODEL.TAX_INCREASE;          // +80% tax increase
+            const afterDiscountRemoval = afterTaxIncrease * MODEL.DISCOUNT_REMOVAL; // +50% for half houses
+
+            // 7. Collection rate adjustment (relative to ASSUMED_COLLECTION baseline)
+            // Transparenta data is assumed at ASSUMED_COLLECTION (80%) rate
+            const collectionAdjustment = rTarget / MODEL.ASSUMED_COLLECTION;
+            const adjustedBase = afterDiscountRemoval * collectionAdjustment;
+
+            // 8. CartInspect effect (+80%)
+            const afterCartInspect = adjustedBase * MODEL.CARTINSPECT_FACTOR;
+
+            // 9. Results — currentRevenue adjusts based on rCurrent vs assumed baseline
+            const currentRevenue = transparentaTotal * (rCurrent / MODEL.ASSUMED_COLLECTION);
+            const deltaYear = afterCartInspect - currentRevenue;
+            const delta10Y = deltaYear * 10;
+
+            // 10. Cost & ROI
+            const cost = effectiveHouses * MODEL.PRICE_PER_IMOBIL;
+            const roi10Y = cost > 0 ? (delta10Y - cost) / cost : 0;
+            const paybackYears = deltaYear > 0 ? cost / deltaYear : Infinity;
+
+            // Store results
+            calculationResults = {
+                totalHouses, effectiveHouses, cityFactor,
+                transparentaTotal, effectiveTax, minimumBase, usedMinimum,
+                rCurrent, rTarget, rang, tip,
+                afterTaxIncrease, afterDiscountRemoval,
+                collectionAdjustment, adjustedBase,
+                afterCartInspect,
+                currentRevenue, deltaYear, delta10Y,
+                cost, roi10Y, paybackYears
+            };
+
+            // Update UI
+            renderResults();
+        }
+
+        function formatRON(value) {
+            return new Intl.NumberFormat('ro-RO', { maximumFractionDigits: 0 }).format(Math.round(value)) + ' RON';
+        }
+
+        function renderResults() {
+            const r = calculationResults;
+            if (!r) return;
+
+            // Show all result sections
+            document.getElementById('resultsCard').style.display = 'block';
+            document.getElementById('roiCard').style.display = 'block';
+            document.getElementById('impactCard').style.display = 'block';
+            document.getElementById('pdfCard').style.display = 'block';
+
+            // Current
+            document.getElementById('collectedNow').textContent = formatRON(r.currentRevenue);
+
+            // What it should have been (minimum base)
+            document.getElementById('realMinimum').textContent = formatRON(r.effectiveTax);
+
+            // After CartInspect
+            document.getElementById('collectedAfter').textContent = formatRON(r.afterCartInspect);
+
+            // 10 year
+            document.getElementById('delta10Y').textContent = '+ ' + formatRON(r.delta10Y);
+
+            // Cost & ROI
+            document.getElementById('costTotal').textContent = formatRON(r.cost);
+            document.getElementById('roiValue').textContent = Math.round(r.roi10Y * 100) + '%';
+
+            if (r.paybackYears < 1) {
+                const months = Math.max(1, Math.round(r.paybackYears * 12));
+                document.getElementById('paybackValue').textContent = months + ' luni';
+                document.getElementById('paybackDetail').textContent = 'Investiția se recuperează în mai puțin de 1 an';
+            } else {
+                const years = r.paybackYears.toFixed(1);
+                document.getElementById('paybackValue').textContent = years + ' ani';
+                document.getElementById('paybackDetail').textContent = 'Investiția se recuperează din surplusul anual';
+            }
+
+            // Impact items
+            renderImpact(r.deltaYear);
+
+            // Installment plan
+            calculateInstallments();
+        }
+
+        function renderImpact(deltaYear) {
+            const list = document.getElementById('impactList');
+            list.innerHTML = '';
+
+            INVESTMENTS.forEach(inv => {
+                const count = deltaYear / inv.cost;
+                const div = document.createElement('div');
+                div.className = 'impact-item';
+                let displayCount;
+                if (count >= 100) {
+                    displayCount = new Intl.NumberFormat('ro-RO', { maximumFractionDigits: 0 }).format(Math.round(count));
+                } else if (count >= 1) {
+                    displayCount = new Intl.NumberFormat('ro-RO', { maximumFractionDigits: 1 }).format(count);
+                } else {
+                    displayCount = count.toFixed(2);
+                }
+                div.innerHTML = `
+                <div class="impact-icon">${inv.icon}</div>
+                <div class="impact-text">
+                    <div class="impact-name">${inv.name}</div>
+                    <div class="impact-count">~${displayCount} / an din surplusul generat</div>
+                </div>
+            `;
+                list.appendChild(div);
+            });
+        }
+
+        // ============================================================
+        // PDF GENERATION (Roboto font + Visoro logo)
+        // ============================================================
+        function generatePDF() {
+            const r = calculationResults;
+            if (!r) return;
+
+            const agentName = document.getElementById('agentName').value || 'N/A';
+            const county = document.getElementById('county').value || 'N/A';
+            const communeName = document.getElementById('commune').value || 'N/A';
+            const today = new Date().toLocaleDateString('ro-RO');
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const pageW = 210;
+            const margin = 15;
+            const contentW = pageW - 2 * margin;
+
+            registerRobotoFonts(doc);
+
+            const primary = [26, 54, 93];
+            const accent = [229, 62, 62];
+            const success = [56, 161, 105];
+            const textColor = [26, 32, 44];
+            const gray = [74, 85, 104];
+            const gold = [196, 164, 52];
+            const blue = [49, 130, 206];
+
+            let y = 0;
+
+            // ========= HEADER (36mm) =========
+            doc.setFillColor(...primary);
+            doc.rect(0, 0, pageW, 36, 'F');
+            doc.setFillColor(...gold);
+            doc.rect(0, 36, pageW, 1.2, 'F');
+
+            try { doc.addImage(LOGO_B64, 'PNG', margin, 3, 30, 30); } catch (e) { }
+
+            doc.setFont('Roboto', 'bold');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.text('VISORO CartInspect', margin + 35, 16);
+            doc.setFont('Roboto', 'normal');
+            doc.setFontSize(11);
+            doc.setTextColor(200, 210, 230);
+            doc.text('Calculator Impact Bugetar', margin + 35, 24);
+            doc.setFontSize(9);
+            doc.setTextColor(180, 195, 215);
+            doc.text('Data: ' + today + '  |  Agent: ' + agentName, margin + 35, 31);
+
+            y = 46;
+
+            // ========= DATE ADMINISTRATIVE =========
+            doc.setTextColor(...primary);
+            doc.setFontSize(12);
+            doc.setFont('Roboto', 'bold');
+            doc.text('DATE ADMINISTRATIVE', margin, y);
+            doc.setDrawColor(...primary);
+            doc.setLineWidth(0.6);
+            doc.line(margin, y + 2.5, margin + contentW, y + 2.5);
+
+            y += 10;
+
+            doc.setFontSize(10);
+            var tipLabel = r.tip ? r.tip.charAt(0).toUpperCase() + r.tip.slice(1) : '';
+            var adminRows = [
+                ['Jude\u021b:', county],
+                ['UAT:', communeName + (tipLabel ? ' (' + tipLabel + ')' : '')],
+                ['Rang localitate:', 'Rang ' + r.rang],
+                ['Locuin\u021be existente:', r.totalHouses.toLocaleString('ro-RO')],
+                ['Locuin\u021be efective:', r.effectiveHouses.toLocaleString('ro-RO') + (r.cityFactor < 1 ? ' (' + Math.round(r.cityFactor * 100) + '%)' : '')],
+                ['Rata actual\u0103 colectare:', Math.round(r.rCurrent * 100) + '%'],
+                ['Rata poten\u021bial\u0103 colectare:', Math.round(r.rTarget * 100) + '%']
+            ];
+
+            adminRows.forEach(function (row) {
+                doc.setFont('Roboto', 'normal');
+                doc.setTextColor(...gray);
+                doc.text(row[0], margin, y);
+                doc.setFont('Roboto', 'bold');
+                doc.setTextColor(...textColor);
+                doc.text(String(row[1]), margin + 55, y);
+                y += 7;
+            });
+
+            y += 8;
+
+            // ========= REZULTATE SIMULARE =========
+            doc.setTextColor(...primary);
+            doc.setFontSize(12);
+            doc.setFont('Roboto', 'bold');
+            doc.text('REZULTATE SIMULARE', margin, y);
+            doc.setDrawColor(...primary);
+            doc.setLineWidth(0.6);
+            doc.line(margin, y + 2.5, margin + contentW, y + 2.5);
+            y += 10;
+
+            var boxW = contentW / 2 - 3;
+            var boxH = 22;
+
+            // Row 1: Current (red) | After (green)
+            doc.setFillColor(255, 245, 245);
+            doc.setDrawColor(254, 215, 215);
+            doc.roundedRect(margin, y, boxW, boxH, 2, 2, 'FD');
+            doc.setTextColor(...accent);
+            doc.setFontSize(9);
+            doc.setFont('Roboto', 'normal');
+            doc.text('\u00CEncasare anual\u0103 actual\u0103:', margin + 5, y + 7);
+            doc.setFontSize(16);
+            doc.setFont('Roboto', 'bold');
+            doc.text(formatRON(r.currentRevenue), margin + 5, y + 17);
+
+            var bx2 = margin + boxW + 6;
+            doc.setFillColor(240, 255, 244);
+            doc.setDrawColor(198, 246, 213);
+            doc.roundedRect(bx2, y, boxW, boxH, 2, 2, 'FD');
+            doc.setTextColor(...success);
+            doc.setFontSize(9);
+            doc.setFont('Roboto', 'normal');
+            doc.text('\u00CEncasare dup\u0103 CartInspect:', bx2 + 5, y + 7);
+            doc.setFontSize(16);
+            doc.setFont('Roboto', 'bold');
+            doc.text(formatRON(r.afterCartInspect), bx2 + 5, y + 17);
+
+            y += boxH + 5;
+
+            // Row 2: Delta (blue) | 10Y Impact (dark)
+            doc.setFillColor(235, 248, 255);
+            doc.setDrawColor(190, 227, 248);
+            doc.roundedRect(margin, y, boxW, boxH, 2, 2, 'FD');
+            doc.setTextColor(...blue);
+            doc.setFontSize(9);
+            doc.setFont('Roboto', 'normal');
+            doc.text('Diferen\u021b\u0103 anual\u0103 suplimentar\u0103:', margin + 5, y + 7);
+            doc.setFontSize(16);
+            doc.setFont('Roboto', 'bold');
+            doc.text('+ ' + formatRON(r.deltaYear), margin + 5, y + 17);
+
+            doc.setFillColor(...primary);
+            doc.setDrawColor(...primary);
+            doc.roundedRect(bx2, y, boxW, boxH, 2, 2, 'FD');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(9);
+            doc.setFont('Roboto', 'normal');
+            doc.text('IMPACT PE 10 ANI:', bx2 + 5, y + 7);
+            doc.setFontSize(16);
+            doc.setFont('Roboto', 'bold');
+            doc.setTextColor(104, 211, 145);
+            doc.text('+ ' + formatRON(r.delta10Y), bx2 + 5, y + 17);
+
+            y += boxH + 10;
+
+            // ========= COST & ROI (left) + SURPLUS (right) =========
+            var colLeft = margin;
+            var colRight = margin + contentW / 2 + 4;
+            var colW = contentW / 2 - 4;
+
+            doc.setTextColor(...primary);
+            doc.setFontSize(11);
+            doc.setFont('Roboto', 'bold');
+            doc.text('COST \u0218I RECUPERARE', colLeft, y);
+            doc.setDrawColor(...primary);
+            doc.setLineWidth(0.5);
+            doc.line(colLeft, y + 2.5, colLeft + colW, y + 2.5);
+
+            doc.text('CE SE POATE REALIZA DIN SURPLUS', colRight, y);
+            doc.line(colRight, y + 2.5, colRight + colW, y + 2.5);
+
+            y += 9;
+
+            // ROI data – left
+            doc.setFontSize(9.5);
+            var roiY = y;
+            var paybackStr = r.paybackYears < 1
+                ? Math.max(1, Math.round(r.paybackYears * 12)) + ' luni'
+                : r.paybackYears.toFixed(1) + ' ani';
+            var roiRows = [
+                ['Cost proiect:', formatRON(r.cost)],
+                ['Pre\u021b / locuin\u021b\u0103:', '130 RON'],
+                ['ROI pe 10 ani:', Math.round(r.roi10Y * 100) + '%'],
+                ['Recuperare:', paybackStr]
+            ];
+            roiRows.forEach(function (row) {
+                doc.setFont('Roboto', 'normal');
+                doc.setTextColor(...gray);
+                doc.text(row[0], colLeft, roiY);
+                doc.setFont('Roboto', 'bold');
+                doc.setTextColor(...textColor);
+                doc.text(row[1], colLeft + 35, roiY);
+                roiY += 7;
+            });
+
+            // Surplus – right
+            doc.setFontSize(9);
+            doc.setFont('Roboto', 'normal');
+            doc.setTextColor(...textColor);
+            var surplusY = y;
+            INVESTMENTS.forEach(function (inv) {
+                var count = r.deltaYear / inv.cost;
+                if (count >= 0.1) {
+                    var displayCount = count >= 1 ? count.toFixed(1) : count.toFixed(2);
+                    doc.text('\u2022 ~' + displayCount + ' ' + inv.name + '/an', colRight, surplusY);
+                    surplusY += 6;
+                }
+            });
+
+            // ========= FOOTER =========
+            drawFooter(doc, pageW, margin, contentW, primary, gray);
+
+            var filename = 'CartInspect_' + communeName.replace(/\s+/g, '_') + '_' + today.replace(/\./g, '-') + '.pdf';
+            doc.save(filename);
+            logSimulation();
+        }
+
+        function drawFooter(doc, pageW, margin, contentW, primary, gray) {
+            // Footer background
+            doc.setFillColor(245, 247, 250);
+            doc.rect(0, 275, pageW, 22, 'F');
+
+            // Gold top line
+            doc.setFillColor(196, 164, 52);
+            doc.rect(0, 275, pageW, 0.6, 'F');
+
+            doc.setFont('Roboto', 'normal');
+            doc.setFontSize(6.5);
+            doc.setTextColor(...gray);
+            doc.text(
+                'Simulare realizat\u0103 pe baza datelor publice de pe transparenta.eu. Valorile sunt estimative.',
+                margin, 282
+            );
+
+            doc.setFont('Roboto', 'bold');
+            doc.setFontSize(7);
+            doc.setTextColor(...primary);
+            doc.text('VISORO GROUP | CartInspect | www.visoro-global.ro', margin, 291);
+
+            // Logo in footer (small)
+            try {
+                doc.addImage(LOGO_B64, 'PNG', pageW - margin - 12, 277, 12, 12);
+            } catch (e) { }
+        }
+
+        function logSimulation() {
+            const r = calculationResults;
+            if (!r) return;
+
+            const simulation = {
+                created_at: new Date().toISOString(),
+                source: 'web',
+                app_version: '3.0.0',
+                county: document.getElementById('county').value,
+                commune: document.getElementById('commune').value,
+                rank: r.rang,
+                tip: r.tip,
+                agent_name: document.getElementById('agentName').value || 'N/A',
+                total_houses: r.totalHouses,
+                effective_houses: r.effectiveHouses,
+                city_factor: r.cityFactor,
+                transparenta_total_ron: r.transparentaTotal,
+                effective_tax_ron: r.effectiveTax,
+                price_per_imobil_ron: MODEL.PRICE_PER_IMOBIL,
+                collection_current: r.rCurrent,
+                collection_target: r.rTarget,
+                current_revenue_ron: r.currentRevenue,
+                after_cartinspect_ron: r.afterCartInspect,
+                delta_year_ron: r.deltaYear,
+                delta_10y_ron: r.delta10Y,
+                cost_total_ron: r.cost,
+                roi_10y: r.roi10Y,
+                payback_years: r.paybackYears,
+                pdf_generated: true,
+                device_id: getDeviceId()
+            };
+
+            console.log('Simulation logged:', simulation);
+
+            // Store locally (max 100 simulations)
+            let stored = JSON.parse(localStorage.getItem('cartinspect_simulations') || '[]');
+            stored.push(simulation);
+            if (stored.length > 100) {
+                stored = stored.slice(-100);
+            }
+            localStorage.setItem('cartinspect_simulations', JSON.stringify(stored));
+        }
+
+        function getDeviceId() {
+            let id = localStorage.getItem('cartinspect_device_id');
+            if (!id) {
+                id = 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('cartinspect_device_id', id);
+            }
+            return id;
+        }
+
+        // ============================================================
+        // INSTALLMENT PAYMENT PLAN
+        // ============================================================
+        const MAX_CONTRACT = 270000; // Romanian public procurement direct limit
+
+        function updateInstallmentSlider() {
+            const val = parseInt(document.getElementById('installmentRate').value);
+            document.getElementById('installmentDisplay').textContent =
+                new Intl.NumberFormat('ro-RO').format(val) + ' RON';
+        }
+
+        function calculateInstallments() {
+            const r = calculationResults;
+            if (!r) return;
+
+            const cost = r.cost;
+            const monthlyRate = parseInt(document.getElementById('installmentRate').value);
+            const deltaMonth = r.deltaYear / 12; // monthly surplus
+
+            // Split into contracts if > 270,000
+            const contracts = [];
+            let remaining = cost;
+            while (remaining > 0) {
+                const contractValue = Math.min(remaining, MAX_CONTRACT);
+                const months = Math.ceil(contractValue / monthlyRate);
+                const totalPaid = months * monthlyRate;
+                contracts.push({
+                    value: contractValue,
+                    monthlyRate: monthlyRate,
+                    months: months,
+                    totalPaid: totalPaid
+                });
+                remaining -= contractValue;
+            }
+
+            // Total payment duration = max of all contracts (they run in parallel, each paying monthlyRate)
+            // Actually: all contracts are paid simultaneously, each at monthlyRate
+            // So total monthly outflow = contracts.length * monthlyRate
+            const totalMonthlyPayment = contracts.length * monthlyRate;
+            const longestContract = Math.max(...contracts.map(c => c.months));
+
+            // When does the surplus cover the installments?
+            // After CartInspect, monthly surplus = deltaMonth
+            // The commune pays totalMonthlyPayment per month
+            // Net benefit per month = deltaMonth - totalMonthlyPayment (while paying)
+            // After all paid: net benefit = deltaMonth (full surplus, no more payments)
+
+            // Months until surplus alone covers installments (breakeven month)
+            const surplusCoversPayment = deltaMonth >= totalMonthlyPayment;
+
+            // Total cost across all contracts
+            const totalCost = contracts.reduce((s, c) => s + c.totalPaid, 0);
+
+            // Render
+            renderInstallments(contracts, monthlyRate, totalMonthlyPayment, longestContract, deltaMonth, totalCost);
+        }
+
+        function renderInstallments(contracts, monthlyRate, totalMonthlyPayment, longestMonths, deltaMonth, totalCost) {
+            const r = calculationResults;
+            const IMPLEMENTATION_MONTHS = 6; // project delivery time
+
+            document.getElementById('installmentCard').style.display = 'block';
+
+            const detailsEl = document.getElementById('installmentDetails');
+            let html = '';
+
+
+
+            contracts.forEach((c, i) => {
+                html += '<div class="contract-box">';
+                html += '<div class="contract-box-title">Contract ' + (i + 1) + ' din ' + contracts.length + '</div>';
+                html += '<div class="info-row"><span class="info-label">Valoare contract</span><span class="info-value">' + formatRON(c.value) + '</span></div>';
+                html += '<div class="info-row"><span class="info-label">Rată lunară</span><span class="info-value">' + formatRON(c.monthlyRate) + '</span></div>';
+                html += '<div class="info-row"><span class="info-label">Durată plată</span><span class="info-value">' + c.months + ' luni (' + (c.months / 12).toFixed(1) + ' ani)</span></div>';
+                html += '</div>';
+            });
+
+            if (contracts.length > 1) {
+                html += '<div class="info-row" style="border-top:1px solid var(--gold); padding-top:0.5rem; margin-top:0.25rem;">';
+                html += '<span class="info-label" style="font-weight:700;">Total plată lunară (toate contractele)</span>';
+                html += '<span class="info-value" style="color:var(--gold);">' + formatRON(totalMonthlyPayment) + '/lună</span>';
+                html += '</div>';
+            }
+
+            detailsEl.innerHTML = html;
+
+            // ============ TIMELINE – 10 years, annual perspective ============
+            // Phase 1: IMPLEMENTARE (0.5 years) – project delivery, no surplus
+            // Phase 2: RECUPERARE – surplus kicks in, covers installments, investment recovers
+            // Phase 3: PROFIT NET – fully recovered, everything is profit
+
+            const timelineEl = document.getElementById('installmentTimeline');
+            let tHtml = '';
+
+            const IMPL_YEARS = 0.5; // 6 months
+            const annualSurplus = r.deltaYear; // annual surplus (this is how the mayor thinks)
+            const annualInstallment = totalMonthlyPayment * 12; // annual installment cost
+
+            // How many years of surplus to recover total cost?
+            const breakevenYearsFromSurplus = annualSurplus > 0
+                ? totalCost / annualSurplus
+                : Infinity;
+
+            // Total years from contract signing to break-even
+            const totalBreakevenYears = IMPL_YEARS + breakevenYearsFromSurplus;
+
+            // Timeline: 10 years — 2 simple segments
+            const totalYears = 10;
+            const combinedRecoveryYears = Math.min(totalBreakevenYears, totalYears);
+            const profitYears = Math.max(0, totalYears - combinedRecoveryYears);
+
+            const recoveryPct = (combinedRecoveryYears / totalYears * 100).toFixed(1);
+            const profitPct = (profitYears / totalYears * 100).toFixed(1);
+
+            // Format years nicely
+            function fmtYears(y) {
+                if (y < 1) return Math.round(y * 12) + ' luni';
+                var rounded = Math.round(y * 10) / 10;
+                if (rounded === Math.floor(rounded)) return rounded + (rounded === 1 ? ' an' : ' ani');
+                return rounded.toFixed(1) + ' ani';
+            }
+
+            tHtml += '<div style="font-size:0.7rem; font-weight:700; color:var(--text-secondary); margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:1px;">Cronologie 10 ani</div>';
+
+            tHtml += '<div class="timeline-bar">';
+            tHtml += '<div class="timeline-segment breakeven" style="width:' + recoveryPct + '%">' + fmtYears(combinedRecoveryYears) + '</div>';
+            if (profitYears > 0.01) {
+                tHtml += '<div class="timeline-segment profit" style="width:' + profitPct + '%">' + fmtYears(profitYears) + '</div>';
+            }
+            tHtml += '</div>';
+
+            tHtml += '<div class="timeline-legend">';
+            tHtml += '<div class="timeline-legend-item"><div class="legend-dot" style="background:#d69e2e;"></div>Recuperare investiție</div>';
+            tHtml += '<div class="timeline-legend-item"><div class="legend-dot" style="background:#38a169;"></div>Profit net</div>';
+            tHtml += '</div>';
+
+            // Key insight box – ANNUAL figures (how a mayor thinks)
+            tHtml += '<div class="installment-summary">';
+
+            var annualNet = annualSurplus - annualInstallment;
+
+            if (annualSurplus >= annualInstallment) {
+                tHtml += '<div class="result-label" style="font-size:0.8rem; margin-bottom:0.5rem;">SURPLUSUL ANUAL ACOPERĂ INTEGRAL RATELE</div>';
+                tHtml += '<div style="display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap; margin-bottom:0.75rem;">';
+                tHtml += '<div style="text-align:center;"><div style="font-size:0.65rem; color:rgba(255,255,255,0.5);">Surplus anual</div><div style="font-size:1.3rem; font-weight:700; color:var(--success);">' + formatRON(annualSurplus) + '</div></div>';
+                tHtml += '<div style="text-align:center;"><div style="font-size:0.65rem; color:rgba(255,255,255,0.5);">Rate anuale</div><div style="font-size:1.3rem; font-weight:700; color:#e2a72e;">−' + formatRON(annualInstallment) + '</div></div>';
+                tHtml += '<div style="text-align:center;"><div style="font-size:0.65rem; color:rgba(255,255,255,0.5);">Rămâne net / an</div><div style="font-size:1.3rem; font-weight:700; color:var(--success);">+' + formatRON(annualNet) + '</div></div>';
+                tHtml += '</div>';
+                tHtml += '<div class="result-detail" style="color:rgba(255,255,255,0.7); font-size:0.8rem;">Investiția se recuperează complet în <strong style="color:var(--success);">' + fmtYears(Math.round(totalBreakevenYears * 10) / 10) + '</strong> de la semnarea contractului</div>';
+                tHtml += '<div class="result-detail" style="color:rgba(255,255,255,0.5); font-size:0.7rem; margin-top:0.25rem;">Ratele se plătesc integral din venitul suplimentar generat de CartInspect</div>';
+            } else {
+                var annualOutOfPocket = annualInstallment - annualSurplus;
+                tHtml += '<div class="result-label" style="font-size:0.8rem; margin-bottom:0.5rem;">SURPLUSUL ACOPERĂ PARȚIAL RATELE</div>';
+                tHtml += '<div style="display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap; margin-bottom:0.75rem;">';
+                tHtml += '<div style="text-align:center;"><div style="font-size:0.65rem; color:rgba(255,255,255,0.5);">Surplus anual</div><div style="font-size:1.3rem; font-weight:700; color:var(--success);">' + formatRON(annualSurplus) + '</div></div>';
+                tHtml += '<div style="text-align:center;"><div style="font-size:0.65rem; color:rgba(255,255,255,0.5);">Rate anuale</div><div style="font-size:1.3rem; font-weight:700; color:#e2a72e;">−' + formatRON(annualInstallment) + '</div></div>';
+                tHtml += '<div style="text-align:center;"><div style="font-size:0.65rem; color:rgba(255,255,255,0.5);">Din buget / an</div><div style="font-size:1.3rem; font-weight:700; color:#e53e3e;">' + formatRON(annualOutOfPocket) + '</div></div>';
+                tHtml += '</div>';
+                tHtml += '<div class="result-detail" style="color:rgba(255,255,255,0.7); font-size:0.8rem;">Investiția se recuperează complet în <strong style="color:var(--success);">' + fmtYears(Math.round(totalBreakevenYears * 10) / 10) + '</strong> de la semnarea contractului</div>';
+            }
+            tHtml += '</div>';
+
+            // 10 year summary
+            const surplusYears = totalYears - IMPL_YEARS; // 9.5 years of actual surplus
+            const actualSurplus10Y = annualSurplus * surplusYears;
+            const netGain10Y = actualSurplus10Y - totalCost;
+
+            tHtml += '<div style="margin-top:0.75rem;">';
+            tHtml += '<div class="info-row"><span class="info-label">Cost total proiect</span><span class="info-value">' + formatRON(totalCost) + '</span></div>';
+            tHtml += '<div class="info-row"><span class="info-label">Surplus generat pe 10 ani</span><span class="info-value" style="color:var(--success);">' + formatRON(actualSurplus10Y) + '</span></div>';
+            tHtml += '<div class="info-row" style="border-top:1px solid var(--gold); padding-top:0.5rem;"><span class="info-label" style="font-weight:700;">Câștig net pe 10 ani</span><span class="info-value" style="color:var(--success); font-size:1.1rem;">' + formatRON(netGain10Y) + '</span></div>';
+            tHtml += '</div>';
+
+            timelineEl.innerHTML = tHtml;
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+</body>
+
+</html>
