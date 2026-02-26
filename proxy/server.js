@@ -27,6 +27,83 @@ async function graphql(query, variables) {
 // GET /api/entity-data?county=Bihor&name=Rosia
 // Combined endpoint – search + financial + housing in one call
 // ============================================================
+// Helper: search entities via GraphQL
+async function searchEntities(searchTerm) {
+    const data = await graphql(`
+        query EntitySearch($search: String, $limit: Int) {
+            entities(filter: { search: $search }, limit: $limit) {
+                nodes {
+                    name
+                    cui
+                    uat {
+                        county_name
+                        name
+                        siruta_code
+                    }
+                }
+            }
+        }
+    `, { search: searchTerm, limit: 30 });
+    return data.entities?.nodes || [];
+}
+
+// Helper: is this entity a primăria (municipality office)?
+function isPrimaria(n) {
+    const nm = (n.name || '').toUpperCase();
+    return nm.includes('PRIMĂRIA') || nm.includes('PRIMARIA') ||
+        nm.includes('ORAȘ') || nm.includes('ORAS') ||
+        nm.includes('MUNICIPIUL') || nm.includes('COMUNA');
+}
+
+// Blacklist: NEVER match these entity types
+function isBlacklisted(n) {
+    const nm = (n.name || '').toUpperCase();
+    return nm.includes('SCOALA') || nm.includes('ȘCOALA') || nm.includes('ȘCOALĂ') ||
+        nm.includes('LICEUL') || nm.includes('LICEU') ||
+        nm.includes('GRADINITA') || nm.includes('GRĂDINIȚA') || nm.includes('GRĂDINIȚĂ') ||
+        nm.includes('SPITAL') || nm.includes('BISERICA') || nm.includes('BISERICĂ') ||
+        nm.includes('BIBLIOTECA') || nm.includes('BIBLIOTECĂ') ||
+        nm.includes('MUZEU') || nm.includes('CASA DE CULTURA') ||
+        nm.includes('CLUBUL') || nm.includes('POLITIA') || nm.includes('POLIȚIA') ||
+        nm.includes('INSPECTORAT') || nm.includes('SEMINARUL') ||
+        nm.includes('COLEGIUL') || nm.includes('UNIVERSITATE') ||
+        nm.includes('GIMNAZIAL') ||
+        nm.includes('TRIBUNALUL') || nm.includes('TRIBUNAL') ||
+        nm.includes('JUDECATORIA') || nm.includes('JUDECĂTORIA') ||
+        nm.includes('CURTEA DE APEL') || nm.includes('PARCHETUL') ||
+        nm.includes('DIRECTIA') || nm.includes('DIRECȚIA') ||
+        nm.includes('AGENTIA') || nm.includes('AGENȚIA') ||
+        nm.includes('CAMERA DE COMERT') || nm.includes('PREFECTURA') ||
+        nm.includes('SERVICIUL') || nm.includes('CENTRUL') ||
+        nm.startsWith('JUDETUL') || nm.startsWith('JUDEȚUL');
+}
+
+// Find best entity match from a list of nodes
+function findBestMatch(nodes, countyUpper, nameUpper) {
+    const inCounty = nodes
+        .filter(n => n.uat?.county_name?.toUpperCase() === countyUpper)
+        .filter(n => !isBlacklisted(n));
+
+    // Match priority:
+    // 1. Primăria + exact UAT name
+    // 2. Any non-blacklisted + exact UAT name  
+    // 3. Primăria + UAT name includes search name
+    // 4. Primăria + entity name includes search name
+    // 5. Any non-blacklisted + partial match
+    // 6. First non-blacklisted in county (only if it's a primăria)
+    return inCounty.find(n =>
+        isPrimaria(n) && n.uat?.name?.toUpperCase() === nameUpper
+    ) || inCounty.find(n =>
+        n.uat?.name?.toUpperCase() === nameUpper && isPrimaria(n)
+    ) || inCounty.find(n =>
+        isPrimaria(n) && n.uat?.name?.toUpperCase().includes(nameUpper)
+    ) || inCounty.find(n =>
+        isPrimaria(n) && n.name?.toUpperCase().includes(nameUpper)
+    ) || inCounty.find(n =>
+        (n.uat?.name?.toUpperCase().includes(nameUpper) || n.name?.toUpperCase().includes(nameUpper)) && isPrimaria(n)
+    ) || inCounty.find(n => isPrimaria(n)) || null;
+}
+
 app.get('/api/entity-data', async (req, res) => {
     try {
         const { county, name } = req.query;
@@ -34,73 +111,27 @@ app.get('/api/entity-data', async (req, res) => {
             return res.status(400).json({ error: 'county and name are required' });
         }
 
-        // Step 1: Search for entity
-        const searchTerm = `${name} ${county}`;
-        const searchData = await graphql(`
-            query EntitySearch($search: String, $limit: Int) {
-                entities(filter: { search: $search }, limit: $limit) {
-                    nodes {
-                        name
-                        cui
-                        uat {
-                            county_name
-                            name
-                            siruta_code
-                        }
-                    }
-                }
-            }
-        `, { search: searchTerm, limit: 20 });
-
-        const nodes = searchData.entities?.nodes || [];
         const countyUpper = county.toUpperCase();
         const nameUpper = name.toUpperCase();
 
-        // Helper: is this entity a primăria (municipality office)?
-        const isPrimaria = (n) => {
-            const nm = (n.name || '').toUpperCase();
-            return nm.includes('PRIMĂRIA') || nm.includes('PRIMARIA') ||
-                nm.includes('ORAȘ') || nm.includes('ORAS') ||
-                nm.includes('MUNICIPIUL') || nm.includes('COMUNA');
-        };
+        // Try multiple search strategies to find the primăria
+        const searchStrategies = [
+            `Primaria ${name} ${county}`,     // Most specific: "Primaria Șcheia Suceava"
+            `Comuna ${name} ${county}`,        // "Comuna Berchișești Suceava"
+            `${name} ${county}`,               // Generic: "Șcheia Suceava"
+            `Municipiul ${name} ${county}`,    // For cities: "Municipiul Deva Hunedoara"
+            `Primaria ${name}`,                // Without county: "Primaria Iași"
+        ];
 
-        // Blacklist: NEVER match schools, hospitals, churches, etc.
-        const isBlacklisted = (n) => {
-            const nm = (n.name || '').toUpperCase();
-            return nm.includes('SCOALA') || nm.includes('ȘCOALA') || nm.includes('ȘCOALĂ') ||
-                nm.includes('LICEUL') || nm.includes('LICEU') ||
-                nm.includes('GRADINITA') || nm.includes('GRĂDINIȚA') || nm.includes('GRĂDINIȚĂ') ||
-                nm.includes('SPITAL') || nm.includes('BISERICA') || nm.includes('BISERICĂ') ||
-                nm.includes('BIBLIOTECA') || nm.includes('BIBLIOTECĂ') ||
-                nm.includes('MUZEU') || nm.includes('CASA DE CULTURA') ||
-                nm.includes('CLUBUL') || nm.includes('POLITIA') || nm.includes('POLIȚIA') ||
-                nm.includes('INSPECTORAT') || nm.includes('SEMINARUL') ||
-                nm.includes('COLEGIUL') || nm.includes('UNIVERSITATE') ||
-                nm.includes('GIMNAZIAL');
-        };
-
-        // Match priority (only from non-blacklisted entities in correct county):
-        // 1. Primăria + exact UAT name
-        // 2. Any entity + exact UAT name
-        // 3. Primăria + partial name match
-        // 4. Any entity + partial match
-        // 5. First non-blacklisted entity (last resort)
-        const inCounty = nodes
-            .filter(n => n.uat?.county_name?.toUpperCase() === countyUpper)
-            .filter(n => !isBlacklisted(n));
-
-        let match = inCounty.find(n =>
-            isPrimaria(n) && n.uat?.name?.toUpperCase() === nameUpper
-        ) || inCounty.find(n =>
-            n.uat?.name?.toUpperCase() === nameUpper
-        ) || inCounty.find(n =>
-            isPrimaria(n) && (n.uat?.name?.toUpperCase().includes(nameUpper) || n.name?.toUpperCase().includes(nameUpper))
-        ) || inCounty.find(n =>
-            n.uat?.name?.toUpperCase().includes(nameUpper) || n.name?.toUpperCase().includes(nameUpper)
-        ) || inCounty[0];
+        let match = null;
+        for (const searchTerm of searchStrategies) {
+            const nodes = await searchEntities(searchTerm);
+            match = findBestMatch(nodes, countyUpper, nameUpper);
+            if (match) break;
+        }
 
         if (!match) {
-            return res.status(404).json({ error: 'Entity not found', searched: searchTerm });
+            return res.status(404).json({ error: 'Entity not found', searched: `${name} ${county}` });
         }
 
         const cui = match.cui;
