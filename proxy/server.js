@@ -58,33 +58,49 @@ function isPrimaria(n) {
 // Blacklist: NEVER match these entity types
 function isBlacklisted(n) {
     const nm = (n.name || '').toUpperCase();
-    return nm.includes('SCOALA') || nm.includes('ȘCOALA') || nm.includes('ȘCOALĂ') ||
-        nm.includes('LICEUL') || nm.includes('LICEU') ||
-        nm.includes('GRADINITA') || nm.includes('GRĂDINIȚA') || nm.includes('GRĂDINIȚĂ') ||
-        nm.includes('SPITAL') || nm.includes('BISERICA') || nm.includes('BISERICĂ') ||
-        nm.includes('BIBLIOTECA') || nm.includes('BIBLIOTECĂ') ||
-        nm.includes('MUZEU') || nm.includes('CASA DE CULTURA') ||
-        nm.includes('CLUBUL') || nm.includes('POLITIA') || nm.includes('POLIȚIA') ||
-        nm.includes('INSPECTORAT') || nm.includes('SEMINARUL') ||
-        nm.includes('COLEGIUL') || nm.includes('UNIVERSITATE') ||
-        nm.includes('GIMNAZIAL') ||
-        nm.includes('TRIBUNALUL') || nm.includes('TRIBUNAL') ||
-        nm.includes('JUDECATORIA') || nm.includes('JUDECĂTORIA') ||
-        nm.includes('CURTEA DE APEL') || nm.includes('PARCHETUL') ||
-        nm.includes('DIRECTIA') || nm.includes('DIRECȚIA') ||
-        nm.includes('AGENTIA') || nm.includes('AGENȚIA') ||
-        nm.includes('CAMERA DE COMERT') || nm.includes('PREFECTURA') ||
-        nm.includes('SERVICIUL') || nm.includes('CENTRUL') ||
-        nm.startsWith('JUDETUL') || nm.startsWith('JUDEȚUL') ||
-        // Additional blacklist entries discovered in testing:
-        nm.includes('CRESA') || nm.includes('CREȘA') || nm.includes('CREŞA') ||
-        nm.includes('OPERA ') || nm.includes('FILARMONICA') || nm.includes('TEATRUL') ||
-        nm.includes('SPORT CLUB') || nm.includes('CLUBUL SPORTIV') ||
-        nm.includes('INSTITUTIA') || nm.includes('INSTITUȚIA') ||
-        nm.includes('OFICIUL') || nm.includes('OCOLUL') ||
-        nm.includes('COMPANIA') || nm.includes('REGIA') ||
-        nm.includes('ADMINISTRATIA') || nm.includes('ADMINISTRAȚIA') ||
-        nm.includes('CONSILIUL JUDETEAN') || nm.includes('CONSILIUL JUDEȚEAN');
+    // If it's clearly a primăria/municipiu/comună, NEVER blacklist it
+    if (isPrimaria(n)) return false;
+
+    const badKeywords = [
+        'SCOALA', 'ȘCOALA', 'ȘCOALĂ', 'LICEUL', 'LICEU',
+        'GRADINITA', 'GRĂDINIȚA', 'GRĂDINIȚĂ',
+        'SPITAL', 'BISERICA', 'BISERICĂ',
+        'BIBLIOTECA', 'BIBLIOTECĂ',
+        'MUZEU', 'CASA DE CULTURA',
+        'CLUBUL', 'POLITIA', 'POLIȚIA',
+        'INSPECTORAT', 'SEMINARUL',
+        'COLEGIUL', 'UNIVERSITATE', 'GIMNAZIAL',
+        'TRIBUNALUL', 'TRIBUNAL',
+        'JUDECATORIA', 'JUDECĂTORIA',
+        'CURTEA DE APEL', 'PARCHETUL',
+        'DIRECTIA', 'DIRECȚIA',
+        'AGENTIA', 'AGENȚIA',
+        'CAMERA DE COMERT', 'PREFECTURA',
+        'SERVICIUL', 'CENTRUL',
+        'CRESA', 'CREȘA', 'CREŞA',
+        'OPERA ', 'FILARMONICA', 'TEATRUL',
+        'SPORT CLUB', 'CLUBUL SPORTIV',
+        'INSTITUTIA', 'INSTITUȚIA',
+        'OFICIUL', 'OCOLUL',
+        'COMPANIA', 'REGIA',
+        'ADMINISTRATIA', 'ADMINISTRAȚIA',
+        'CONSILIUL JUDETEAN', 'CONSILIUL JUDEȚEAN',
+        'PENITENCIAR', 'PALATUL', 'CASA CORPULUI',
+        'ASOCIATIA', 'ASOCIAȚIA', 'FUNDATIA', 'FUNDAȚIA',
+        'SOCIETATEA', 'AUTORITATEA', 'COMISARIATUL',
+        'GARDA', 'JANDARMERIA', 'POMPIER',
+        'ACADEMIA', 'FACULTATEA',
+    ];
+
+    const badPrefixes = ['JUDETUL', 'JUDEȚUL', 'CONSILIUL'];
+
+    for (const kw of badKeywords) {
+        if (nm.includes(kw)) return true;
+    }
+    for (const pf of badPrefixes) {
+        if (nm.startsWith(pf)) return true;
+    }
+    return false;
 }
 
 // Find best entity match from a list of nodes
