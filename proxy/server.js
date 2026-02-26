@@ -75,7 +75,16 @@ function isBlacklisted(n) {
         nm.includes('AGENTIA') || nm.includes('AGENȚIA') ||
         nm.includes('CAMERA DE COMERT') || nm.includes('PREFECTURA') ||
         nm.includes('SERVICIUL') || nm.includes('CENTRUL') ||
-        nm.startsWith('JUDETUL') || nm.startsWith('JUDEȚUL');
+        nm.startsWith('JUDETUL') || nm.startsWith('JUDEȚUL') ||
+        // Additional blacklist entries discovered in testing:
+        nm.includes('CRESA') || nm.includes('CREȘA') || nm.includes('CREŞA') ||
+        nm.includes('OPERA ') || nm.includes('FILARMONICA') || nm.includes('TEATRUL') ||
+        nm.includes('SPORT CLUB') || nm.includes('CLUBUL SPORTIV') ||
+        nm.includes('INSTITUTIA') || nm.includes('INSTITUȚIA') ||
+        nm.includes('OFICIUL') || nm.includes('OCOLUL') ||
+        nm.includes('COMPANIA') || nm.includes('REGIA') ||
+        nm.includes('ADMINISTRATIA') || nm.includes('ADMINISTRAȚIA') ||
+        nm.includes('CONSILIUL JUDETEAN') || nm.includes('CONSILIUL JUDEȚEAN');
 }
 
 // Find best entity match from a list of nodes
