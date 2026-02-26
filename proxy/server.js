@@ -109,23 +109,20 @@ function findBestMatch(nodes, countyUpper, nameUpper) {
         .filter(n => n.uat?.county_name?.toUpperCase() === countyUpper)
         .filter(n => !isBlacklisted(n));
 
-    // Match priority (all require UAT name or entity name to relate to searched name):
-    // 1. Primăria + exact UAT name
-    // 2. Primăria + UAT name includes search name
-    // 3. Primăria + entity name includes search name
-    // 4. Non-primăria + exact UAT name (still valid if not blacklisted)
-    // 5. Non-primăria + UAT/entity name includes search name
-    // NO generic fallback – never return a random entity from the county!
+    // Normalize: treat hyphens and spaces as equivalent (e.g. "PIATRA NEAMȚ" ↔ "PIATRA-NEAMȚ")
+    const norm = (s) => (s || '').toUpperCase().replace(/-/g, ' ');
+    const nameNorm = norm(nameUpper);
+
     return inCounty.find(n =>
-        isPrimaria(n) && n.uat?.name?.toUpperCase() === nameUpper
+        isPrimaria(n) && norm(n.uat?.name) === nameNorm
     ) || inCounty.find(n =>
-        isPrimaria(n) && n.uat?.name?.toUpperCase().includes(nameUpper)
+        isPrimaria(n) && norm(n.uat?.name).includes(nameNorm)
     ) || inCounty.find(n =>
-        isPrimaria(n) && n.name?.toUpperCase().includes(nameUpper)
+        isPrimaria(n) && norm(n.name).includes(nameNorm)
     ) || inCounty.find(n =>
-        n.uat?.name?.toUpperCase() === nameUpper
+        norm(n.uat?.name) === nameNorm
     ) || inCounty.find(n =>
-        n.uat?.name?.toUpperCase().includes(nameUpper) || n.name?.toUpperCase().includes(nameUpper)
+        norm(n.uat?.name).includes(nameNorm) || norm(n.name).includes(nameNorm)
     ) || null;
 }
 
@@ -139,7 +136,8 @@ app.get('/api/entity-data', async (req, res) => {
         const countyUpper = county.toUpperCase();
         const nameUpper = name.toUpperCase();
 
-        // Try multiple search strategies to find the primăria
+        // Build search strategies – include hyphenated variant if name has spaces
+        const nameHyphen = name.includes(' ') ? name.replace(/ /g, '-') : null;
         const searchStrategies = [
             `Primaria ${name} ${county}`,     // Most specific: "Primaria Șcheia Suceava"
             `Comuna ${name} ${county}`,        // "Comuna Berchișești Suceava"
@@ -147,6 +145,14 @@ app.get('/api/entity-data', async (req, res) => {
             `Municipiul ${name} ${county}`,    // For cities: "Municipiul Deva Hunedoara"
             `Primaria ${name}`,                // Without county: "Primaria Iași"
         ];
+        // Add hyphenated variants for names with spaces (e.g. "Piatra Neamț" → "Piatra-Neamț")
+        if (nameHyphen) {
+            searchStrategies.push(
+                `Municipiul ${nameHyphen} ${county}`,
+                `${nameHyphen} ${county}`,
+                `Primaria ${nameHyphen}`
+            );
+        }
 
         let match = null;
         for (const searchTerm of searchStrategies) {
