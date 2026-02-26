@@ -84,24 +84,24 @@ function findBestMatch(nodes, countyUpper, nameUpper) {
         .filter(n => n.uat?.county_name?.toUpperCase() === countyUpper)
         .filter(n => !isBlacklisted(n));
 
-    // Match priority:
+    // Match priority (all require UAT name or entity name to relate to searched name):
     // 1. Primăria + exact UAT name
-    // 2. Any non-blacklisted + exact UAT name  
-    // 3. Primăria + UAT name includes search name
-    // 4. Primăria + entity name includes search name
-    // 5. Any non-blacklisted + partial match
-    // 6. First non-blacklisted in county (only if it's a primăria)
+    // 2. Primăria + UAT name includes search name
+    // 3. Primăria + entity name includes search name
+    // 4. Non-primăria + exact UAT name (still valid if not blacklisted)
+    // 5. Non-primăria + UAT/entity name includes search name
+    // NO generic fallback – never return a random entity from the county!
     return inCounty.find(n =>
         isPrimaria(n) && n.uat?.name?.toUpperCase() === nameUpper
-    ) || inCounty.find(n =>
-        n.uat?.name?.toUpperCase() === nameUpper && isPrimaria(n)
     ) || inCounty.find(n =>
         isPrimaria(n) && n.uat?.name?.toUpperCase().includes(nameUpper)
     ) || inCounty.find(n =>
         isPrimaria(n) && n.name?.toUpperCase().includes(nameUpper)
     ) || inCounty.find(n =>
-        (n.uat?.name?.toUpperCase().includes(nameUpper) || n.name?.toUpperCase().includes(nameUpper)) && isPrimaria(n)
-    ) || inCounty.find(n => isPrimaria(n)) || null;
+        n.uat?.name?.toUpperCase() === nameUpper
+    ) || inCounty.find(n =>
+        n.uat?.name?.toUpperCase().includes(nameUpper) || n.name?.toUpperCase().includes(nameUpper)
+    ) || null;
 }
 
 app.get('/api/entity-data', async (req, res) => {
