@@ -1248,7 +1248,7 @@
         // CALCULATION ENGINE (Transparenta.eu based)
         // ============================================================
         function calculate() {
-            if (!transparentaData || !transparentaData.financial || !transparentaData.housing) {
+            if (!transparentaData || !transparentaData.housing) {
                 hideResults();
                 return;
             }
@@ -1260,8 +1260,8 @@
             const tip = currentTip;
             const rang = currentRang;
 
-            // 1. Base data
-            const transparentaTotal = transparentaData.financial.total;
+            // 1. Base data (financial may be null for some communes → fallback to 0, minimumBase will kick in)
+            const transparentaTotal = (transparentaData.financial && transparentaData.financial.total) ? transparentaData.financial.total : 0;
             const totalHouses = transparentaData.housing.count;
             const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
             const effectiveHouses = Math.round(totalHouses * cityFactor);

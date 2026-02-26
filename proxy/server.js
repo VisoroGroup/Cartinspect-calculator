@@ -50,22 +50,37 @@ app.get('/api/entity-data', async (req, res) => {
                     }
                 }
             }
-        `, { search: searchTerm, limit: 10 });
+        `, { search: searchTerm, limit: 20 });
 
         const nodes = searchData.entities?.nodes || [];
         const countyUpper = county.toUpperCase();
         const nameUpper = name.toUpperCase();
 
-        // Match by county + UAT name
-        let match = nodes.find(n =>
-            n.uat?.county_name?.toUpperCase() === countyUpper &&
+        // Helper: is this entity a primăria (municipality office)?
+        const isPrimaria = (n) => {
+            const nm = (n.name || '').toUpperCase();
+            return nm.includes('PRIMĂRIA') || nm.includes('PRIMARIA') ||
+                nm.includes('ORAȘ') || nm.includes('ORAS') ||
+                nm.includes('MUNICIPIUL') || nm.includes('COMUNA');
+        };
+
+        // Match priority:
+        // 1. Primăria + exact UAT name + correct county
+        // 2. Any entity + exact UAT name + correct county
+        // 3. Primăria + partial UAT/name match + correct county
+        // 4. Any entity + partial match + correct county
+        // 5. Any entity in correct county (last resort)
+        const inCounty = nodes.filter(n => n.uat?.county_name?.toUpperCase() === countyUpper);
+
+        let match = inCounty.find(n =>
+            isPrimaria(n) && n.uat?.name?.toUpperCase() === nameUpper
+        ) || inCounty.find(n =>
             n.uat?.name?.toUpperCase() === nameUpper
-        ) || nodes.find(n =>
-            n.uat?.county_name?.toUpperCase() === countyUpper &&
-            (n.uat?.name?.toUpperCase().includes(nameUpper) || n.name?.toUpperCase().includes(nameUpper))
-        ) || nodes.find(n =>
-            n.uat?.county_name?.toUpperCase() === countyUpper
-        );
+        ) || inCounty.find(n =>
+            isPrimaria(n) && (n.uat?.name?.toUpperCase().includes(nameUpper) || n.name?.toUpperCase().includes(nameUpper))
+        ) || inCounty.find(n =>
+            n.uat?.name?.toUpperCase().includes(nameUpper) || n.name?.toUpperCase().includes(nameUpper)
+        ) || inCounty[0];
 
         if (!match) {
             return res.status(404).json({ error: 'Entity not found', searched: searchTerm });
