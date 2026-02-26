@@ -64,13 +64,30 @@ app.get('/api/entity-data', async (req, res) => {
                 nm.includes('MUNICIPIUL') || nm.includes('COMUNA');
         };
 
-        // Match priority:
-        // 1. Primăria + exact UAT name + correct county
-        // 2. Any entity + exact UAT name + correct county
-        // 3. Primăria + partial UAT/name match + correct county
-        // 4. Any entity + partial match + correct county
-        // 5. Any entity in correct county (last resort)
-        const inCounty = nodes.filter(n => n.uat?.county_name?.toUpperCase() === countyUpper);
+        // Blacklist: NEVER match schools, hospitals, churches, etc.
+        const isBlacklisted = (n) => {
+            const nm = (n.name || '').toUpperCase();
+            return nm.includes('SCOALA') || nm.includes('ȘCOALA') || nm.includes('ȘCOALĂ') ||
+                nm.includes('LICEUL') || nm.includes('LICEU') ||
+                nm.includes('GRADINITA') || nm.includes('GRĂDINIȚA') || nm.includes('GRĂDINIȚĂ') ||
+                nm.includes('SPITAL') || nm.includes('BISERICA') || nm.includes('BISERICĂ') ||
+                nm.includes('BIBLIOTECA') || nm.includes('BIBLIOTECĂ') ||
+                nm.includes('MUZEU') || nm.includes('CASA DE CULTURA') ||
+                nm.includes('CLUBUL') || nm.includes('POLITIA') || nm.includes('POLIȚIA') ||
+                nm.includes('INSPECTORAT') || nm.includes('SEMINARUL') ||
+                nm.includes('COLEGIUL') || nm.includes('UNIVERSITATE') ||
+                nm.includes('GIMNAZIAL');
+        };
+
+        // Match priority (only from non-blacklisted entities in correct county):
+        // 1. Primăria + exact UAT name
+        // 2. Any entity + exact UAT name
+        // 3. Primăria + partial name match
+        // 4. Any entity + partial match
+        // 5. First non-blacklisted entity (last resort)
+        const inCounty = nodes
+            .filter(n => n.uat?.county_name?.toUpperCase() === countyUpper)
+            .filter(n => !isBlacklisted(n));
 
         let match = inCounty.find(n =>
             isPrimaria(n) && n.uat?.name?.toUpperCase() === nameUpper
