@@ -1303,12 +1303,17 @@
             const paybackYears = deltaYear > 0 ? cost / deltaYear : Infinity;
 
             // Store results
+            // realMinimum = what the commune SHOULD collect: all houses × 150 RON
+            // For cities: 60% of houses × 150 (only individual houses)
+            const realMinimumFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
+            const realMinimum = totalHouses * realMinimumFactor * 150;
+
             calculationResults = {
                 totalHouses, effectiveHouses, cityFactor,
                 transparentaTotal, effectiveTax: baseValue, minimumBase, usedMinimum,
                 rCurrent, rTarget, rang, tip,
                 afterTaxIncrease, afterDiscountRemoval,
-                potential100,
+                potential100, realMinimum,
                 afterCartInspect, improvedStatusQuo: 0,
                 currentRevenue, deltaYear, delta10Y,
                 cost, roi10Y, paybackYears
@@ -1335,9 +1340,9 @@
             // Current
             document.getElementById('collectedNow').textContent = formatRON(r.currentRevenue);
 
-            // What it should have been (= potential100 * 0.80, the properly-collected baseline)
-            // This is FIXED – it doesn't move with the current rate slider (it's the "correct" baseline)
-            document.getElementById('realMinimum').textContent = formatRON(r.potential100 * MODEL.ASSUMED_COLLECTION);
+            // What it should have been = totalHouses × 150 RON (fixed, all houses)
+            // For cities: totalHouses × 0.6 × 150
+            document.getElementById('realMinimum').textContent = formatRON(r.realMinimum);
 
             // After CartInspect
             document.getElementById('collectedAfter').textContent = formatRON(r.afterCartInspect);
