@@ -1177,6 +1177,16 @@
                 return;
             }
 
+            // 3. Sanity check: reject impossibly high housing counts (likely county-level data)
+            if (data.housing && data.housing.count) {
+                const tip = currentTip;
+                const maxHouses = (tip === 'municipiu') ? 200000 : (tip === 'oraș') ? 50000 : 15000;
+                if (data.housing.count > maxHouses) {
+                    console.warn(`Housing count ${data.housing.count} exceeds max ${maxHouses} for ${tip}. Likely wrong entity.`);
+                    data.housing = null;
+                }
+            }
+
             transparentaData = data;
 
             // Display the loaded data
