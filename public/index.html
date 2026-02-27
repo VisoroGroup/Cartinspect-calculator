@@ -1280,8 +1280,8 @@
             const potential100 = baseValue / 0.80; // Hardcoded absolute assumption based on real data
 
             // 4. Slider calculations
-            // "Current Revenue" dynamically moves with the CURRENT slider based on the 100% potential
-            const currentRevenue = potential100 * rCurrent;
+            // "Current Revenue" is FIXED = the real Transparenta.eu data, never changes with sliders
+            const currentRevenue = baseValue;
 
             // 5. Future calculations (2026 law) applied to the 100% potential
             const afterTaxIncrease = potential100 * MODEL.TAX_INCREASE;
