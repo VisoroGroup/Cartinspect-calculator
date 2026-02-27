@@ -1298,7 +1298,7 @@
             const delta10Y = deltaYear * 10;
 
             // 8. Cost & ROI
-            const cost = effectiveHouses * MODEL.PRICE_PER_IMOBIL;
+            const cost = totalHouses * MODEL.PRICE_PER_IMOBIL; // ALL houses get inspected
             const roi10Y = cost > 0 ? (delta10Y - cost) / cost : 0;
             const paybackYears = deltaYear > 0 ? cost / deltaYear : Infinity;
 
