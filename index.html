@@ -1267,10 +1267,14 @@
             const effectiveHouses = Math.round(totalHouses * cityFactor);
             const minimumBase = effectiveHouses * 150;
 
+            // taxFactor: for cities, only 60% of building tax is from individual houses.
+            // For communes, 100% — the Transparenta.eu data must stay unchanged.
+            const taxFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
+
             // 2. The core assumption: The REAL data we have (transparentaTotal or minimumBase)
             // represents an assumed 80% average collection rate nationwide.
-            const baseValue = Math.max(transparentaTotal * cityFactor, minimumBase);
-            const usedMinimum = minimumBase > (transparentaTotal * cityFactor);
+            const baseValue = Math.max(transparentaTotal * taxFactor, minimumBase);
+            const usedMinimum = minimumBase > (transparentaTotal * taxFactor);
 
             // 3. What is the implied 100% potential?
             const potential100 = baseValue / 0.80; // Hardcoded absolute assumption based on real data
