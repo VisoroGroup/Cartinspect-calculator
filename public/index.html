@@ -1006,7 +1006,7 @@
         // ============================================================
         const MODEL = {
             PRICE_PER_IMOBIL: 130,       // RON per imobil
-            TAX_INCREASE: 1.8,           // +80% tax increase (2026 law)
+            TAX_INCREASE: 1.6,           // +60% tax increase (2026 law)
             DISCOUNT_REMOVAL: 1.25,      // +50% for half houses (average: ×1.25)
             CARTINSPECT_FACTOR: 1.8,     // +80% from CartInspect measurement
             ASSUMED_COLLECTION: 0.80     // Transparenta data assumed at 80% collection
@@ -1181,7 +1181,7 @@
 
             // Display the loaded data
             const tip = currentTip;
-            const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
+            const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 0.5;
             const totalHouses = data.housing?.count || 0;
             const effectiveHouses = Math.round(totalHouses * cityFactor);
             const totalTax = data.financial?.total || 0;
@@ -1189,7 +1189,7 @@
             document.getElementById('housingCount').textContent =
                 totalHouses.toLocaleString('ro-RO') + (data.housing?.year ? ` (${data.housing.year})` : '');
             document.getElementById('effectiveHousingCount').textContent =
-                effectiveHouses.toLocaleString('ro-RO') + (cityFactor < 1 ? ` (${Math.round(cityFactor * 100)}% — oraș/municipiu)` : '');
+                effectiveHouses.toLocaleString('ro-RO') + (cityFactor < 1 ? ` (${Math.round(cityFactor * 100)}% — ${(tip === 'municipiu' || tip === 'oraș') ? 'oraș/municipiu' : 'fără instalații'})` : '');
 
             if (isOffline) {
                 setDataStatus('success', '✓ Date încărcate din cache local (offline)');
@@ -1263,7 +1263,7 @@
             // 1. Base data (financial may be null for some communes → fallback to 0, minimumBase will kick in)
             const transparentaTotal = (transparentaData.financial && transparentaData.financial.total) ? transparentaData.financial.total : 0;
             const totalHouses = transparentaData.housing.count;
-            const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
+            const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 0.5;
             const effectiveHouses = Math.round(totalHouses * cityFactor);
             const minimumBase = effectiveHouses * 150;
 
