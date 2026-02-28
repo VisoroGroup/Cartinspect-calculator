@@ -21,7 +21,7 @@ if (!match) {
     console.error('Could not parse romania_uat.js');
     process.exit(1);
 }
-const ROMANIA_UAT = eval('(' + match[1] + ')');
+const ROMANIA_UAT = new Function('return ' + match[1])();
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

@@ -14,7 +14,7 @@ const OUTPUT_FILE = path.join(__dirname, '..', 'uat_data.js');
 // Load romania_uat.js
 const uatSource = fs.readFileSync(path.join(__dirname, '..', 'romania_uat.js'), 'utf-8');
 const match = uatSource.match(/const\s+ROMANIA_UAT\s*=\s*(\{[\s\S]*\});/);
-const ROMANIA_UAT = eval('(' + match[1] + ')');
+const ROMANIA_UAT = new Function('return ' + match[1])();
 
 // Load existing uat_data.js
 const dataSource = fs.readFileSync(OUTPUT_FILE, 'utf-8');

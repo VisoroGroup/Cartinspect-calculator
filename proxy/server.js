@@ -309,5 +309,5 @@ app.get('/health', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`CartInspect proxy running on port ${PORT}`);
+    console.info(`CartInspect proxy running on port ${PORT}`);
 });
