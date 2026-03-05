@@ -1316,11 +1316,11 @@
             // realMinimum = what the commune SHOULD collect: all houses × 150 RON
             // For cities: 60% of houses × 150 (only individual houses)
             const realMinimumFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
-            const realMinimum = totalHouses * realMinimumFactor * 150;
+            let realMinimum = totalHouses * realMinimumFactor * 150;
 
-            // CONSTRAINT: The yellow number (currentRevenue) must NEVER be smaller than the red number (realMinimum)
-            if (currentRevenue < realMinimum) {
-                currentRevenue = realMinimum;
+            // CONSTRAINT: The yellow number (realMinimum) must NEVER be smaller than the red number (currentRevenue)
+            if (realMinimum < currentRevenue) {
+                realMinimum = currentRevenue;
             }
 
             calculationResults = {
