@@ -1291,7 +1291,7 @@
 
             // 4. Slider calculations
             // "Current Revenue" is FIXED = the real Transparenta.eu data, never changes with sliders
-            const currentRevenue = baseValue;
+            let currentRevenue = baseValue;
 
             // 5. Future calculations (2026 law) applied to the 100% potential
             const afterTaxIncrease = potential100 * MODEL.TAX_INCREASE;
@@ -1317,6 +1317,11 @@
             // For cities: 60% of houses × 150 (only individual houses)
             const realMinimumFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
             const realMinimum = totalHouses * realMinimumFactor * 150;
+
+            // CONSTRAINT: The yellow number (currentRevenue) must NEVER be smaller than the red number (realMinimum)
+            if (currentRevenue < realMinimum) {
+                currentRevenue = realMinimum;
+            }
 
             calculationResults = {
                 totalHouses, effectiveHouses, cityFactor,
