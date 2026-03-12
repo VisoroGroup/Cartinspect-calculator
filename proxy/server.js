@@ -1,12 +1,16 @@
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the public/ directory (root of the project)
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 const GRAPHQL_URL = 'https://api.transparenta.eu/graphql';
 
@@ -175,7 +179,27 @@ app.get('/api/entity-data', async (req, res) => {
         ]);
 
         const financial = financialResult.status === 'fulfilled' ? financialResult.value : null;
-        const housing = housingResult.status === 'fulfilled' ? housingResult.value : null;
+        let housing = housingResult.status === 'fulfilled' ? housingResult.value : null;
+
+        // Sanity check: reject impossibly high housing counts (likely county-level data)
+        if (housing && housing.count) {
+            const uatName = match.uat?.name || '';
+            const maxHouses = uatName.toUpperCase().includes('MUNICIPIUL') ? 200000
+                : uatName.toUpperCase().includes('ORAȘ') ? 50000
+                    : 15000;
+            if (housing.count > maxHouses) {
+                console.warn(`[SANITY] Housing count ${housing.count} exceeds max ${maxHouses} for "${name}" (${county}). Rejecting as county-level data.`);
+                housing = null;
+            }
+            // Also warn if territory name doesn't match
+            if (housing && housing.territory) {
+                const territoryNorm = (housing.territory || '').toUpperCase().replace(/-/g, ' ');
+                const nameNorm = nameUpper.replace(/-/g, ' ');
+                if (!territoryNorm.includes(nameNorm) && !nameNorm.includes(territoryNorm)) {
+                    console.warn(`[SANITY] Housing territory "${housing.territory}" doesn't match requested "${name}". Data may be wrong.`);
+                }
+            }
+        }
 
         res.json({
             entity: {
@@ -306,6 +330,11 @@ async function fetchHousingData(siruta) {
 // Health check
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Fallback: serve index.html for all non-API routes (SPA)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
