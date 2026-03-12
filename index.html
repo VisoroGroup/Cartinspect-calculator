@@ -843,11 +843,11 @@
 
                 <div id="transparentaDataDisplay" class="transparenta-data" style="display:none">
                     <div class="info-row">
-                        <span class="info-label">Locuințe existente</span>
+                        <span class="info-label">Locuințe existente (INS)</span>
                         <span class="info-value" id="housingCount">-</span>
                     </div>
-                    <div class="info-row" style="display:none">
-                        <span class="info-label">Locuințe efective (pt. calcul)</span>
+                    <div class="info-row" id="effectiveHousingRow" style="display:none">
+                        <span class="info-label" id="effectiveHousingLabel">Locuințe individuale (60%)</span>
                         <span class="info-value" id="effectiveHousingCount" style="color:var(--gold);">-</span>
                     </div>
                 </div>
@@ -1197,11 +1197,28 @@
             const totalTax = data.financial?.total || 0;
 
             document.getElementById('housingCount').textContent =
-                totalHouses.toLocaleString('ro-RO') + (data.housing?.year ? ` (${data.housing.year})` : '');
-            document.getElementById('effectiveHousingCount').textContent =
-                effectiveHouses.toLocaleString('ro-RO') + (cityFactor < 1 ? ` (${Math.round(cityFactor * 100)}% — ${(tip === 'municipiu' || tip === 'oraș') ? 'oraș/municipiu' : 'fără instalații'})` : '');
+                totalHouses > 0
+                    ? totalHouses.toLocaleString('ro-RO') + (data.housing?.year ? ` (${data.housing.year})` : '')
+                    : 'Nu sunt disponibile';
 
-            if (isOffline) {
+            // For cities/municipiu: show the 60%-adjusted effective count in a separate row
+            const isCity = (tip === 'municipiu' || tip === 'oraș');
+            const effectiveRow = document.getElementById('effectiveHousingRow');
+            const effectiveLabel = document.getElementById('effectiveHousingLabel');
+            if (isCity && totalHouses > 0) {
+                effectiveRow.style.display = 'flex';
+                effectiveLabel.textContent = tip === 'municipiu' ? 'Locuințe individuale (60% — municipiu)' : 'Locuințe individuale (60% — oraș)';
+                document.getElementById('effectiveHousingCount').textContent = effectiveHouses.toLocaleString('ro-RO');
+            } else {
+                effectiveRow.style.display = 'none';
+                document.getElementById('effectiveHousingCount').textContent = '-';
+            }
+
+            if (totalHouses === 0 && totalTax === 0) {
+                setDataStatus('warning', '⚠ Nu am găsit date pentru această localitate. Calculele nu sunt disponibile.');
+            } else if (totalHouses === 0) {
+                setDataStatus('warning', '⚠ Datele despre locuințe nu sunt disponibile. Calculele vor folosi doar datele financiare.');
+            } else if (isOffline) {
                 setDataStatus('success', '✓ Date încărcate din cache local (offline)');
             } else {
                 setDataStatus('success', '✓ Datele au fost încărcate cu succes');
@@ -1258,7 +1275,15 @@
         // CALCULATION ENGINE (Transparenta.eu based)
         // ============================================================
         function calculate() {
-            if (!transparentaData || !transparentaData.housing) {
+            if (!transparentaData) {
+                hideResults();
+                return;
+            }
+
+            // If no housing data at all AND no financial data, we can't calculate
+            const hasHousing = transparentaData.housing && transparentaData.housing.count > 0;
+            const hasFinancial = transparentaData.financial && transparentaData.financial.total > 0;
+            if (!hasHousing && !hasFinancial) {
                 hideResults();
                 return;
             }
@@ -1272,7 +1297,7 @@
 
             // 1. Base data (financial may be null for some communes → fallback to 0, minimumBase will kick in)
             const transparentaTotal = (transparentaData.financial && transparentaData.financial.total) ? transparentaData.financial.total : 0;
-            const totalHouses = transparentaData.housing.count;
+            const totalHouses = transparentaData.housing?.count || 0;
             const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 0.5;
             const effectiveHouses = Math.round(totalHouses * cityFactor);
             const minimumBase = effectiveHouses * 150;
