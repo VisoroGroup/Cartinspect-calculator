@@ -246,7 +246,7 @@ async function fetchFinancialData(cui) {
                     account_category: "vn",
                     report_type: "PRINCIPAL_AGGREGATED",
                     entity_cuis: [cui],
-                    functional_prefixes: ["07.01.01"],
+                    functional_prefixes: ["07.01.01", "07.02"],
                     is_uat: true,
                     normalization: "total",
                     show_period_growth: false,
@@ -259,8 +259,10 @@ async function fetchFinancialData(cui) {
             const nodes = data.aggregatedLineItems?.nodes || [];
             if (nodes.length === 0) continue;
 
-            // Only use fn:07.01.01 – Impozit pe clădiri de la persoane fizice
+            // fn:07.01.01 – Impozit pe clădiri de la persoane fizice
+            // fn:07.02    – Impozit pe terenuri
             let impozitCladiriFizice = 0;
+            let impozitTerenuri = 0;
 
             for (const node of nodes) {
                 const code = node.fn_c || '';
@@ -268,14 +270,17 @@ async function fetchFinancialData(cui) {
 
                 if (code === '07.01.01') {
                     impozitCladiriFizice = amount;
+                } else if (code.startsWith('07.02')) {
+                    impozitTerenuri += amount;
                 }
             }
 
-            if (impozitCladiriFizice > 0) {
+            if (impozitCladiriFizice > 0 || impozitTerenuri > 0) {
                 return {
                     year,
                     impozitCladiriFizice: Math.round(impozitCladiriFizice * 100) / 100,
-                    total: Math.round(impozitCladiriFizice * 100) / 100
+                    impozitTerenuri: Math.round(impozitTerenuri * 100) / 100,
+                    total: Math.round((impozitCladiriFizice + impozitTerenuri) * 100) / 100
                 };
             }
         } catch (e) {

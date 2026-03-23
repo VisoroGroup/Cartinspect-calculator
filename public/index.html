@@ -863,18 +863,11 @@
                     <div class="result-value red" id="collectedNow">0 RON</div>
                 </div>
 
-                <!-- What it should have been -->
-                <div class="result-block"
-                    style="background:rgba(196,164,52,0.08); border:1px solid rgba(196,164,52,0.25);">
-                    <div class="result-label">Cât ar fi trebuit să fie în mod real</div>
-                    <div class="result-value" style="color:var(--gold-light);" id="realMinimum">0 RON</div>
-                </div>
-
                 <!-- After CartInspect -->
                 <div class="result-block after">
                     <div class="result-label">Încasare anuală după CartInspect</div>
                     <div class="result-value green" id="collectedAfter">0 RON</div>
-                    <div class="result-detail">Cu rata potențială de colectare selectată</div>
+                    <div class="result-detail">+80% față de situația actuală</div>
                 </div>
 
                 <!-- 10 year highlight -->
@@ -897,7 +890,7 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Preț per imobil</span>
-                    <span class="info-value">130 RON</span>
+                    <span class="info-value">110 RON</span>
                 </div>
 
                 <div class="divider"></div>
@@ -946,30 +939,6 @@
                 <div id="installmentTimeline"></div>
             </div>
 
-            <!-- #4: Sliders (least important, at bottom) -->
-            <div class="card">
-                <div class="card-title">Parametri colectare</div>
-
-                <div class="slider-container">
-                    <div class="slider-header">
-                        <label>Rata actuală de colectare</label>
-                        <span class="slider-value" id="currentRateDisplay">60%</span>
-                    </div>
-                    <input type="range" id="currentRate" min="10" max="90" value="60" step="5"
-                        oninput="updateSlider('currentRate'); calculate()" aria-label="Rata actuală de colectare">
-
-                </div>
-
-                <div class="slider-container">
-                    <div class="slider-header">
-                        <label>Rata potențială de colectare</label>
-                        <span class="slider-value" id="targetRateDisplay">80%</span>
-                    </div>
-                    <input type="range" id="targetRate" min="10" max="100" value="80" step="5"
-                        oninput="updateSlider('targetRate'); calculate()" aria-label="Rata potențială de colectare">
-
-                </div>
-            </div>
 
             <!-- Generate PDF -->
             <div class="card grid-full" id="pdfCard" style="display:none">
@@ -1005,11 +974,8 @@
         // MODEL CONSTANTS
         // ============================================================
         const MODEL = {
-            PRICE_PER_IMOBIL: 130,       // RON per imobil
-            TAX_INCREASE: 1.6,           // +60% tax increase (2026 law)
-            DISCOUNT_REMOVAL: 1.25,      // +50% for half houses (average: ×1.25)
-            CARTINSPECT_FACTOR: 1.8,     // +80% from CartInspect measurement
-            ASSUMED_COLLECTION: 0.80     // Transparenta data assumed at 80% collection
+            PRICE_PER_IMOBIL: 110,       // RON per imobil
+            CARTINSPECT_FACTOR: 1.8      // +80% from CartInspect measurement
         };
 
         // Public investment examples (realistic Romanian prices)
@@ -1036,8 +1002,6 @@
         // ============================================================
         function init() {
             populateCounties();
-            updateSlider('currentRate');
-            updateSlider('targetRate');
             updateInstallmentSlider();
             // Initialize fill for all range inputs on page load
             document.querySelectorAll('input[type="range"]').forEach(updateSliderFill);
@@ -1158,10 +1122,11 @@
                 const offline = UAT_DATA[county][commune];
                 data = {
                     entity: { name: commune, county: county },
-                    financial: offline.tax > 0 ? {
+                    financial: (offline.tax > 0 || offline.landTax > 0) ? {
                         year: offline.taxYear,
-                        impozitCladiriFizice: offline.tax,
-                        total: offline.tax
+                        impozitCladiriFizice: offline.tax || 0,
+                        impozitTerenuri: offline.landTax || 0,
+                        total: (offline.tax || 0) + (offline.landTax || 0)
                     } : null,
                     housing: offline.houses > 0 ? {
                         year: offline.housesYear,
@@ -1280,82 +1245,47 @@
                 return;
             }
 
-            // If no housing data at all AND no financial data, we can't calculate
-            const hasHousing = transparentaData.housing && transparentaData.housing.count > 0;
             const hasFinancial = transparentaData.financial && transparentaData.financial.total > 0;
-            if (!hasHousing && !hasFinancial) {
+            if (!hasFinancial) {
                 hideResults();
                 return;
             }
 
-            const rCurrent = parseInt(document.getElementById('currentRate').value) / 100;
-            // rTarget comes ONLY from the target slider, independent of rCurrent
-            const rTarget = parseInt(document.getElementById('targetRate').value) / 100;
-
             const tip = currentTip;
             const rang = currentRang;
 
-            // 1. Base data (financial may be null for some communes → fallback to 0, minimumBase will kick in)
-            const transparentaTotal = (transparentaData.financial && transparentaData.financial.total) ? transparentaData.financial.total : 0;
-            const totalHouses = transparentaData.housing?.count || 0;
-            const cityFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 0.5;
-            const effectiveHouses = Math.round(totalHouses * cityFactor);
-            const minimumBase = effectiveHouses * 150;
+            // 1. Base = fn:07.01.01 (clădiri fizice) + fn:07.02 (terenuri) — RED number, always full
+            const impozitCladiriFizice = transparentaData.financial?.impozitCladiriFizice || 0;
+            const impozitTerenuri = transparentaData.financial?.impozitTerenuri || 0;
+            const currentRevenue = impozitCladiriFizice + impozitTerenuri;
 
-            // taxFactor: for cities, only 60% of building tax is from individual houses.
-            // For communes, 100% — the Transparenta.eu data must stay unchanged.
-            const taxFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
+            // 2. City factor: for municipiu/oraș only individual houses (60%) can be measured.
+            // Apartments in blocks are excluded. For comună: 100%.
+            const isCity = (tip === 'municipiu' || tip === 'oraș');
+            const cityFactor = isCity ? 0.6 : 1.0;
 
-            // 2. The core assumption: The REAL data we have (transparentaTotal or minimumBase)
-            // represents an assumed 80% average collection rate nationwide.
-            const baseValue = Math.max(transparentaTotal * taxFactor, minimumBase);
-            const usedMinimum = minimumBase > (transparentaTotal * taxFactor);
+            // 3. CartInspect: +80% applied only to the measurable share (cityFactor).
+            //    The unmeasurable share (1 - cityFactor) stays unchanged.
+            //    afterCartInspect = base × (1 - cityFactor) + base × cityFactor × 1.8
+            //                     = base × (1 - cityFactor + cityFactor × 1.8)
+            const afterCartInspect = currentRevenue * (1 - cityFactor + cityFactor * MODEL.CARTINSPECT_FACTOR);
 
-            // 3. What is the implied 100% potential?
-            const potential100 = baseValue / 0.80; // Hardcoded absolute assumption based on real data
-
-            // 4. Slider calculations
-            // "Current Revenue" is FIXED = the real Transparenta.eu data, never changes with sliders
-            let currentRevenue = baseValue;
-
-            // 5. Future calculations (2026 law) applied to the 100% potential
-            const afterTaxIncrease = potential100 * MODEL.TAX_INCREASE;
-            const afterDiscountRemoval = afterTaxIncrease * MODEL.DISCOUNT_REMOVAL;
-
-            // 6. With CartInspect (+80%) multiplied by TARGET collection rate
-            const afterCartInspect = (afterDiscountRemoval * MODEL.CARTINSPECT_FACTOR) * rTarget;
-
-            // 7. Deltas and impact
-            // Impact is ALWAYS calculated against the FIXED transparenta baseline (baseValue).
-            // This ensures "Impact pe 10 ani" is stable and only changes with the TARGET slider.
-            // "Actuală" (currentRevenue) is just informational, it does NOT affect the impact.
-            const deltaYear = afterCartInspect - baseValue;
+            // 4. Deltas and impact
+            const deltaYear = afterCartInspect - currentRevenue;
             const delta10Y = deltaYear * 10;
 
-            // 8. Cost & ROI
-            const cost = totalHouses * MODEL.PRICE_PER_IMOBIL; // ALL houses get inspected
+            // 5. Cost & ROI — only the measurable houses are inspected (cityFactor)
+            const totalHouses = transparentaData.housing?.count || 0;
+            const measurableHouses = Math.round(totalHouses * cityFactor);
+            const cost = measurableHouses * MODEL.PRICE_PER_IMOBIL;
             const roi10Y = cost > 0 ? (delta10Y - cost) / cost : 0;
             const paybackYears = deltaYear > 0 ? cost / deltaYear : Infinity;
 
-            // Store results
-            // realMinimum = what the commune SHOULD collect: all houses × 150 RON
-            // For cities: 60% of houses × 150 (only individual houses)
-            const realMinimumFactor = (tip === 'municipiu' || tip === 'oraș') ? 0.6 : 1.0;
-            let realMinimum = totalHouses * realMinimumFactor * 150;
-
-            // CONSTRAINT: The yellow number (realMinimum) must NEVER be smaller than the red number (currentRevenue)
-            if (realMinimum < currentRevenue) {
-                realMinimum = currentRevenue;
-            }
-
             calculationResults = {
-                totalHouses, effectiveHouses, cityFactor,
-                transparentaTotal, effectiveTax: baseValue, minimumBase, usedMinimum,
-                rCurrent, rTarget, rang, tip,
-                afterTaxIncrease, afterDiscountRemoval,
-                potential100, realMinimum,
-                afterCartInspect, improvedStatusQuo: 0,
-                currentRevenue, deltaYear, delta10Y,
+                totalHouses, measurableHouses, cityFactor, rang, tip,
+                impozitCladiriFizice, impozitTerenuri,
+                currentRevenue, afterCartInspect,
+                deltaYear, delta10Y,
                 cost, roi10Y, paybackYears
             };
 
@@ -1379,10 +1309,6 @@
 
             // Current
             document.getElementById('collectedNow').textContent = formatRON(r.currentRevenue);
-
-            // What it should have been = totalHouses × 150 RON (fixed, all houses)
-            // For cities: totalHouses × 0.6 × 150
-            document.getElementById('realMinimum').textContent = formatRON(r.realMinimum);
 
             // After CartInspect
             document.getElementById('collectedAfter').textContent = formatRON(r.afterCartInspect);
@@ -1508,9 +1434,8 @@
                 ['UAT:', communeName + (tipLabel ? ' (' + tipLabel + ')' : '')],
                 ['Rang localitate:', 'Rang ' + r.rang],
                 ['Locuin\u021be existente:', r.totalHouses.toLocaleString('ro-RO')],
-                ['Locuin\u021be efective:', r.effectiveHouses.toLocaleString('ro-RO') + (r.cityFactor < 1 ? ' (' + Math.round(r.cityFactor * 100) + '%)' : '')],
-                ['Rata actual\u0103 colectare:', Math.round(r.rCurrent * 100) + '%'],
-                ['Rata poten\u021bial\u0103 colectare:', Math.round(r.rTarget * 100) + '%']
+                ['Impozit cl\u0103diri fizice (07.01.01):', formatRON(r.impozitCladiriFizice)],
+                ['Impozit terenuri (07.02):', formatRON(r.impozitTerenuri)]
             ];
 
             adminRows.forEach(function (row) {
@@ -1616,7 +1541,7 @@
                 : r.paybackYears.toFixed(1) + ' ani';
             var roiRows = [
                 ['Cost proiect:', formatRON(r.cost)],
-                ['Pre\u021b / locuin\u021b\u0103:', '130 RON'],
+                ['Pre\u021b / locuin\u021b\u0103:', '110 RON'],
                 ['ROI pe 10 ani:', Math.round(r.roi10Y * 100) + '%'],
                 ['Recuperare:', paybackStr]
             ];
@@ -1694,13 +1619,11 @@
                 tip: r.tip,
                 agent_name: document.getElementById('agentName').value || 'N/A',
                 total_houses: r.totalHouses,
-                effective_houses: r.effectiveHouses,
+                measurable_houses: r.measurableHouses,
                 city_factor: r.cityFactor,
-                transparenta_total_ron: r.transparentaTotal,
-                effective_tax_ron: r.effectiveTax,
+                impozit_cladiri_fizice_ron: r.impozitCladiriFizice,
+                impozit_terenuri_ron: r.impozitTerenuri,
                 price_per_imobil_ron: MODEL.PRICE_PER_IMOBIL,
-                collection_current: r.rCurrent,
-                collection_target: r.rTarget,
                 current_revenue_ron: r.currentRevenue,
                 after_cartinspect_ron: r.afterCartInspect,
                 delta_year_ron: r.deltaYear,

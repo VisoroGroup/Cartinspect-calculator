@@ -1,5 +1,5 @@
 /**
- * Fetches financial (fn:07.01.01) and housing data for ALL UATs
+ * Fetches financial (fn:07.01.01 + fn:07.02) and housing data for ALL UATs
  * from transparenta.eu via the local proxy, then writes uat_data.js
  *
  * Usage: node scripts/fetch-all-uat-data.js
@@ -35,7 +35,8 @@ async function fetchUAT(county, name) {
         const data = await res.json();
         if (!data.financial && !data.housing) return null;
         return {
-            tax: data.financial?.total || 0,
+            tax: data.financial?.impozitCladiriFizice || 0,
+            landTax: data.financial?.impozitTerenuri || 0,
             taxYear: data.financial?.year || null,
             houses: data.housing?.count || 0,
             housesYear: data.housing?.year || null
@@ -70,10 +71,10 @@ async function main() {
 
             const data = await fetchUAT(county, uat);
 
-            if (data && (data.tax > 0 || data.houses > 0)) {
+            if (data && (data.tax > 0 || data.landTax > 0 || data.houses > 0)) {
                 result[county][uat] = data;
                 fetched++;
-                console.log(`✓ ${data.tax.toLocaleString()} RON, ${data.houses} houses`);
+                console.log(`✓ clădiri: ${data.tax.toLocaleString()} RON, terenuri: ${data.landTax.toLocaleString()} RON, ${data.houses} houses`);
             } else {
                 failed++;
                 console.log(`✗ no data`);
