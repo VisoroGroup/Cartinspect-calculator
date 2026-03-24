@@ -14,6 +14,15 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 const GRAPHQL_URL = 'https://api.transparenta.eu/graphql';
 
+// Strip Romanian diacritics to ASCII (transparenta.eu often stores names in ASCII)
+function stripDiacritics(s) {
+    return s
+        .replace(/[ăâ]/gi, m => m === m.toLowerCase() ? 'a' : 'A')
+        .replace(/[îâ]/gi, m => m === m.toLowerCase() ? 'i' : 'I')
+        .replace(/[șş]/gi, m => m === m.toLowerCase() ? 's' : 'S')
+        .replace(/[țţ]/gi, m => m === m.toLowerCase() ? 't' : 'T');
+}
+
 // Helper: execute GraphQL query
 async function graphql(query, variables) {
     const res = await fetch(GRAPHQL_URL, {
@@ -51,83 +60,55 @@ async function searchEntities(searchTerm) {
     return data.entities?.nodes || [];
 }
 
-// Helper: is this entity a primăria (municipality office)?
-function isPrimaria(n) {
-    const nm = (n.name || '').toUpperCase();
-    return nm.includes('PRIMĂRIA') || nm.includes('PRIMARIA') ||
-        nm.includes('ORAȘ') || nm.includes('ORAS') ||
-        nm.includes('MUNICIPIUL') || nm.includes('COMUNA');
-}
+// ============================================================
+// Entity matching — SIMPLE RULE:
+// Only match entities whose name starts with:
+//   ORAS / ORASUL / ORAȘUL / COMUNA / MUN / MUNICIPIUL / PRIMARIA / PRIMĂRIA
+// Everything else is ignored. No blacklist needed.
+// ============================================================
 
-// Blacklist: NEVER match these entity types
-function isBlacklisted(n) {
-    const nm = (n.name || '').toUpperCase();
-    // If it's clearly a primăria/municipiu/comună, NEVER blacklist it
-    if (isPrimaria(n)) return false;
-
-    const badKeywords = [
-        'SCOALA', 'ȘCOALA', 'ȘCOALĂ', 'LICEUL', 'LICEU',
-        'GRADINITA', 'GRĂDINIȚA', 'GRĂDINIȚĂ',
-        'SPITAL', 'BISERICA', 'BISERICĂ',
-        'BIBLIOTECA', 'BIBLIOTECĂ',
-        'MUZEU', 'CASA DE CULTURA',
-        'CLUBUL', 'POLITIA', 'POLIȚIA',
-        'INSPECTORAT', 'SEMINARUL',
-        'COLEGIUL', 'UNIVERSITATE', 'GIMNAZIAL',
-        'TRIBUNALUL', 'TRIBUNAL',
-        'JUDECATORIA', 'JUDECĂTORIA',
-        'CURTEA DE APEL', 'PARCHETUL',
-        'DIRECTIA', 'DIRECȚIA',
-        'AGENTIA', 'AGENȚIA',
-        'CAMERA DE COMERT', 'PREFECTURA',
-        'SERVICIUL', 'CENTRUL',
-        'CRESA', 'CREȘA', 'CREŞA',
-        'OPERA ', 'FILARMONICA', 'TEATRUL',
-        'SPORT CLUB', 'CLUBUL SPORTIV',
-        'INSTITUTIA', 'INSTITUȚIA',
-        'OFICIUL', 'OCOLUL',
-        'COMPANIA', 'REGIA',
-        'ADMINISTRATIA', 'ADMINISTRAȚIA',
-        'CONSILIUL JUDETEAN', 'CONSILIUL JUDEȚEAN',
-        'PENITENCIAR', 'PALATUL', 'CASA CORPULUI',
-        'ASOCIATIA', 'ASOCIAȚIA', 'FUNDATIA', 'FUNDAȚIA',
-        'SOCIETATEA', 'AUTORITATEA', 'COMISARIATUL',
-        'GARDA', 'JANDARMERIA', 'POMPIER',
-        'ACADEMIA', 'FACULTATEA',
-    ];
-
-    const badPrefixes = ['JUDETUL', 'JUDEȚUL', 'CONSILIUL'];
-
-    for (const kw of badKeywords) {
-        if (nm.includes(kw)) return true;
-    }
-    for (const pf of badPrefixes) {
-        if (nm.startsWith(pf)) return true;
-    }
-    return false;
+function isUATEntity(n) {
+    const nm = stripDiacritics((n.name || '').toUpperCase().trim());
+    // Must start with ORAS/COMUNA/MUN/PRIMARIA
+    if (!/^(ORAS\b|ORASUL\b|COMUNA\b|MUN\b|MUNICIPIUL\b|PRIMARIA\b)/.test(nm)) return false;
+    // Reject subsidiary services: "COMUNA X SERVICIUL PUBLIC DE..."
+    if (/SERVICIUL|SERVICIU |GOSPODARI|ALIMENTARE|EXPLOATARE|INTRETINERE/.test(nm)) return false;
+    return true;
 }
 
 // Find best entity match from a list of nodes
 function findBestMatch(nodes, countyUpper, nameUpper) {
-    const inCounty = nodes
-        .filter(n => n.uat?.county_name?.toUpperCase() === countyUpper)
-        .filter(n => !isBlacklisted(n));
-
-    // Normalize: treat hyphens and spaces as equivalent (e.g. "PIATRA NEAMȚ" ↔ "PIATRA-NEAMȚ")
-    const norm = (s) => (s || '').toUpperCase().replace(/-/g, ' ');
+    const norm = (s) => stripDiacritics((s || '').toUpperCase().normalize('NFC')).replace(/-/g, ' ');
+    const countyNorm = norm(countyUpper);
     const nameNorm = norm(nameUpper);
 
-    return inCounty.find(n =>
-        isPrimaria(n) && norm(n.uat?.name) === nameNorm
-    ) || inCounty.find(n =>
-        isPrimaria(n) && norm(n.uat?.name).includes(nameNorm)
-    ) || inCounty.find(n =>
-        isPrimaria(n) && norm(n.name).includes(nameNorm)
-    ) || inCounty.find(n =>
-        norm(n.uat?.name) === nameNorm
-    ) || inCounty.find(n =>
-        norm(n.uat?.name).includes(nameNorm) || norm(n.name).includes(nameNorm)
-    ) || null;
+    // Step 1: filter to same county + UAT entities only (ORAS/COMUNA/MUN/PRIMARIA)
+    const candidates = nodes
+        .filter(n => {
+            const cn = norm(n.uat?.county_name);
+            return cn === countyNorm || cn.includes(countyNorm) || countyNorm.includes(cn);
+        })
+        .filter(n => isUATEntity(n));
+
+    if (candidates.length === 0) return null;
+
+    // "endsWith" check: e.g. "MUNICIPIUL BISTRITA" ends with "BISTRITA"
+    const endsWithName = (s) => {
+        const sn = norm(s);
+        return sn === nameNorm || sn.endsWith(' ' + nameNorm);
+    };
+
+    // Priority 1: exact UAT name match
+    return candidates.find(n => norm(n.uat?.name) === nameNorm)
+    // Priority 2: UAT name ends with the search name
+        || candidates.find(n => endsWithName(n.uat?.name))
+    // Priority 3: entity name ends with the search name
+        || candidates.find(n => endsWithName(n.name))
+    // Priority 4: UAT name contains the search name
+        || candidates.find(n => norm(n.uat?.name).includes(nameNorm))
+    // Priority 5: entity name contains the search name
+        || candidates.find(n => norm(n.name).includes(nameNorm))
+        || null;
 }
 
 app.get('/api/entity-data', async (req, res) => {
@@ -142,24 +123,67 @@ app.get('/api/entity-data', async (req, res) => {
 
         // Build search strategies – include hyphenated variant if name has spaces
         const nameHyphen = name.includes(' ') ? name.replace(/ /g, '-') : null;
+        const nameAscii = stripDiacritics(name);
+        const countyAscii = stripDiacritics(county);
+        const hasSpecialChars = nameAscii !== name;
+
         const searchStrategies = [
             `Primaria ${name} ${county}`,     // Most specific: "Primaria Șcheia Suceava"
+            `Municipiul ${name} ${county}`,    // For cities: "Municipiul Deva Hunedoara"
+            `Orașul ${name} ${county}`,         // For towns: "Orașul Beclean Bistrița-Năsăud"
             `Comuna ${name} ${county}`,        // "Comuna Berchișești Suceava"
             `${name} ${county}`,               // Generic: "Șcheia Suceava"
-            `Municipiul ${name} ${county}`,    // For cities: "Municipiul Deva Hunedoara"
             `Primaria ${name}`,                // Without county: "Primaria Iași"
+            `Municipiul ${name}`,              // Without county: "Municipiul Brașov"
+            `Orașul ${name}`,                   // Without county: "Orașul Beclean"
+            `Comuna ${name}`,                  // Without county: "Comuna Șcheia"
+            name,                              // Just the name: "Beclean"
         ];
-        // Add hyphenated variants for names with spaces (e.g. "Piatra Neamț" → "Piatra-Neamț")
-        if (nameHyphen) {
+
+        // Add ASCII (diacritics-stripped) variants — transparenta.eu often stores names in ASCII
+        if (hasSpecialChars) {
             searchStrategies.push(
-                `Municipiul ${nameHyphen} ${county}`,
-                `${nameHyphen} ${county}`,
-                `Primaria ${nameHyphen}`
+                `Primaria ${nameAscii} ${countyAscii}`,
+                `Municipiul ${nameAscii} ${countyAscii}`,
+                `Orasul ${nameAscii} ${countyAscii}`,
+                `Primaria ${nameAscii}`,
+                `Municipiul ${nameAscii}`,
+                `Orasul ${nameAscii}`,
+                `Comuna ${nameAscii}`,
+                nameAscii,
             );
         }
 
+        // Add hyphenated variants for names with spaces (e.g. "Piatra Neamț" → "Piatra-Neamț")
+        if (nameHyphen) {
+            const nameHyphenAscii = stripDiacritics(nameHyphen);
+            searchStrategies.push(
+                `Municipiul ${nameHyphen} ${county}`,
+                `Orașul ${nameHyphen} ${county}`,
+                `${nameHyphen} ${county}`,
+                `Primaria ${nameHyphen}`,
+                `Municipiul ${nameHyphen}`,
+                nameHyphen
+            );
+            if (hasSpecialChars) {
+                searchStrategies.push(
+                    `Municipiul ${nameHyphenAscii}`,
+                    `Primaria ${nameHyphenAscii}`,
+                    nameHyphenAscii
+                );
+            }
+        }
+
+        // Deduplicate search strategies (keep order)
+        const seen = new Set();
+        const uniqueStrategies = searchStrategies.filter(s => {
+            if (seen.has(s)) return false;
+            seen.add(s);
+            return true;
+        });
+
         let match = null;
-        for (const searchTerm of searchStrategies) {
+        for (const searchTerm of uniqueStrategies) {
             const nodes = await searchEntities(searchTerm);
             match = findBestMatch(nodes, countyUpper, nameUpper);
             if (match) break;
@@ -191,10 +215,10 @@ app.get('/api/entity-data', async (req, res) => {
                 console.warn(`[SANITY] Housing count ${housing.count} exceeds max ${maxHouses} for "${name}" (${county}). Rejecting as county-level data.`);
                 housing = null;
             }
-            // Also warn if territory name doesn't match
+            // Also warn if territory name doesn't match (use ASCII normalization)
             if (housing && housing.territory) {
-                const territoryNorm = (housing.territory || '').toUpperCase().replace(/-/g, ' ');
-                const nameNorm = nameUpper.replace(/-/g, ' ');
+                const territoryNorm = stripDiacritics((housing.territory || '').toUpperCase().replace(/-/g, ' '));
+                const nameNorm = stripDiacritics(nameUpper.replace(/-/g, ' '));
                 if (!territoryNorm.includes(nameNorm) && !nameNorm.includes(territoryNorm)) {
                     console.warn(`[SANITY] Housing territory "${housing.territory}" doesn't match requested "${name}". Data may be wrong.`);
                 }

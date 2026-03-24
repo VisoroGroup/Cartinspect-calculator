@@ -1136,6 +1136,20 @@
                 isOffline = true;
             }
 
+            // 2b. Online returned housing but no financial — supplement with offline financial if available
+            if (data && !data.financial && typeof UAT_DATA !== 'undefined' && UAT_DATA[county]?.[commune]) {
+                const offline = UAT_DATA[county][commune];
+                if (offline.tax > 0 || offline.landTax > 0) {
+                    data.financial = {
+                        year: offline.taxYear,
+                        impozitCladiriFizice: offline.tax || 0,
+                        impozitTerenuri: offline.landTax || 0,
+                        total: (offline.tax || 0) + (offline.landTax || 0)
+                    };
+                    isOffline = true;
+                }
+            }
+
             if (!data || (!data.financial && !data.housing)) {
                 setDataStatus('error', '✗ Nu s-au găsit date pentru această localitate');
                 isLoadingData = false;

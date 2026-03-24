@@ -1,0 +1,31 @@
+{
+  "generated": "2026-03-12T13:04:11.018Z",
+  "summary": {
+    "totalCities": 216,
+    "totalMunicipii": 103,
+    "total": 319,
+    "ok": 318,
+    "noHouses": 1,
+    "tooHigh": 0,
+    "tooLow": 0,
+    "totalProblems": 1
+  },
+  "issues": {
+    "noHouses": [
+      {
+        "county": "București",
+        "name": "București",
+        "tip": "municipiu",
+        "rawHouses": 0,
+        "effectiveHouses": 0,
+        "minimumBase": 0,
+        "tax": 0,
+        "taxYear": null,
+        "housesYear": null,
+        "missing": false
+      }
+    ],
+    "tooHigh": [],
+    "tooLow": []
+  }
+}

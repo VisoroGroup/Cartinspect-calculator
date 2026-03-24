@@ -1,0 +1,4949 @@
+{
+  "generated": "2026-03-10T16:33:56.821Z",
+  "summary": {
+    "total": 3187,
+    "ok": 2894,
+    "missing": 0,
+    "zeroHouses": 282,
+    "countyLeak": 0,
+    "tooHigh": 5,
+    "noTax": 416
+  },
+  "issues": {
+    "missing": [],
+    "zeroHouses": [
+      {
+        "county": "Alba",
+        "name": "Cergău",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Ceru-Băcăinți",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Cricău",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Doștat",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Fărău",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Rădești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Săliștea",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Șibot",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Șugag",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Hălmăgel",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Hășmaș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 35575294.82
+      },
+      {
+        "county": "Arad",
+        "name": "Mișca",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 35575294.82
+      },
+      {
+        "county": "Arad",
+        "name": "Păuliș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Săvârșin",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Șiștarovăț",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Argeș",
+        "name": "Ștefănești",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Argeș",
+        "name": "Călinești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Argeș",
+        "name": "Coșești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Argeș",
+        "name": "Dârmănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Argeș",
+        "name": "Hârsești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Argeș",
+        "name": "Rătești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bacău",
+        "name": "Agăș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bacău",
+        "name": "Asău",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bacău",
+        "name": "Blăgești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bacău",
+        "name": "Cașin",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bacău",
+        "name": "Căiuți",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bacău",
+        "name": "Glăvănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bacău",
+        "name": "Săucești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bacău",
+        "name": "Tătărăști",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Coșbuc",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Leșu",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Milaș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Șanț",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Șieu",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Șieuț",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Târlișua",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Flămânzi",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 10486527.65
+      },
+      {
+        "county": "Botoșani",
+        "name": "Săveni",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Ștefănești",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Adășeni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Bălușeni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Brăești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Călărași",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Cândești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Curtești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Dângeni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Drăgușeni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Hănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Mihălășeni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Nicșeni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 10486527.65
+      },
+      {
+        "county": "Botoșani",
+        "name": "Răuseni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Românești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Sulița",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Trușești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Unțeni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Văculești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Vlădeni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Cața",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Drăguș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Dumbrăvița",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Măieruș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Părău",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Șinca",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Brăila",
+        "name": "Cireșu",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Brăila",
+        "name": "Grădiștea",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Brăila",
+        "name": "Mărașu",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Brăila",
+        "name": "Vădeni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Buzău",
+        "name": "Brăești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Buzău",
+        "name": "Cănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Buzău",
+        "name": "Pănătău",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Buzău",
+        "name": "Poșta Câlnău",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Buzău",
+        "name": "Rușețu",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Buzău",
+        "name": "Tisău",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Cluj",
+        "name": "Cătina",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Cluj",
+        "name": "Dăbâca",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Cluj",
+        "name": "Măguri-Răcătău",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Cluj",
+        "name": "Mărișel",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Cluj",
+        "name": "Țaga",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Constanța",
+        "name": "Ovidiu",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Constanța",
+        "name": "Bărăganu",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Constanța",
+        "name": "Săcele",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Constanța",
+        "name": "Târgușor",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dolj",
+        "name": "Brădești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dolj",
+        "name": "Cerăt",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dolj",
+        "name": "Cernătești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dolj",
+        "name": "Tălpaș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Găești",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Bărbulețu",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Brănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Cândești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Conțești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Dărmănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Ludești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Mănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Mătăsaru",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Șotânga",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Tărtășești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Văcărești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Vișinești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Bălăbănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Bălășești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Brăhășești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Cerțești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Drăgănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Fârțănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Ivești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Rădești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Scânteiești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Țepu",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Vlădești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Frătești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Herăști",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Malu",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 6073564.65
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Mârșa",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 6073564.65
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Vărăști",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Bălănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Bălești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Bărbătești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Dănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Drăguțești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Fărcășești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "peștișani",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Brădești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Dănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Șimonești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Bătrâna",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Ribița",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Tomești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Toplița",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Totești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Căzănești",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Armășești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Bărcănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Borănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Cosâmbești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Drăgoești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Miloșești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Rădulești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Iași",
+        "name": "Bălțați",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Iași",
+        "name": "Dagâța",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Iași",
+        "name": "Drăgușeni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Iași",
+        "name": "Moșna",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Iași",
+        "name": "Românești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Tăuții-Măgherăuș",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Băsești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Călinești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Șișești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Bâlvănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Căzănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Pădina",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Șișești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Mureș",
+        "name": "Ațintiș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Mureș",
+        "name": "Gălești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 14753854.42
+      },
+      {
+        "county": "Mureș",
+        "name": "Gănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Cândești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Dămuc",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 12170110.37
+      },
+      {
+        "county": "Neamț",
+        "name": "Drăgănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Gâdinți",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Pângărați",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Răucești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Stănița",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Tămășeni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Zănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Olt",
+        "name": "Bărăști",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Olt",
+        "name": "Găvănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Olt",
+        "name": "Mihăești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Olt",
+        "name": "Șerbănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Olt",
+        "name": "Vădăstrița",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Bălțești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Bănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Bărcănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Bătrâni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Drăgănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Mănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Păulești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Posești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Ștefești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Livada",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Negrești-Oaș",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Tășnad",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Acâș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Agriș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Apa",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Bătarci",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Bârsău",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Bixad",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Botiz",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Călinești-Oaș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Cămărzana",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Cămin",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Căpleni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Căuaș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Cehal",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Certeze",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Ciumești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Crucișor",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Doba",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Dorolț",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Gherța Mică",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Halmeu",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Micula",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Moftin",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Păulești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Petrești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Pir",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Pișcolt",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Pomi",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Racșa",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Sanislău",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Santău",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Săcășeni",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Săuca",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Socond",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Supur",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Târșolț",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Turț",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Vama",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Vetiș",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Sibiu",
+        "name": "Copșa Mică",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Sibiu",
+        "name": "Săliște",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Sibiu",
+        "name": "Rășinari",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Broșteni",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Milișăuți",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Bogdănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Bunești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Ciocănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Comănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Coșna",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Dărmănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Dolhești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Drăgoiești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Fântâna Mare",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Frătăuții Noi",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Gălănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Grămești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 13471241.34
+      },
+      {
+        "county": "Suceava",
+        "name": "Grănicești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Hănțești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Ilișești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Ipotești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Mălini",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 13471241.34
+      },
+      {
+        "county": "Suceava",
+        "name": "Moara",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 13471241.34
+      },
+      {
+        "county": "Suceava",
+        "name": "Mușenița",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 13471241.34
+      },
+      {
+        "county": "Suceava",
+        "name": "Pătrăuți",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Sălaj",
+        "name": "Bălan",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Sălaj",
+        "name": "Bănișor",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Sălaj",
+        "name": "Măeriște",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Călmățuiu de Sus",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Tătărăștii de Sus",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Timiș",
+        "name": "Făget",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Timiș",
+        "name": "Orțișoara",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Timiș",
+        "name": "Săcălaz",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Tulcea",
+        "name": "Măcin",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 9479946.62
+      },
+      {
+        "county": "Vaslui",
+        "name": "Băcești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Blăgești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Boțești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Codăești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Crețești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Dănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Delești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Găgești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Ibănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Oșești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Roșiești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Șuletea",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Mărășești",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Bălești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Bârsești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Cotești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Gugești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Măicănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Nănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Păulești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Tătăranu",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Tâmboești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Țifești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Vânători",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Bălcești",
+        "tip": "oraș",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Dăești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Fârtățești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Lădești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Ștefănești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Vlădești",
+        "tip": "comună",
+        "houses": 0,
+        "tax": 0
+      }
+    ],
+    "countyLeak": [],
+    "tooHigh": [
+      {
+        "county": "București",
+        "name": "București",
+        "tip": "municipiu",
+        "houses": 1063983,
+        "max": 200000,
+        "tax": 0
+      },
+      {
+        "county": "Cluj",
+        "name": "Florești",
+        "tip": "comună",
+        "houses": 32254,
+        "max": 15000,
+        "tax": 7646214.19
+      },
+      {
+        "county": "Iași",
+        "name": "Miroslava",
+        "tip": "comună",
+        "houses": 15598,
+        "max": 15000,
+        "tax": 1890500.27
+      },
+      {
+        "county": "Ilfov",
+        "name": "Chiajna",
+        "tip": "comună",
+        "houses": 38540,
+        "max": 15000,
+        "tax": 9605924.31
+      },
+      {
+        "county": "Timiș",
+        "name": "Giroc",
+        "tip": "comună",
+        "houses": 16795,
+        "max": 15000,
+        "tax": 3235075.25
+      }
+    ],
+    "noTax": [
+      {
+        "county": "Alba",
+        "name": "Alba Iulia",
+        "tip": "municipiu",
+        "houses": 35518,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Blaj",
+        "tip": "municipiu",
+        "houses": 7538,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Meteș",
+        "tip": "comună",
+        "houses": 1199,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Mihalț",
+        "tip": "comună",
+        "houses": 1210,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Mirăslău",
+        "tip": "comună",
+        "houses": 940,
+        "tax": 0
+      },
+      {
+        "county": "Alba",
+        "name": "Noșlac",
+        "tip": "comună",
+        "houses": 876,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Bârzava",
+        "tip": "comună",
+        "houses": 1293,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Fântânele",
+        "tip": "comună",
+        "houses": 1081,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Iratoșu",
+        "tip": "comună",
+        "houses": 1073,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Livada",
+        "tip": "comună",
+        "houses": 1819,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Petriș",
+        "tip": "comună",
+        "houses": 788,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Șepreuș",
+        "tip": "comună",
+        "houses": 1059,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Șimand",
+        "tip": "comună",
+        "houses": 1562,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Târnova",
+        "tip": "comună",
+        "houses": 2981,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Ususău",
+        "tip": "comună",
+        "houses": 628,
+        "tax": 0
+      },
+      {
+        "county": "Arad",
+        "name": "Zăbrani",
+        "tip": "comună",
+        "houses": 1563,
+        "tax": 0
+      },
+      {
+        "county": "Argeș",
+        "name": "Pitești",
+        "tip": "municipiu",
+        "houses": 72588,
+        "tax": 0
+      },
+      {
+        "county": "Argeș",
+        "name": "Bogați",
+        "tip": "comună",
+        "houses": 2460,
+        "tax": 0
+      },
+      {
+        "county": "Argeș",
+        "name": "Hârtiești",
+        "tip": "comună",
+        "houses": 915,
+        "tax": 0
+      },
+      {
+        "county": "Argeș",
+        "name": "Negrași",
+        "tip": "comună",
+        "houses": 1297,
+        "tax": 0
+      },
+      {
+        "county": "Argeș",
+        "name": "Șuici",
+        "tip": "comună",
+        "houses": 1267,
+        "tax": 0
+      },
+      {
+        "county": "Bacău",
+        "name": "Stănișești",
+        "tip": "comună",
+        "houses": 5443,
+        "tax": 0
+      },
+      {
+        "county": "Bihor",
+        "name": "Oradea",
+        "tip": "municipiu",
+        "houses": 105958,
+        "tax": 0
+      },
+      {
+        "county": "Bihor",
+        "name": "Beiuș",
+        "tip": "municipiu",
+        "houses": 5109,
+        "tax": 0
+      },
+      {
+        "county": "Bihor",
+        "name": "Aștileu",
+        "tip": "comună",
+        "houses": 1561,
+        "tax": 0
+      },
+      {
+        "county": "Bihor",
+        "name": "Batăr",
+        "tip": "comună",
+        "houses": 2096,
+        "tax": 0
+      },
+      {
+        "county": "Bihor",
+        "name": "Căpâlna",
+        "tip": "comună",
+        "houses": 1271,
+        "tax": 0
+      },
+      {
+        "county": "Bihor",
+        "name": "Chișlaz",
+        "tip": "comună",
+        "houses": 1510,
+        "tax": 0
+      },
+      {
+        "county": "Bihor",
+        "name": "Curățele",
+        "tip": "comună",
+        "houses": 1040,
+        "tax": 0
+      },
+      {
+        "county": "Bihor",
+        "name": "Gepiu",
+        "tip": "comună",
+        "houses": 1267,
+        "tax": 0
+      },
+      {
+        "county": "Bihor",
+        "name": "Oșorhei",
+        "tip": "comună",
+        "houses": 3584,
+        "tax": 0
+      },
+      {
+        "county": "Bihor",
+        "name": "Popești",
+        "tip": "comună",
+        "houses": 3049,
+        "tax": 0
+      },
+      {
+        "county": "Bihor",
+        "name": "Sălard",
+        "tip": "comună",
+        "houses": 1777,
+        "tax": 0
+      },
+      {
+        "county": "Bihor",
+        "name": "Sânmartin",
+        "tip": "comună",
+        "houses": 6154,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Bistrița",
+        "tip": "municipiu",
+        "houses": 40333,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Beclean",
+        "tip": "oraș",
+        "houses": 4751,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Dumitra",
+        "tip": "comună",
+        "houses": 1631,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Maieru",
+        "tip": "comună",
+        "houses": 2427,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Matei",
+        "tip": "comună",
+        "houses": 1387,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Miceștii de Câmpie",
+        "tip": "comună",
+        "houses": 592,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Monor",
+        "tip": "comună",
+        "houses": 618,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Prundu Bârgăului",
+        "tip": "comună",
+        "houses": 2449,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Romuli",
+        "tip": "comună",
+        "houses": 752,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Salva",
+        "tip": "comună",
+        "houses": 1048,
+        "tax": 0
+      },
+      {
+        "county": "Bistrița-Năsăud",
+        "name": "Uriu",
+        "tip": "comună",
+        "houses": 1455,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Albești",
+        "tip": "comună",
+        "houses": 2157,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Broscăuți",
+        "tip": "comună",
+        "houses": 1466,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Concești",
+        "tip": "comună",
+        "houses": 922,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Cristești",
+        "tip": "comună",
+        "houses": 2013,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Durnești",
+        "tip": "comună",
+        "houses": 1616,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Hudești",
+        "tip": "comună",
+        "houses": 2762,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Păltiniș",
+        "tip": "comună",
+        "houses": 1692,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Rădăuți-Prut",
+        "tip": "comună",
+        "houses": 2000,
+        "tax": 0
+      },
+      {
+        "county": "Botoșani",
+        "name": "Vlăsinești",
+        "tip": "comună",
+        "houses": 1351,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Brașov",
+        "tip": "municipiu",
+        "houses": 149139,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Făgăraș",
+        "tip": "municipiu",
+        "houses": 149139,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Săcele",
+        "tip": "municipiu",
+        "houses": 11413,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Râșnov",
+        "tip": "oraș",
+        "houses": 6999,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Zărnești",
+        "tip": "oraș",
+        "houses": 9106,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Hârseni",
+        "tip": "comună",
+        "houses": 946,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Șercaia",
+        "tip": "comună",
+        "houses": 1256,
+        "tax": 0
+      },
+      {
+        "county": "Brașov",
+        "name": "Ticușu",
+        "tip": "comună",
+        "houses": 443,
+        "tax": 0
+      },
+      {
+        "county": "Brăila",
+        "name": "Brăila",
+        "tip": "municipiu",
+        "houses": 81274,
+        "tax": 0
+      },
+      {
+        "county": "Brăila",
+        "name": "Bărăganul",
+        "tip": "comună",
+        "houses": 1239,
+        "tax": 0
+      },
+      {
+        "county": "Brăila",
+        "name": "Șuțești",
+        "tip": "comună",
+        "houses": 1710,
+        "tax": 0
+      },
+      {
+        "county": "Brăila",
+        "name": "Tichilești",
+        "tip": "comună",
+        "houses": 1710,
+        "tax": 0
+      },
+      {
+        "county": "Buzău",
+        "name": "Mânzălești",
+        "tip": "comună",
+        "houses": 1483,
+        "tax": 0
+      },
+      {
+        "county": "Buzău",
+        "name": "Odăile",
+        "tip": "comună",
+        "houses": 561,
+        "tax": 0
+      },
+      {
+        "county": "Buzău",
+        "name": "Săpoca",
+        "tip": "comună",
+        "houses": 1383,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Caransebeș",
+        "tip": "municipiu",
+        "houses": 12221,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Reșița",
+        "tip": "municipiu",
+        "houses": 37344,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Anina",
+        "tip": "oraș",
+        "houses": 4276,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Băile Herculane",
+        "tip": "oraș",
+        "houses": 2826,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Bocșa",
+        "tip": "oraș",
+        "houses": 6738,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Moldova Nouă",
+        "tip": "oraș",
+        "houses": 5821,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Oravița",
+        "tip": "oraș",
+        "houses": 6103,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Oțelu Roșu",
+        "tip": "oraș",
+        "houses": 4930,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Armeniș",
+        "tip": "comună",
+        "houses": 975,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Berzovia",
+        "tip": "comună",
+        "houses": 1450,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Bozovici",
+        "tip": "comună",
+        "houses": 1340,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Brebu",
+        "tip": "comună",
+        "houses": 639,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Bucoșnița",
+        "tip": "comună",
+        "houses": 927,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Cărbunari",
+        "tip": "comună",
+        "houses": 606,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Ciclova Română",
+        "tip": "comună",
+        "houses": 1074,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Dalboșeț",
+        "tip": "comună",
+        "houses": 746,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Dognecea",
+        "tip": "comună",
+        "houses": 895,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Eftimie Murgu",
+        "tip": "comună",
+        "houses": 636,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Ezeriș",
+        "tip": "comună",
+        "houses": 587,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Goruia",
+        "tip": "comună",
+        "houses": 512,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Lăpușnicu Mare",
+        "tip": "comună",
+        "houses": 718,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Măureni",
+        "tip": "comună",
+        "houses": 918,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Mehadia",
+        "tip": "comună",
+        "houses": 1855,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Păltiniș",
+        "tip": "comună",
+        "houses": 933,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Vermeș",
+        "tip": "comună",
+        "houses": 621,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Vrani",
+        "tip": "comună",
+        "houses": 456,
+        "tax": 0
+      },
+      {
+        "county": "Caraș-Severin",
+        "name": "Zorlențu Mare",
+        "tip": "comună",
+        "houses": 573,
+        "tax": 0
+      },
+      {
+        "county": "Constanța",
+        "name": "Mangalia",
+        "tip": "municipiu",
+        "houses": 17383,
+        "tax": 0
+      },
+      {
+        "county": "Constanța",
+        "name": "Medgidia",
+        "tip": "municipiu",
+        "houses": 15647,
+        "tax": 0
+      },
+      {
+        "county": "Constanța",
+        "name": "Hârșova",
+        "tip": "oraș",
+        "houses": 3675,
+        "tax": 0
+      },
+      {
+        "county": "Constanța",
+        "name": "Mihail Kogălniceanu",
+        "tip": "comună",
+        "houses": 3420,
+        "tax": 0
+      },
+      {
+        "county": "Constanța",
+        "name": "Poarta Albă",
+        "tip": "comună",
+        "houses": 1725,
+        "tax": 0
+      },
+      {
+        "county": "Covasna",
+        "name": "Sfântu Gheorghe",
+        "tip": "municipiu",
+        "houses": 26803,
+        "tax": 0
+      },
+      {
+        "county": "Călărași",
+        "name": "Călărași",
+        "tip": "municipiu",
+        "houses": 2815,
+        "tax": 0
+      },
+      {
+        "county": "Călărași",
+        "name": "Oltenița",
+        "tip": "municipiu",
+        "houses": 10210,
+        "tax": 0
+      },
+      {
+        "county": "Călărași",
+        "name": "Fundulea",
+        "tip": "oraș",
+        "houses": 2815,
+        "tax": 0
+      },
+      {
+        "county": "Călărași",
+        "name": "Grădiștea",
+        "tip": "comună",
+        "houses": 2815,
+        "tax": 0
+      },
+      {
+        "county": "Călărași",
+        "name": "Sărulești",
+        "tip": "comună",
+        "houses": 2815,
+        "tax": 0
+      },
+      {
+        "county": "Dolj",
+        "name": "Craiova",
+        "tip": "municipiu",
+        "houses": 123985,
+        "tax": 0
+      },
+      {
+        "county": "Dolj",
+        "name": "Băilești",
+        "tip": "municipiu",
+        "houses": 123985,
+        "tax": 0
+      },
+      {
+        "county": "Dolj",
+        "name": "Calafat",
+        "tip": "municipiu",
+        "houses": 7401,
+        "tax": 0
+      },
+      {
+        "county": "Dolj",
+        "name": "Gogoșu",
+        "tip": "comună",
+        "houses": 686,
+        "tax": 0
+      },
+      {
+        "county": "Dolj",
+        "name": "Lipovu",
+        "tip": "comună",
+        "houses": 1169,
+        "tax": 0
+      },
+      {
+        "county": "Dolj",
+        "name": "Scăești",
+        "tip": "comună",
+        "houses": 1207,
+        "tax": 0
+      },
+      {
+        "county": "Dolj",
+        "name": "Țuglui",
+        "tip": "comună",
+        "houses": 1104,
+        "tax": 0
+      },
+      {
+        "county": "Dolj",
+        "name": "Vârtop",
+        "tip": "comună",
+        "houses": 794,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Ciocănești",
+        "tip": "comună",
+        "houses": 2120,
+        "tax": 0
+      },
+      {
+        "county": "Dâmbovița",
+        "name": "Răscăeți",
+        "tip": "comună",
+        "houses": 8149,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Galați",
+        "tip": "municipiu",
+        "houses": 114644,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Tecuci",
+        "tip": "municipiu",
+        "houses": 16135,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Barcea",
+        "tip": "comună",
+        "houses": 2254,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Băleni",
+        "tip": "comună",
+        "houses": 1202,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Băneasa",
+        "tip": "comună",
+        "houses": 883,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Braniștea",
+        "tip": "comună",
+        "houses": 1803,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Foltești",
+        "tip": "comună",
+        "houses": 1377,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Frumușița",
+        "tip": "comună",
+        "houses": 1850,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Independența",
+        "tip": "comună",
+        "houses": 1718,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Jorăști",
+        "tip": "comună",
+        "houses": 770,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Liești",
+        "tip": "comună",
+        "houses": 3740,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Matca",
+        "tip": "comună",
+        "houses": 3614,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Nămoloasa",
+        "tip": "comună",
+        "houses": 1109,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Nicorești",
+        "tip": "comună",
+        "houses": 1775,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Poiana",
+        "tip": "comună",
+        "houses": 829,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Priponești",
+        "tip": "comună",
+        "houses": 1197,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Rediu",
+        "tip": "comună",
+        "houses": 965,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Suhurlui",
+        "tip": "comună",
+        "houses": 643,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Șendreni",
+        "tip": "comună",
+        "houses": 1952,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Tulucești",
+        "tip": "comună",
+        "houses": 2975,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Umbrărești",
+        "tip": "comună",
+        "houses": 2416,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Vânători",
+        "tip": "comună",
+        "houses": 2706,
+        "tax": 0
+      },
+      {
+        "county": "Galați",
+        "name": "Vârlezi",
+        "tip": "comună",
+        "houses": 1052,
+        "tax": 0
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Mihăilești",
+        "tip": "oraș",
+        "houses": 3612,
+        "tax": 0
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Băneasa",
+        "tip": "comună",
+        "houses": 2651,
+        "tax": 0
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Călugăreni",
+        "tip": "comună",
+        "houses": 3040,
+        "tax": 0
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Ghimpați",
+        "tip": "comună",
+        "houses": 2790,
+        "tax": 0
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Răsuceni",
+        "tip": "comună",
+        "houses": 1857,
+        "tax": 0
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Singureni",
+        "tip": "comună",
+        "houses": 1586,
+        "tax": 0
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Stănești",
+        "tip": "comună",
+        "houses": 1685,
+        "tax": 0
+      },
+      {
+        "county": "Giurgiu",
+        "name": "Vânătorii Mici",
+        "tip": "comună",
+        "houses": 2052,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Brănești",
+        "tip": "comună",
+        "houses": 1342,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Dănciulești",
+        "tip": "comună",
+        "houses": 1276,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Drăgotești",
+        "tip": "comună",
+        "houses": 998,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Lelești",
+        "tip": "comună",
+        "houses": 912,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Logrești",
+        "tip": "comună",
+        "houses": 1582,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Mușetești",
+        "tip": "comună",
+        "houses": 949,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Padeș",
+        "tip": "comună",
+        "houses": 2213,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Scoarța",
+        "tip": "comună",
+        "houses": 2636,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Stănești",
+        "tip": "comună",
+        "houses": 1288,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Telești",
+        "tip": "comună",
+        "houses": 1296,
+        "tax": 0
+      },
+      {
+        "county": "Gorj",
+        "name": "Văgiulești",
+        "tip": "comună",
+        "houses": 1188,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Gheorgheni",
+        "tip": "municipiu",
+        "houses": 7842,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Miercurea Ciuc",
+        "tip": "municipiu",
+        "houses": 16774,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Odorheiu Secuiesc",
+        "tip": "municipiu",
+        "houses": 14381,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Toplița",
+        "tip": "municipiu",
+        "houses": 16774,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Cristuru Secuiesc",
+        "tip": "oraș",
+        "houses": 4021,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Avrămești",
+        "tip": "comună",
+        "houses": 966,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Corund",
+        "tip": "comună",
+        "houses": 2204,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Cozmeni",
+        "tip": "comună",
+        "houses": 754,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Dealu",
+        "tip": "comună",
+        "houses": 1891,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Mărtiniș",
+        "tip": "comună",
+        "houses": 1767,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Mihăileni",
+        "tip": "comună",
+        "houses": 1332,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Porumbeni",
+        "tip": "comună",
+        "houses": 767,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Praid",
+        "tip": "comună",
+        "houses": 3144,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Sărmaș",
+        "tip": "comună",
+        "houses": 1713,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Sânsimion",
+        "tip": "comună",
+        "houses": 1377,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Sântimbru",
+        "tip": "comună",
+        "houses": 1085,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Secuieni",
+        "tip": "comună",
+        "houses": 979,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Voșlăbeni",
+        "tip": "comună",
+        "houses": 1304,
+        "tax": 0
+      },
+      {
+        "county": "Harghita",
+        "name": "Zetea",
+        "tip": "comună",
+        "houses": 2821,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Brad",
+        "tip": "municipiu",
+        "houses": 7277,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Deva",
+        "tip": "municipiu",
+        "houses": 31215,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Lupeni",
+        "tip": "municipiu",
+        "houses": 11876,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Orăștie",
+        "tip": "municipiu",
+        "houses": 31215,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Petroșani",
+        "tip": "municipiu",
+        "houses": 17992,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Vulcan",
+        "tip": "municipiu",
+        "houses": 12031,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Aninoasa",
+        "tip": "oraș",
+        "houses": 2051,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Hațeg",
+        "tip": "oraș",
+        "houses": 4738,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Petrila",
+        "tip": "oraș",
+        "houses": 10282,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Balșa",
+        "tip": "comună",
+        "houses": 876,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Baru",
+        "tip": "comună",
+        "houses": 1284,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Băița",
+        "tip": "comună",
+        "houses": 1981,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Blăjeni",
+        "tip": "comună",
+        "houses": 688,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Buceș",
+        "tip": "comună",
+        "houses": 1011,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Bucureșci",
+        "tip": "comună",
+        "houses": 639,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Burjuc",
+        "tip": "comună",
+        "houses": 601,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Cerbăl",
+        "tip": "comună",
+        "houses": 317,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Crișcior",
+        "tip": "comună",
+        "houses": 1703,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Densuș",
+        "tip": "comună",
+        "houses": 723,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Lăpugiu de Jos",
+        "tip": "comună",
+        "houses": 744,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Lelese",
+        "tip": "comună",
+        "houses": 247,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Răchitova",
+        "tip": "comună",
+        "houses": 574,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Sălașu de Sus",
+        "tip": "comună",
+        "houses": 1040,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Sântămăria-Orlea",
+        "tip": "comună",
+        "houses": 1168,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Șoimuș",
+        "tip": "comună",
+        "houses": 1891,
+        "tax": 0
+      },
+      {
+        "county": "Hunedoara",
+        "name": "Turdaș",
+        "tip": "comună",
+        "houses": 739,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Slobozia",
+        "tip": "municipiu",
+        "houses": 19820,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Adâncata",
+        "tip": "comună",
+        "houses": 1431,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Albești",
+        "tip": "comună",
+        "houses": 668,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Bărbulești",
+        "tip": "comună",
+        "houses": 1195,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Buești",
+        "tip": "comună",
+        "houses": 511,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Mărculești",
+        "tip": "comună",
+        "houses": 683,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Perieți",
+        "tip": "comună",
+        "houses": 1690,
+        "tax": 0
+      },
+      {
+        "county": "Ialomița",
+        "name": "Vlădeni",
+        "tip": "comună",
+        "houses": 797,
+        "tax": 0
+      },
+      {
+        "county": "Iași",
+        "name": "Pașcani",
+        "tip": "municipiu",
+        "houses": 15282,
+        "tax": 0
+      },
+      {
+        "county": "Ilfov",
+        "name": "Măgurele",
+        "tip": "oraș",
+        "houses": 8079,
+        "tax": 0
+      },
+      {
+        "county": "Ilfov",
+        "name": "Balotești",
+        "tip": "comună",
+        "houses": 6003,
+        "tax": 0
+      },
+      {
+        "county": "Ilfov",
+        "name": "Brănești",
+        "tip": "comună",
+        "houses": 4721,
+        "tax": 0
+      },
+      {
+        "county": "Ilfov",
+        "name": "Grădiștea",
+        "tip": "comună",
+        "houses": 8398,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Baia Mare",
+        "tip": "municipiu",
+        "houses": 58365,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Seini",
+        "tip": "oraș",
+        "houses": 3677,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Târgu Lăpuș",
+        "tip": "oraș",
+        "houses": 4969,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Ariniș",
+        "tip": "comună",
+        "houses": 588,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Bârsana",
+        "tip": "comună",
+        "houses": 1920,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Cernești",
+        "tip": "comună",
+        "houses": 1608,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Coaș",
+        "tip": "comună",
+        "houses": 763,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Dumbrăvița",
+        "tip": "comună",
+        "houses": 2081,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Groși",
+        "tip": "comună",
+        "houses": 2014,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Lăpuș",
+        "tip": "comună",
+        "houses": 1628,
+        "tax": 0
+      },
+      {
+        "county": "Maramureș",
+        "name": "Sălsig",
+        "tip": "comună",
+        "houses": 573,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Drobeta-Turnu Severin",
+        "tip": "municipiu",
+        "houses": 41519,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Braniștea",
+        "tip": "comună",
+        "houses": 830,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Broșteni",
+        "tip": "comună",
+        "houses": 1243,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Dârvari",
+        "tip": "comună",
+        "houses": 1264,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Devesel",
+        "tip": "comună",
+        "houses": 2064,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Florești",
+        "tip": "comună",
+        "houses": 1135,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Gogoșu",
+        "tip": "comună",
+        "houses": 2265,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Gruia",
+        "tip": "comună",
+        "houses": 1197,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Pătulele",
+        "tip": "comună",
+        "houses": 1792,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Salcia",
+        "tip": "comună",
+        "houses": 1231,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Șimian",
+        "tip": "comună",
+        "houses": 4177,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Vânători",
+        "tip": "comună",
+        "houses": 1056,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Vânjuleț",
+        "tip": "comună",
+        "houses": 867,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Vlădaia",
+        "tip": "comună",
+        "houses": 1010,
+        "tax": 0
+      },
+      {
+        "county": "Mehedinți",
+        "name": "Vrata",
+        "tip": "comună",
+        "houses": 744,
+        "tax": 0
+      },
+      {
+        "county": "Mureș",
+        "name": "Crăiești",
+        "tip": "comună",
+        "houses": 4066,
+        "tax": 0
+      },
+      {
+        "county": "Mureș",
+        "name": "Ibănești",
+        "tip": "comună",
+        "houses": 1924,
+        "tax": 0
+      },
+      {
+        "county": "Mureș",
+        "name": "Pănet",
+        "tip": "comună",
+        "houses": 2006,
+        "tax": 0
+      },
+      {
+        "county": "Mureș",
+        "name": "Răstolița",
+        "tip": "comună",
+        "houses": 833,
+        "tax": 0
+      },
+      {
+        "county": "Mureș",
+        "name": "Vânători",
+        "tip": "comună",
+        "houses": 1473,
+        "tax": 0
+      },
+      {
+        "county": "Mureș",
+        "name": "Zagăr",
+        "tip": "comună",
+        "houses": 480,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Piatra-Neamț",
+        "tip": "municipiu",
+        "houses": 47126,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Bârgăuani",
+        "tip": "comună",
+        "houses": 1962,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Făurei",
+        "tip": "comună",
+        "houses": 1160,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Gherăești",
+        "tip": "comună",
+        "houses": 2341,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Grințieș",
+        "tip": "comună",
+        "houses": 1113,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Săbăoani",
+        "tip": "comună",
+        "houses": 3985,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Săvinești",
+        "tip": "comună",
+        "houses": 2657,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Tașca",
+        "tip": "comună",
+        "houses": 1137,
+        "tax": 0
+      },
+      {
+        "county": "Neamț",
+        "name": "Văleni",
+        "tip": "comună",
+        "houses": 757,
+        "tax": 0
+      },
+      {
+        "county": "Olt",
+        "name": "Făgețelu",
+        "tip": "comună",
+        "houses": 1038,
+        "tax": 0
+      },
+      {
+        "county": "Olt",
+        "name": "Rusănești",
+        "tip": "comună",
+        "houses": 1393,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Ploiești",
+        "tip": "municipiu",
+        "houses": 91559,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Bușteni",
+        "tip": "oraș",
+        "houses": 6010,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Mizil",
+        "tip": "oraș",
+        "houses": 5152,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Slănic",
+        "tip": "oraș",
+        "houses": 2944,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Urlați",
+        "tip": "oraș",
+        "houses": 4070,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Adunați",
+        "tip": "comună",
+        "houses": 1089,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Brazi",
+        "tip": "comună",
+        "houses": 3154,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Bucov",
+        "tip": "comună",
+        "houses": 4168,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Ceptura",
+        "tip": "comună",
+        "houses": 2039,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Cerașu",
+        "tip": "comună",
+        "houses": 2215,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Cocorăștii Colț",
+        "tip": "comună",
+        "houses": 1111,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Drajna",
+        "tip": "comună",
+        "houses": 2681,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Filipeștii de Târg",
+        "tip": "comună",
+        "houses": 2621,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Florești",
+        "tip": "comună",
+        "houses": 2461,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Gherghița",
+        "tip": "comună",
+        "houses": 829,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Măgureni",
+        "tip": "comună",
+        "houses": 2329,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Măneciu",
+        "tip": "comună",
+        "houses": 4574,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Olari",
+        "tip": "comună",
+        "houses": 898,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Plopu",
+        "tip": "comună",
+        "houses": 1178,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Râfov",
+        "tip": "comună",
+        "houses": 2069,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Salcia",
+        "tip": "comună",
+        "houses": 598,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Sălciile",
+        "tip": "comună",
+        "houses": 954,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Sângeru",
+        "tip": "comună",
+        "houses": 1976,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Scorțeni",
+        "tip": "comună",
+        "houses": 2508,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Surani",
+        "tip": "comună",
+        "houses": 859,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Șoimari",
+        "tip": "comună",
+        "houses": 1352,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Șotrile",
+        "tip": "comună",
+        "houses": 1450,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Talea",
+        "tip": "comună",
+        "houses": 447,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Tătaru",
+        "tip": "comună",
+        "houses": 708,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Târgșoru Vechi",
+        "tip": "comună",
+        "houses": 3989,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Tinosu",
+        "tip": "comună",
+        "houses": 970,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Valea Călugărească",
+        "tip": "comună",
+        "houses": 3924,
+        "tax": 0
+      },
+      {
+        "county": "Prahova",
+        "name": "Vâlcănești",
+        "tip": "comună",
+        "houses": 1592,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Satu Mare",
+        "tip": "municipiu",
+        "houses": 49839,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Carei",
+        "tip": "municipiu",
+        "houses": 49839,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Beltiug",
+        "tip": "comună",
+        "houses": 1457,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Berveni",
+        "tip": "comună",
+        "houses": 1116,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Bogdand",
+        "tip": "comună",
+        "houses": 1264,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Culciu",
+        "tip": "comună",
+        "houses": 1562,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Homoroade",
+        "tip": "comună",
+        "houses": 1042,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Odoreu",
+        "tip": "comună",
+        "houses": 2376,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Orașu Nou",
+        "tip": "comună",
+        "houses": 1933,
+        "tax": 0
+      },
+      {
+        "county": "Satu Mare",
+        "name": "Porumbești",
+        "tip": "comună",
+        "houses": 842,
+        "tax": 0
+      },
+      {
+        "county": "Sibiu",
+        "name": "Mediaș",
+        "tip": "municipiu",
+        "houses": 79793,
+        "tax": 0
+      },
+      {
+        "county": "Sibiu",
+        "name": "Bazna",
+        "tip": "comună",
+        "houses": 1400,
+        "tax": 0
+      },
+      {
+        "county": "Sibiu",
+        "name": "Bârghiș",
+        "tip": "comună",
+        "houses": 1004,
+        "tax": 0
+      },
+      {
+        "county": "Sibiu",
+        "name": "Dârlos",
+        "tip": "comună",
+        "houses": 1129,
+        "tax": 0
+      },
+      {
+        "county": "Sibiu",
+        "name": "Loamneș",
+        "tip": "comună",
+        "houses": 1422,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Fălticeni",
+        "tip": "municipiu",
+        "houses": 11470,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Frasin",
+        "tip": "oraș",
+        "houses": 2341,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Arbore",
+        "tip": "comună",
+        "houses": 2816,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Berchișești",
+        "tip": "comună",
+        "houses": 1222,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Brodina",
+        "tip": "comună",
+        "houses": 1231,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Capu Câmpului",
+        "tip": "comună",
+        "houses": 982,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Dornești",
+        "tip": "comună",
+        "houses": 1604,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Dumbrăveni",
+        "tip": "comună",
+        "houses": 3038,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Fântânele",
+        "tip": "comună",
+        "houses": 1861,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Forăști",
+        "tip": "comună",
+        "houses": 2031,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Iaslovăț",
+        "tip": "comună",
+        "houses": 1472,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Moldovița",
+        "tip": "comună",
+        "houses": 1869,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Panaci",
+        "tip": "comună",
+        "houses": 970,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Păltinoasa",
+        "tip": "comună",
+        "houses": 1834,
+        "tax": 0
+      },
+      {
+        "county": "Suceava",
+        "name": "Vatra Moldoviței",
+        "tip": "comună",
+        "houses": 1755,
+        "tax": 0
+      },
+      {
+        "county": "Sălaj",
+        "name": "Zalău",
+        "tip": "municipiu",
+        "houses": 27223,
+        "tax": 0
+      },
+      {
+        "county": "Sălaj",
+        "name": "Jibou",
+        "tip": "oraș",
+        "houses": 4460,
+        "tax": 0
+      },
+      {
+        "county": "Sălaj",
+        "name": "Bocșa",
+        "tip": "comună",
+        "houses": 1441,
+        "tax": 0
+      },
+      {
+        "county": "Sălaj",
+        "name": "Sâg",
+        "tip": "comună",
+        "houses": 658,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Alexandria",
+        "tip": "municipiu",
+        "houses": 19618,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Zimnicea",
+        "tip": "oraș",
+        "houses": 5799,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Beuca",
+        "tip": "comună",
+        "houses": 671,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Blejești",
+        "tip": "comună",
+        "houses": 1618,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Bogdana",
+        "tip": "comună",
+        "houses": 1514,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Brânceni",
+        "tip": "comună",
+        "houses": 1054,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Bujoreni",
+        "tip": "comună",
+        "houses": 718,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Călinești",
+        "tip": "comună",
+        "houses": 1694,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Ciolănești",
+        "tip": "comună",
+        "houses": 1768,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Cosmești",
+        "tip": "comună",
+        "houses": 1003,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Crevenicu",
+        "tip": "comună",
+        "houses": 705,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Dobrotești",
+        "tip": "comună",
+        "houses": 2135,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Drăcșenei",
+        "tip": "comună",
+        "houses": 847,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Frumoasa",
+        "tip": "comună",
+        "houses": 1025,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Gratia",
+        "tip": "comună",
+        "houses": 1132,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Mereni",
+        "tip": "comună",
+        "houses": 1370,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Moșteni",
+        "tip": "comună",
+        "houses": 748,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Necșești",
+        "tip": "comună",
+        "houses": 913,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Nenciulești",
+        "tip": "comună",
+        "houses": 972,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Olteni",
+        "tip": "comună",
+        "houses": 1151,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Orbeasca",
+        "tip": "comună",
+        "houses": 2736,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Plosca",
+        "tip": "comună",
+        "houses": 2038,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Saelele",
+        "tip": "comună",
+        "houses": 1023,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Sârbeni",
+        "tip": "comună",
+        "houses": 933,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Scurtu Mare",
+        "tip": "comună",
+        "houses": 1018,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Segarcea-Vale",
+        "tip": "comună",
+        "houses": 1697,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Sfințești",
+        "tip": "comună",
+        "houses": 659,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Stejaru",
+        "tip": "comună",
+        "houses": 1205,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Suhaia",
+        "tip": "comună",
+        "houses": 1071,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Troianul",
+        "tip": "comună",
+        "houses": 1471,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Vârtoape",
+        "tip": "comună",
+        "houses": 1518,
+        "tax": 0
+      },
+      {
+        "county": "Teleorman",
+        "name": "Vedea",
+        "tip": "comună",
+        "houses": 1203,
+        "tax": 0
+      },
+      {
+        "county": "Timiș",
+        "name": "Timișoara",
+        "tip": "municipiu",
+        "houses": 153565,
+        "tax": 0
+      },
+      {
+        "county": "Timiș",
+        "name": "Lugoj",
+        "tip": "municipiu",
+        "houses": 19314,
+        "tax": 0
+      },
+      {
+        "county": "Timiș",
+        "name": "Gătaia",
+        "tip": "oraș",
+        "houses": 2350,
+        "tax": 0
+      },
+      {
+        "county": "Timiș",
+        "name": "Cărpiniș",
+        "tip": "comună",
+        "houses": 1352,
+        "tax": 0
+      },
+      {
+        "county": "Timiș",
+        "name": "Mănăștiur",
+        "tip": "comună",
+        "houses": 632,
+        "tax": 0
+      },
+      {
+        "county": "Timiș",
+        "name": "Sânandrei",
+        "tip": "comună",
+        "houses": 2796,
+        "tax": 0
+      },
+      {
+        "county": "Timiș",
+        "name": "Șag",
+        "tip": "comună",
+        "houses": 2159,
+        "tax": 0
+      },
+      {
+        "county": "Timiș",
+        "name": "Șandra",
+        "tip": "comună",
+        "houses": 1019,
+        "tax": 0
+      },
+      {
+        "county": "Timiș",
+        "name": "Victor Vlad Delamarina",
+        "tip": "comună",
+        "houses": 1207,
+        "tax": 0
+      },
+      {
+        "county": "Tulcea",
+        "name": "Dăeni",
+        "tip": "comună",
+        "houses": 1012,
+        "tax": 0
+      },
+      {
+        "county": "Tulcea",
+        "name": "Maliuc",
+        "tip": "comună",
+        "houses": 556,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Ferești",
+        "tip": "comună",
+        "houses": 797,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Ivești",
+        "tip": "comună",
+        "houses": 1093,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Mălușteni",
+        "tip": "comună",
+        "houses": 1891,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Miclești",
+        "tip": "comună",
+        "houses": 1262,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Solești",
+        "tip": "comună",
+        "houses": 1601,
+        "tax": 0
+      },
+      {
+        "county": "Vaslui",
+        "name": "Zăpodeni",
+        "tip": "comună",
+        "houses": 1942,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Adjud",
+        "tip": "municipiu",
+        "houses": 7499,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Focșani",
+        "tip": "municipiu",
+        "houses": 37075,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Odobești",
+        "tip": "oraș",
+        "houses": 3744,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Boghești",
+        "tip": "comună",
+        "houses": 914,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Bolotești",
+        "tip": "comună",
+        "houses": 2129,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Broșteni",
+        "tip": "comună",
+        "houses": 928,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Ciorăști",
+        "tip": "comună",
+        "houses": 1790,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Dumbrăveni",
+        "tip": "comună",
+        "houses": 1949,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Jitia",
+        "tip": "comună",
+        "houses": 749,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Movilița",
+        "tip": "comună",
+        "houses": 1763,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Popești",
+        "tip": "comună",
+        "houses": 1430,
+        "tax": 0
+      },
+      {
+        "county": "Vrancea",
+        "name": "Urechești",
+        "tip": "comună",
+        "houses": 1223,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Drăgășani",
+        "tip": "municipiu",
+        "houses": 8114,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Băbeni",
+        "tip": "oraș",
+        "houses": 3435,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Băile Olănești",
+        "tip": "oraș",
+        "houses": 2048,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Berbești",
+        "tip": "oraș",
+        "houses": 2620,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Călimănești",
+        "tip": "oraș",
+        "houses": 3613,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Budești",
+        "tip": "comună",
+        "houses": 2546,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Bunești",
+        "tip": "comună",
+        "houses": 1224,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Drăgoești",
+        "tip": "comună",
+        "houses": 1033,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Făurești",
+        "tip": "comună",
+        "houses": 1481,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Frâncești",
+        "tip": "comună",
+        "houses": 2109,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Grădiștea",
+        "tip": "comună",
+        "houses": 1447,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Gușoeni",
+        "tip": "comună",
+        "houses": 950,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Ionești",
+        "tip": "comună",
+        "houses": 1969,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Lăpușata",
+        "tip": "comună",
+        "houses": 1147,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Măldărești",
+        "tip": "comună",
+        "houses": 1481,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Mihăești",
+        "tip": "comună",
+        "houses": 1481,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Orlești",
+        "tip": "comună",
+        "houses": 1797,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Păușești",
+        "tip": "comună",
+        "houses": 1481,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Păușești-Măglași",
+        "tip": "comună",
+        "houses": 1481,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Perișani",
+        "tip": "comună",
+        "houses": 1140,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Popești",
+        "tip": "comună",
+        "houses": 1527,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Roșiile",
+        "tip": "comună",
+        "houses": 1714,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Sinești",
+        "tip": "comună",
+        "houses": 1076,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Stănești",
+        "tip": "comună",
+        "houses": 548,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Sutești",
+        "tip": "comună",
+        "houses": 1096,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Șușani",
+        "tip": "comună",
+        "houses": 1481,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Titești",
+        "tip": "comună",
+        "houses": 548,
+        "tax": 0
+      },
+      {
+        "county": "Vâlcea",
+        "name": "Zătreni",
+        "tip": "comună",
+        "houses": 1664,
+        "tax": 0
+      }
+    ],
+    "duplicateHouses": []
+  }
+}

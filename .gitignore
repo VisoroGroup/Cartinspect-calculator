@@ -2,3 +2,5 @@
 *.docx
 .wrangler/
 proxy/node_modules/
+30
+.claude/
