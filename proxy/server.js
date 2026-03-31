@@ -9,8 +9,8 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from the public/ directory (root of the project)
-app.use(express.static(path.join(__dirname, '..', 'public')));
+// Serve static files from the project root (no more public/ duplication)
+app.use(express.static(path.join(__dirname, '..')));
 
 const GRAPHQL_URL = 'https://api.transparenta.eu/graphql';
 
@@ -18,7 +18,7 @@ const GRAPHQL_URL = 'https://api.transparenta.eu/graphql';
 function stripDiacritics(s) {
     return s
         .replace(/[ăâ]/gi, m => m === m.toLowerCase() ? 'a' : 'A')
-        .replace(/[îâ]/gi, m => m === m.toLowerCase() ? 'i' : 'I')
+        .replace(/[î]/gi, m => m === m.toLowerCase() ? 'i' : 'I')
         .replace(/[șş]/gi, m => m === m.toLowerCase() ? 's' : 'S')
         .replace(/[țţ]/gi, m => m === m.toLowerCase() ? 't' : 'T');
 }
@@ -363,7 +363,7 @@ app.get('/health', (req, res) => {
 
 // Fallback: serve index.html for all non-API routes (SPA)
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 app.listen(PORT, () => {
